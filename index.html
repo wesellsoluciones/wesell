@@ -7,13 +7,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0f172a;
-      --surface: #1e293b;
-      --surface2: #263347;
-      --red: #dc2626;
-      --red-bright: #ef4444;
-      --text: #f1f5f9;
-      --muted: #94a3b8;
+      --bg: #0a0f1e;
+      --surface: #131929;
+      --surface2: #1a2235;
+      --red: #e03030;
+      --red-bright: #f04040;
+      --text: #ffffff;
+      --muted: #8899b4;
       --border: rgba(220,38,38,0.2);
       --border-gray: rgba(255,255,255,0.08);
     }
@@ -57,7 +57,7 @@
       display: flex; flex-direction: column; justify-content: center;
       position: relative; z-index: 1;
     }
-    .hero-eyebrow { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: var(--red); margin-bottom: 20px; display: flex; align-items: center; gap: 12px; opacity: 0; animation: fadeUp 0.8s 0.3s ease both; }
+    .hero-eyebrow { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: #ffffff; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; opacity: 0; animation: fadeUp 0.8s 0.3s ease both; }
     .hero-eyebrow::before { content:''; display:block; width:30px; height:1px; background:var(--red); }
     .hero-content h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(56px,6vw,96px); font-weight:400; line-height:0.95; letter-spacing:0.02em; margin-bottom:28px; opacity:0; animation: fadeUp 0.8s 0.5s ease both; color: var(--text); }
     .hero-content h2 .red { color: var(--red); }
@@ -106,8 +106,9 @@
 
     /* ── SECTION ── */
     .section { padding:110px 60px; position:relative; }
-    .section-label { font-size:11px; letter-spacing:0.28em; text-transform:uppercase; color:var(--red); margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+    .section-label { font-size:11px; letter-spacing:0.28em; text-transform:uppercase; color:#ffffff; margin-bottom:16px; display:flex; align-items:center; gap:10px; }
     .section-label::before { content:''; display:block; width:24px; height:1px; background:var(--red); }
+    .hero-eyebrow::before { background: var(--red); }
     .section-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(40px,5vw,72px); font-weight:400; line-height:1; letter-spacing:0.03em; margin-bottom:56px; }
 
     /* ── SERVICES ── */
@@ -117,8 +118,8 @@
     .service-card::after { content:''; position:absolute; bottom:0; left:0; width:100%; height:2px; background:var(--red); transform:scaleX(0); transform-origin:left; transition:transform 0.4s ease; }
     .service-card:hover { background:var(--surface); }
     .service-card:hover::after { transform:scaleX(1); }
-    .service-num { font-family:'Bebas Neue',sans-serif; font-size:80px; color:rgba(220,38,38,0.1); line-height:1; margin-bottom:16px; display:block; transition:color 0.4s; }
-    .service-card:hover .service-num { color:rgba(220,38,38,0.22); }
+    .service-num { font-family:'Bebas Neue',sans-serif; font-size:80px; color:rgba(224,48,48,0.3); line-height:1; margin-bottom:16px; display:block; transition:color 0.4s; }
+    .service-card:hover .service-num { color:rgba(224,48,48,0.45); }
     .service-card h3 { font-family:'Bebas Neue',sans-serif; font-size:28px; font-weight:400; letter-spacing:0.06em; margin-bottom:14px; color:var(--text); }
     .service-card p { font-size:14px; color:var(--muted); line-height:1.75; }
     .service-arrow { position:absolute; bottom:28px; right:28px; color:var(--red); font-size:20px; opacity:0; transition:opacity 0.3s,transform 0.3s; }
