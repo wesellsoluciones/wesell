@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Marketing & Ads - We Sell Orchids</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0f1e;
+      --surface: #131929;
+      --surface2: #1a2235;
+      --red: #b91c1c;
+      --red-bright: #c0392b;
+      --text: #ffffff;
+      --muted: #8899b4;
+      --border: rgba(185,28,28,0.2);
+      --border-gray: rgba(255,255,255,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+    /* HEADER */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 10px 60px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: #ffffff; border-bottom: 2px solid var(--red);
+      box-shadow: 0 2px 20px rgba(185,28,28,0.12);
+    }
+    .header-logo { height: 56px; width: auto; transition: transform 0.3s; }
+    .header-logo:hover { transform: scale(1.04); }
+    nav { display: flex; gap: 32px; align-items: center; }
+    nav a { text-decoration: none; color: #444; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; transition: color 0.3s; }
+    nav a:hover { color: var(--red); }
+    .nav-cta { border: 1px solid var(--red) !important; color: var(--red) !important; padding: 8px 20px; border-radius: 2px; transition: background 0.3s, color 0.3s !important; }
+    .nav-cta:hover { background: var(--red) !important; color: #fff !important; }
+
+    /* HERO */
+    .page-hero {
+      min-height: 50vh;
+      display: flex; flex-direction: column; justify-content: center;
+      padding: 140px 60px 80px;
+      position: relative; overflow: hidden;
+    }
+    .page-hero::after {
+      content: '';
+      position: absolute; top: 0; right: 0;
+      width: 500px; height: 500px;
+      background: radial-gradient(circle, rgba(185,28,28,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .breadcrumb { font-size: 12px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+    .breadcrumb a { color: var(--muted); text-decoration: none; transition: color 0.3s; }
+    .breadcrumb a:hover { color: var(--red); }
+    .breadcrumb span { color: var(--text); }
+    .page-hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(60px, 8vw, 110px); font-weight: 400; line-height: 0.95; letter-spacing: 0.02em; margin-bottom: 24px; }
+    .page-hero h1 .red { color: var(--red); }
+    .page-hero .lead { font-size: 18px; color: var(--muted); line-height: 1.75; max-width: 600px; }
+
+    /* CONTENT */
+    .content { padding: 80px 60px; }
+    .red-line { width: 48px; height: 2px; background: var(--red); margin-bottom: 28px; }
+
+    .section-label { font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: #ffffff; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .section-label::before { content:''; display:block; width:24px; height:1px; background:var(--red); }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(36px, 4vw, 56px); font-weight: 400; line-height: 1; letter-spacing: 0.03em; margin-bottom: 48px; }
+
+    /* 3 MAIN CARDS */
+    .main-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 80px; }
+    .main-card {
+      background: var(--surface); border: 1px solid var(--border-gray);
+      border-radius: 4px; padding: 40px 32px;
+      position: relative; overflow: hidden;
+      transition: background 0.3s, transform 0.3s;
+    }
+    .main-card:hover { background: var(--surface2); transform: translateY(-6px); }
+    .main-card::after {
+      content: ''; position: absolute; bottom: 0; left: 0;
+      width: 100%; height: 2px; background: var(--red);
+      transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease;
+    }
+    .main-card:hover::after { transform: scaleX(1); }
+    .card-icon { font-size: 36px; margin-bottom: 20px; display: block; }
+    .main-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 28px; letter-spacing: 0.06em; margin-bottom: 16px; color: var(--text); }
+    .main-card > p { font-size: 14px; color: var(--muted); line-height: 1.75; margin-bottom: 24px; }
+    .service-list { list-style: none; padding: 0; }
+    .service-list li {
+      font-size: 13px; color: var(--muted); padding: 8px 0;
+      border-bottom: 1px solid var(--border-gray);
+      display: flex; align-items: center; gap: 10px;
+      line-height: 1.5;
+    }
+    .service-list li:last-child { border-bottom: none; }
+    .service-list li::before { content: ''; display: block; width: 6px; height: 6px; background: var(--red); border-radius: 50%; flex-shrink: 0; }
+
+    /* DETAIL SECTION - Análisis de datos */
+    .detail-section {
+      background: var(--surface);
+      border: 1px solid var(--border-gray);
+      border-radius: 4px; padding: 60px;
+      margin-bottom: 80px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+    }
+    .detail-section h3 { font-family: 'Bebas Neue', sans-serif; font-size: 42px; letter-spacing: 0.04em; margin-bottom: 20px; line-height: 1; }
+    .detail-section h3 span { color: var(--red); }
+    .detail-section p { font-size: 15px; color: var(--muted); line-height: 1.85; margin-bottom: 16px; }
+    .detail-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .detail-item {
+      background: var(--bg); border: 1px solid var(--border-gray);
+      border-radius: 4px; padding: 20px;
+    }
+    .detail-item h5 { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.06em; margin-bottom: 6px; color: var(--text); }
+    .detail-item p { font-size: 12px; color: var(--muted); line-height: 1.6; margin: 0; }
+
+    /* CTA */
+    .cta-section {
+      background: var(--surface); border: 1px solid var(--border-gray);
+      border-radius: 4px; padding: 60px;
+      display: flex; justify-content: space-between; align-items: center; gap: 40px;
+    }
+    .cta-section h3 { font-family: 'Bebas Neue', sans-serif; font-size: 42px; letter-spacing: 0.04em; line-height: 1; }
+    .cta-section h3 span { color: var(--red); }
+    .cta-section p { font-size: 15px; color: var(--muted); margin-top: 12px; max-width: 400px; }
+    .btn-primary {
+      padding: 16px 40px; background: var(--red); color: #fff; border: none;
+      font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
+      letter-spacing: 0.12em; text-transform: uppercase; cursor: pointer;
+      border-radius: 2px; white-space: nowrap; text-decoration: none;
+      transition: transform 0.2s, box-shadow 0.3s, background 0.3s; display: inline-block;
+    }
+    .btn-primary:hover { background: var(--red-bright); transform: translateY(-2px); box-shadow: 0 14px 40px rgba(185,28,28,0.4); }
+
+    /* FOOTER */
+    footer { padding: 36px 60px; border-top: 2px solid var(--red); display: flex; justify-content: space-between; align-items: center; background: #ffffff; box-shadow: 0 -2px 20px rgba(185,28,28,0.08); }
+    .footer-logo { height: 48px; width: auto; }
+    footer p { font-size: 12px; color: #555555; letter-spacing: 0.06em; }
+
+    /* WhatsApp */
+    .whatsapp-btn { position: fixed; bottom: 28px; right: 28px; z-index: 999; background: #25d366; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 20px rgba(37,211,102,0.4); transition: transform 0.3s, box-shadow 0.3s; animation: waPulse 2.5s ease-in-out infinite; }
+    .whatsapp-btn:hover { transform: scale(1.1); }
+    @keyframes waPulse { 0%,100%{box-shadow:0 4px 20px rgba(37,211,102,0.4);} 50%{box-shadow:0 4px 30px rgba(37,211,102,0.7);} }
+
+    @media (max-width: 900px) {
+      header { padding: 10px 20px; }
+      nav { gap: 16px; }
+      .page-hero { padding: 120px 24px 60px; }
+      .content { padding: 60px 24px; }
+      .main-cards { grid-template-columns: 1fr; }
+      .detail-section { grid-template-columns: 1fr; padding: 40px 24px; gap: 40px; }
+      .detail-grid { grid-template-columns: 1fr; }
+      .cta-section { flex-direction: column; text-align: center; padding: 40px 24px; }
+      footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <a href="index.html"><img src="logo.png" alt="We Sell" class="header-logo"></a>
+  <nav>
+    <a href="index.html#servicios">Servicios</a>
+    <a href="index.html#equipo">Equipo</a>
+    <a href="index.html#nosotros">Nosotros</a>
+    <a href="index.html#contacto" class="nav-cta">Contacto</a>
+  </nav>
+</header>
+
+<section class="page-hero">
+  <div class="breadcrumb">
+    <a href="index.html">Inicio</a> / <span>Marketing & Ads</span>
+  </div>
+  <h1>Marketing<br><span class="red">& Ads</span></h1>
+  <p class="lead">Estrategias de marketing efectivas y campañas publicitarias optimizadas para generar leads, ventas y crecimiento real.</p>
+</section>
+
+<div class="content">
+
+  <span class="section-label">Nuestros servicios</span>
+  <h2 class="section-title">3 áreas de especialización</h2>
+
+  <div class="main-cards">
+
+    <div class="main-card">
+      <span class="card-icon">📢</span>
+      <h3>Marketing Strategy</h3>
+      <p>Análisis de tu negocio, mercado y competencia para crear una estrategia de marketing efectiva y escalable.</p>
+      <ul class="service-list">
+        <li>Auditoría de marketing digital</li>
+        <li>Análisis de competencia</li>
+        <li>Definición de público objetivo</li>
+        <li>Estrategia de adquisición de clientes</li>
+        <li>Plan de crecimiento digital</li>
+      </ul>
+    </div>
+
+    <div class="main-card">
+      <span class="card-icon">🎯</span>
+      <h3>Ads Management</h3>
+      <p>Creación y optimización de campañas publicitarias para generar leads, ventas y tráfico de calidad.</p>
+      <ul class="service-list">
+        <li>Creación de campañas publicitarias</li>
+        <li>Optimización de anuncios y segmentación</li>
+        <li>A/B testing y mejora continua</li>
+        <li>Análisis de métricas y rendimiento</li>
+        <li>Optimización de presupuesto</li>
+      </ul>
+    </div>
+
+    <div class="main-card">
+      <span class="card-icon">🛒</span>
+      <h3>Mercado Libre</h3>
+      <p>Consultoría especializada para aumentar la visibilidad y ventas dentro de Mercado Libre.</p>
+      <ul class="service-list">
+        <li>Optimización de publicaciones</li>
+        <li>Posicionamiento en el marketplace</li>
+        <li>Campañas publicitarias en MeLi</li>
+        <li>Optimización de títulos e imágenes</li>
+        <li>Estrategias de conversión y ranking</li>
+      </ul>
+    </div>
+
+  </div>
+
+  <!-- Análisis de datos -->
+  <div class="detail-section">
+    <div>
+      <div class="red-line"></div>
+      <h3>Análisis de<br><span>Datos y</span><br>Optimización</h3>
+      <p>Medición y análisis de datos para mejorar el rendimiento de las campañas y tomar decisiones basadas en información real.</p>
+    </div>
+    <div class="detail-grid">
+      <div class="detail-item">
+        <h5>Métricas clave</h5>
+        <p>Análisis profundo de los indicadores que realmente importan para tu negocio.</p>
+      </div>
+      <div class="detail-item">
+        <h5>Oportunidades</h5>
+        <p>Identificación de áreas de mejora y oportunidades de crecimiento.</p>
+      </div>
+      <div class="detail-item">
+        <h5>Optimización</h5>
+        <p>Ajuste continuo de campañas basado en datos reales y comportamiento del usuario.</p>
+      </div>
+      <div class="detail-item">
+        <h5>Reportes</h5>
+        <p>Informes claros y accionables sobre el rendimiento de todas las acciones.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta-section">
+    <div>
+      <h3>¿Querés más ventas<br><span>y más clientes?</span></h3>
+      <p>Agendá una llamada y te mostramos cómo nuestras estrategias de marketing pueden transformar tu negocio.</p>
+    </div>
+    <a href="https://wa.me/5491135019702" class="btn-primary">Agendar llamada</a>
+  </div>
+
+</div>
+
+<footer>
+  <a href="index.html"><img src="logo.png" alt="We Sell Orchids" class="footer-logo"></a>
+  <p>© 2026 Orchids Consulting — Todos los derechos reservados</p>
+</footer>
+
+<a href="https://wa.me/5491135019702" target="_blank" class="whatsapp-btn" title="Chateá con nosotros">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.17 1.595 5.938L.057 23.929l6.188-1.517A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.817 9.817 0 01-5.003-1.368l-.36-.214-3.722.912.947-3.628-.235-.374A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+</a>
+
+</body>
+</html>
