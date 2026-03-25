@@ -115,6 +115,50 @@
     .ring-bg-2 { width:340px; height:340px; transform:translate(-50%,-50%); border:1px dashed rgba(255,255,255,0.08); animation: spinRing 35s linear infinite reverse; }
     @keyframes spinRing { from{transform:translate(-50%,-50%) rotate(0deg);} to{transform:translate(-50%,-50%) rotate(360deg);} }
 
+
+    /* ── HOVER LOGO: GIRO + MENSAJE ── */
+    .logo-circle {
+      cursor: pointer;
+      transition: box-shadow 0.3s;
+    }
+    .logo-circle:hover {
+      box-shadow: 0 0 0 1px rgba(220,38,38,0.5), 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(220,38,38,0.3);
+    }
+    .hero-logo-img.spinning {
+      animation: logoSpin 0.7s cubic-bezier(0.4,0,0.2,1) both !important;
+    }
+    @keyframes logoSpin {
+      0%   { transform: rotate(0deg) scale(1); }
+      40%  { transform: rotate(200deg) scale(1.08); }
+      100% { transform: rotate(360deg) scale(1); }
+    }
+    .logo-msg {
+      position: absolute;
+      bottom: -70px; left: 50%;
+      transform: translateX(-50%);
+      background: rgba(10,15,30,0.92);
+      border: 1px solid var(--red);
+      border-radius: 6px;
+      padding: 10px 18px;
+      font-size: 12px; font-weight: 500;
+      color: #ffffff; letter-spacing: 0.04em;
+      white-space: nowrap;
+      opacity: 0; pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      transform: translateX(-50%) translateY(6px);
+      z-index: 10;
+    }
+    .logo-msg.visible {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .logo-msg::before {
+      content: '';
+      position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
+      border-left: 6px solid transparent;
+      border-right: 6px solid transparent;
+      border-bottom: 6px solid var(--red);
+    }
     /* ── EFECTO SELLO EN LOGO ── */
     .logo-seal-wrap {
       position: relative; z-index: 2;
@@ -426,9 +470,10 @@
       </div>
       <div class="seal-pulse"></div>
       <div class="seal-pulse-2"></div>
-      <div class="logo-circle">
-        <img src="logo.png" alt="We Sell" class="hero-logo-img">
+      <div class="logo-circle" onmouseenter="logoHover()" onmouseleave="logoLeave()">
+        <img src="logo.png" alt="We Sell" class="hero-logo-img" id="hero-logo">
       </div>
+      <div class="logo-msg" id="logo-msg"></div>
     </div>
   </div>
 </section>
@@ -550,6 +595,88 @@
   // IMPORTANTE: Reemplazá "TU_PUBLIC_KEY" con tu clave pública de EmailJS
   // Conseguila en: https://dashboard.emailjs.com/admin/account
   emailjs.init("TU_PUBLIC_KEY");
+
+
+  // ── LOGO HOVER: GIRO + FRASES ──
+  const frases = [
+    "Tu próxima venta empieza hoy.",
+    "El ecommerce no duerme. Vos tampoco deberías.",
+    "Cada clic es una oportunidad.",
+    "Escalar no es suerte, es estrategia.",
+    "Tu cliente ideal está online ahora mismo.",
+    "El que no está digital, no existe.",
+    "Vender más es una decisión.",
+    "Los datos no mienten. Tu negocio puede más.",
+    "El mejor momento para crecer fue ayer. El segundo mejor es hoy.",
+    "Una buena estrategia vale más que mil anuncios.",
+    "No vendas productos, vendé soluciones.",
+    "El ROI no es un mito, es una consecuencia.",
+    "Tu competencia ya está en digital. ¿Y vos?",
+    "Automatizá y liberá tu tiempo.",
+    "Cada email bien enviado es una venta posible.",
+    "El tráfico sin conversión es solo ruido.",
+    "Los marketplaces son tu vidriera global.",
+    "Escalar es el nuevo sobrevivir.",
+    "Sin métricas no hay dirección.",
+    "El cliente que no te conoce, no puede comprarte.",
+    "Vender online no es el futuro, es el presente.",
+    "Una tienda online trabaja 24/7. ¿La tuya trabaja bien?",
+    "El primer paso es el más importante.",
+    "Construí tu marca antes de que otro lo haga.",
+    "La visibilidad que no medís, no existe.",
+    "Un anuncio bien segmentado cambia todo.",
+    "El ecommerce es el negocio más escalable del mundo.",
+    "Tu historia de marca es tu mejor activo.",
+    "Invertir en digital es invertir en resultados.",
+    "La automatización es el equipo que nunca se cansa.",
+    "Cada reseña positiva es oro puro.",
+    "El carrito abandonado es una venta que espera.",
+    "Menos fricción, más conversión.",
+    "El cliente online decide en segundos.",
+    "Mercado Libre, Amazon, Tiendanube: el mundo es tu vidriera.",
+    "No alcanza con tener un producto, hay que saber venderlo.",
+    "La velocidad de carga importa más de lo que creés.",
+    "El retargeting recupera lo que casi se perdió.",
+    "Una estrategia de contenido construye confianza.",
+    "El crecimiento sostenible empieza por los cimientos.",
+    "Cada peso invertido bien puede multiplicarse.",
+    "Tu nicho tiene más demanda de la que imaginás.",
+    "Optimizá, medí, escalá. Repetí.",
+    "El email marketing sigue siendo el rey.",
+    "La omnicanalidad no es una moda, es una necesidad.",
+    "Vender es servir. Servir es fidelizar.",
+    "La diferencia entre crecer y estancarse es la estrategia.",
+    "Un funnel bien armado convierte extraños en clientes.",
+    "Los mejores negocios resuelven problemas reales.",
+    "Hoy es el mejor día para tomar la decisión."
+  ];
+  let frasesUsadas = [];
+  let logoTimeout;
+
+  function getFraseRandom() {
+    if (frasesUsadas.length === frases.length) frasesUsadas = [];
+    let disponibles = frases.filter((_, i) => !frasesUsadas.includes(i));
+    let idx = frases.indexOf(disponibles[Math.floor(Math.random() * disponibles.length)]);
+    frasesUsadas.push(idx);
+    return frases[idx];
+  }
+
+  function logoHover() {
+    const logo = document.getElementById('hero-logo');
+    const msg  = document.getElementById('logo-msg');
+    logo.classList.remove('spinning');
+    void logo.offsetWidth;
+    logo.classList.add('spinning');
+    msg.textContent = getFraseRandom();
+    msg.classList.add('visible');
+    clearTimeout(logoTimeout);
+    logo.addEventListener('animationend', () => logo.classList.remove('spinning'), { once: true });
+  }
+
+  function logoLeave() {
+    const msg = document.getElementById('logo-msg');
+    logoTimeout = setTimeout(() => msg.classList.remove('visible'), 400);
+  }
 
   // ── PARTÍCULAS HERO ──
   (function() {
