@@ -1,466 +1,158 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>We Sell - Orchids Consulting</title>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <!-- EmailJS -->
-  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <style>
-    :root {
-      --bg: #0a0f1e;
-      --surface: #131929;
-      --surface2: #1a2235;
-      --red: #e03030;
-      --red-bright: #f04040;
-      --text: #ffffff;
-      --muted: #8899b4;
-      --border: rgba(220,38,38,0.2);
-      --border-gray: rgba(255,255,255,0.08);
-    }
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>We Sell - Premium</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 
-    /* ── HEADER ── */
-    header {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      padding: 10px 60px;
-      display: flex; justify-content: space-between; align-items: center;
-      background: #a8a8a8;
-      border-bottom: 2px solid var(--red);
-      box-shadow: 0 2px 20px rgba(220,38,38,0.12);
-      animation: fadeDown 0.8s ease both;
-    }
-    @keyframes fadeDown { from{opacity:0;transform:translateY(-20px);} to{opacity:1;transform:translateY(0);} }
+<style>
+:root {
+  --bg:#0a0f1e;
+  --surface:#131929;
+  --red:#e03030;
+  --text:#fff;
+  --muted:#8899b4;
+}
 
-    .header-logo { height: 56px; width: 56px; border-radius: 50%; object-fit: cover; transition: transform 0.3s; }
-    .header-logo:hover { transform: scale(1.04); }
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text)}
 
-    nav { display: flex; gap: 32px; align-items: center; }
-    nav a { text-decoration: none; color: #222222; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; transition: color 0.3s; }
-    nav a:hover { color: var(--red); }
-    .nav-cta { border: 1px solid var(--red) !important; color: var(--red) !important; padding: 8px 20px; border-radius: 2px; transition: background 0.3s, color 0.3s !important; }
-    .nav-cta:hover { background: var(--red) !important; color: #fff !important; }
+/* HEADER */
+header{
+  position:fixed;
+  width:100%;
+  display:flex;
+  justify-content:space-between;
+  padding:15px 60px;
+  background:rgba(10,15,30,0.85);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid rgba(224,48,48,0.2);
+}
 
-    /* ── HERO ── */
-    .hero {
-      min-height: 65vh;
-      display: grid; grid-template-columns: 3fr 2fr;
-      align-items: stretch; padding: 0;
-      position: relative; overflow: hidden;
-    }
-    .hero-content {
-      background: var(--bg);
-      padding: 100px 80px 50px;
-      display: flex; flex-direction: column; justify-content: center;
-      position: relative; z-index: 1;
-    }
-    .hero-eyebrow { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: #ffffff; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; opacity: 0; animation: fadeUp 0.8s 0.3s ease both; }
-    .hero-eyebrow::before { content:''; display:block; width:30px; height:1px; background:var(--red); }
-    .hero-content h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(56px,6vw,96px); font-weight:400; line-height:0.95; letter-spacing:0.02em; margin-bottom:28px; opacity:0; animation: fadeUp 0.8s 0.5s ease both; color: var(--text); }
-    .hero-content h2 .red { color: var(--red); }
-    .hero-content h2 .outline { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.25); }
-    .hero-content p { font-size:16px; color:var(--muted); line-height:1.8; max-width:520px; margin-bottom:44px; opacity:0; animation: fadeUp 0.8s 0.7s ease both; }
-    .hero-actions { display:flex; gap:16px; align-items:center; opacity:0; animation: fadeUp 0.8s 0.9s ease both; }
-    @keyframes fadeUp { from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:translateY(0);} }
+nav a{
+  color:#ccc;
+  margin-left:20px;
+  text-decoration:none;
+  font-size:12px;
+}
 
-    .hero-visual {
-      background: #ffffff;
-      border-left: 2px solid rgba(220,38,38,0.15);
-      display: flex; align-items: center; justify-content: center;
-      position: relative; padding: 60px 40px;
-      opacity: 0; animation: fadeIn 1s 0.4s ease both;
-    }
-    @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
-    .hero-visual::before { display: none; }
+nav a:hover{color:var(--red)}
 
-    .ring-bg { position:absolute; border-radius:50%; top:50%; left:50%; }
-    .ring-bg-1 { width:420px; height:420px; transform:translate(-50%,-50%); border:1px solid rgba(220,38,38,0.08); animation: spinRing 30s linear infinite; }
-    .ring-bg-2 { width:500px; height:500px; transform:translate(-50%,-50%); border:1px dashed rgba(220,38,38,0.05); animation: spinRing 45s linear infinite reverse; }
-    @keyframes spinRing { from{transform:translate(-50%,-50%) rotate(0deg);} to{transform:translate(-50%,-50%) rotate(360deg);} }
+/* HERO */
+.hero{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  min-height:100vh;
+}
 
-    .hero-logo-img { width:300px; height:300px; object-fit:contain; position:relative; z-index:2; animation: floatSeal 5s ease-in-out infinite; }
-    @keyframes floatSeal { 0%,100%{transform:translateY(0);} 50%{transform:translateY(-14px);} }
+.hero-content{
+  padding:120px 80px;
+}
 
-    .btn-primary { padding:15px 36px; background:var(--red); color:#fff; border:none; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; border-radius:2px; transition:transform 0.2s,box-shadow 0.3s,background 0.3s; }
-    .btn-primary:hover { background:var(--red-bright); transform:translateY(-2px); box-shadow:0 14px 40px rgba(220,38,38,0.4); }
-    .btn-ghost { color:var(--muted); font-size:12px; letter-spacing:0.1em; cursor:pointer; background:none; border:1px solid var(--border-gray); font-family:'DM Sans',sans-serif; padding:14px 28px; border-radius:2px; transition:color 0.3s,border-color 0.3s; }
-    .btn-ghost:hover { color:var(--text); border-color:rgba(255,255,255,0.25); }
+.hero-content h1{
+  font-family:'Bebas Neue';
+  font-size:clamp(64px,7vw,110px);
+  line-height:0.9;
+}
 
-    /* ── MARQUEE ── */
-    .marquee-wrap { overflow:hidden; border-top:1px solid var(--border); border-bottom:1px solid var(--border); background:var(--surface); padding:18px 0; }
-    .marquee-track { display:flex; gap:60px; width:max-content; animation: marquee 18s linear infinite; }
-    @keyframes marquee { from{transform:translateX(0);} to{transform:translateX(-50%);} }
-    .marquee-item { font-family:'Bebas Neue',sans-serif; font-size:20px; letter-spacing:0.2em; color:var(--muted); display:flex; align-items:center; gap:60px; white-space:nowrap; }
-    .marquee-dot { width:5px; height:5px; background:var(--red); border-radius:50%; }
+.hero-content p{
+  margin-top:20px;
+  color:var(--muted);
+}
 
-    /* ── STATS ── */
-    .stats-bar { padding:50px 60px; display:flex; justify-content:space-between; background:var(--surface); border-bottom:1px solid var(--border-gray); border-top:1px solid var(--border-gray); }
-    .stat { text-align:center; flex:1; border-right:1px solid var(--border-gray); }
-    .stat:last-child { border-right:none; }
-    .stat-num { font-family:'Bebas Neue',sans-serif; font-size:64px; color:var(--red); display:block; line-height:1; }
-    .stat-label { font-size:11px; letter-spacing:0.18em; text-transform:uppercase; color:var(--muted); margin-top:6px; display:block; }
+.btn{
+  margin-top:30px;
+  padding:15px 30px;
+  background:var(--red);
+  border:none;
+  color:#fff;
+  cursor:pointer;
+}
 
-    /* ── SECTION ── */
-    .section { padding:110px 60px; position:relative; }
-    .section-label { font-size:11px; letter-spacing:0.28em; text-transform:uppercase; color:#ffffff; margin-bottom:16px; display:flex; align-items:center; gap:10px; }
-    .section-label::before { content:''; display:block; width:24px; height:1px; background:var(--red); }
-    .section-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(40px,5vw,72px); font-weight:400; line-height:1; letter-spacing:0.03em; margin-bottom:56px; }
+.hero-visual{
+  position:relative;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
 
-    /* ── SERVICES ── */
-    #servicios { background:var(--bg); }
-    .services-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border-gray); border:1px solid var(--border-gray); grid-auto-rows: auto; }
-    .service-card { background:var(--bg); padding:48px 36px; position:relative; overflow:hidden; transition:background 0.4s; }
-    .service-card::after { content:''; position:absolute; bottom:0; left:0; width:100%; height:2px; background:var(--red); transform:scaleX(0); transform-origin:left; transition:transform 0.4s ease; }
-    .service-card:hover { background:var(--surface); }
-    .service-card:hover::after { transform:scaleX(1); }
-    .service-num { font-family:'Bebas Neue',sans-serif; font-size:80px; color:rgba(224,48,48,0.3); line-height:1; margin-bottom:16px; display:block; transition:color 0.4s; }
-    .service-card:hover .service-num { color:rgba(224,48,48,0.45); }
-    .service-card h3 { font-family:'Bebas Neue',sans-serif; font-size:28px; font-weight:400; letter-spacing:0.06em; margin-bottom:14px; color:var(--text); }
-    .service-card p { font-size:14px; color:var(--muted); line-height:1.75; }
-    .service-arrow { position:absolute; bottom:28px; right:28px; color:var(--red); font-size:20px; opacity:0; transition:opacity 0.3s,transform 0.3s; }
-    .service-card:hover .service-arrow { opacity:1; transform:translate(3px,-3px); }
-    .service-list { list-style:none; margin-top:8px; display:flex; flex-direction:column; gap:7px; }
-    .service-list li { font-size:13px; color:var(--muted); padding-left:14px; position:relative; line-height:1.5; }
-    .service-list li::before { content:'—'; position:absolute; left:0; color:var(--red); font-size:11px; top:1px; }
-    .service-card--wide { grid-column: 1 / -1; }
-    .mkt-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:28px; margin-top:28px; padding-bottom:20px; }
-    .mkt-sub { border-left:1px solid var(--border); padding-left:18px; }
-    .mkt-sub-title { display:block; font-family:'Bebas Neue',sans-serif; font-size:16px; letter-spacing:0.08em; color:var(--text); margin-bottom:10px; }
-    @media(max-width:900px){ .mkt-grid { grid-template-columns:1fr 1fr; } }
-    @media(max-width:560px){ .mkt-grid { grid-template-columns:1fr; } }
+.hero-visual::after{
+  content:'';
+  position:absolute;
+  width:500px;
+  height:500px;
+  background:radial-gradient(circle, rgba(224,48,48,0.2), transparent 70%);
+  filter:blur(60px);
+}
 
-    /* ── TEAM ── */
-    #equipo { background:var(--surface); }
-    .team-grid { display:grid; grid-template-columns:400px; justify-content:center; gap:20px; }
-    .team-card { position:relative; overflow:hidden; border-radius:3px; border:1px solid var(--border-gray); transition:transform 0.3s,box-shadow 0.3s; }
-    .team-card:hover { transform:translateY(-6px); box-shadow:0 20px 50px rgba(220,38,38,0.2); }
-    .team-card img { width:100%; height:320px; object-fit:cover; display:block; filter:grayscale(40%) contrast(1.05); transition:filter 0.5s,transform 0.5s; }
-    .team-card:hover img { filter:grayscale(0%); transform:scale(1.03); }
-    .team-overlay { position:absolute; bottom:0; left:0; right:0; padding:28px 22px; background:linear-gradient(to top,rgba(15,23,42,0.97) 0%,transparent 100%); }
-    .team-name { font-family:'Bebas Neue',sans-serif; font-size:24px; letter-spacing:0.06em; display:block; color:var(--text); }
-    .team-role { font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:var(--red); margin-top:4px; display:block; }
+/* SERVICES */
+.section{
+  padding:130px 80px;
+}
 
-    /* ── ABOUT ── */
-    #nosotros { background:var(--bg); display:grid; grid-template-columns:1fr 1fr; gap:80px; align-items:center; padding:110px 60px; }
-    .about-img-wrap { position:relative; height:480px; }
-    .about-img-main { position:absolute; top:0; left:0; width:80%; height:380px; object-fit:cover; border-radius:3px; filter:grayscale(20%) contrast(1.05); }
-    .about-img-accent { position:absolute; bottom:0; right:0; width:52%; height:210px; object-fit:cover; border-radius:3px; border:4px solid var(--bg); filter:grayscale(20%); }
-    .about-tag { position:absolute; top:22px; right:6px; background:var(--red); color:#fff; font-family:'Bebas Neue',sans-serif; font-size:15px; letter-spacing:0.2em; padding:8px 16px; border-radius:2px; }
-    .about-text p { font-size:15px; color:var(--muted); line-height:1.85; margin-bottom:20px; }
-    .red-line { width:48px; height:2px; background:var(--red); margin-bottom:28px; }
+.services{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
 
-    /* ── CONTACT ── */
-    #contacto { background:var(--surface); }
-    .contact-inner { max-width:560px; }
-    .contact-inner > p { font-size:15px; color:var(--muted); margin-bottom:36px; line-height:1.75; }
-    .contact-fields { display:flex; flex-direction:column; gap:14px; margin-bottom:14px; }
-    .contact-fields input,
-    .contact-fields textarea {
-      width:100%; padding:16px 20px;
-      background:rgba(255,255,255,0.04);
-      border:1px solid var(--border-gray);
-      outline:none; color:var(--text);
-      font-family:'DM Sans',sans-serif; font-size:14px;
-      border-radius:2px;
-      transition:border-color 0.3s;
-    }
-    .contact-fields input:focus,
-    .contact-fields textarea:focus { border-color:var(--red); }
-    .contact-fields input::placeholder,
-    .contact-fields textarea::placeholder { color:var(--muted); }
-    .contact-fields textarea { resize:vertical; min-height:100px; }
-    .input-group { display:flex; border:1px solid var(--border-gray); transition:border-color 0.3s; }
-    .input-group:focus-within { border-color:var(--red); }
-    .input-group input { flex:1; padding:18px 22px; background:rgba(255,255,255,0.04); border:none; outline:none; color:var(--text); font-family:'DM Sans',sans-serif; font-size:14px; }
-    .input-group input::placeholder { color:var(--muted); }
-    .input-group button { padding:18px 28px; background:var(--red); border:none; color:#fff; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; letter-spacing:0.1em; text-transform:uppercase; cursor:pointer; transition:background 0.3s; }
-    .input-group button:hover { background:var(--red-bright); }
-    .btn-submit { width:100%; padding:18px; background:var(--red); border:none; color:#fff; font-family:'DM Sans',sans-serif; font-size:12px; font-weight:500; letter-spacing:0.12em; text-transform:uppercase; cursor:pointer; border-radius:2px; transition:background 0.3s,transform 0.2s,box-shadow 0.3s; }
-    .btn-submit:hover { background:var(--red-bright); transform:translateY(-2px); box-shadow:0 10px 30px rgba(220,38,38,0.35); }
-    .btn-submit:disabled { opacity:0.6; cursor:not-allowed; transform:none; }
-    .success-msg { display:none; margin-top:18px; color:#4ade80; font-size:13px; }
-    .error-msg { display:none; margin-top:18px; color:var(--red); font-size:13px; }
+.card{
+  padding:40px;
+  background:var(--surface);
+  transition:0.3s;
+}
 
-    /* ── FOOTER ── */
-    footer { padding:36px 60px; border-top:2px solid var(--red); display:flex; justify-content:space-between; align-items:center; background:#a8a8a8; box-shadow:0 -2px 20px rgba(185,28,28,0.08); }
-    .footer-logo { height:48px; width:48px; border-radius:50%; object-fit:cover; }
-    footer p { font-size:12px; color:#222222; letter-spacing:0.06em; }
+.card:hover{
+  transform:translateY(-5px);
+  box-shadow:0 20px 50px rgba(0,0,0,0.5);
+}
 
-    /* ── SCROLL REVEAL ── */
-    .reveal {
-      opacity: 0;
-      transform: translateY(40px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-    .reveal-left {
-      opacity: 0;
-      transform: translateX(-40px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal-left.visible {
-      opacity: 1;
-      transform: translateX(0);
-    }
-    .reveal-right {
-      opacity: 0;
-      transform: translateX(40px);
-      transition: opacity 0.7s ease, transform 0.7s ease;
-    }
-    .reveal-right.visible {
-      opacity: 1;
-      transform: translateX(0);
-    }
+/* FOOTER */
+footer{
+  padding:40px;
+  text-align:center;
+  background:var(--surface);
+}
 
-    /* ── RESPONSIVE ── */
-    @media (max-width:900px) {
-      header { padding:10px 20px; }
-      nav { gap:16px; }
-      .hero { grid-template-columns:1fr; }
-      .hero-content { padding:120px 24px 60px; }
-      .hero-visual { padding:50px 24px; min-height:340px; border-left:none; border-top:2px solid rgba(220,38,38,0.15); }
-      .hero-logo-img { width:260px; height:260px; }
-      .stats-bar { flex-direction:column; gap:28px; padding:40px 24px; }
-      .stat { border-right:none; border-bottom:1px solid var(--border-gray); padding-bottom:24px; }
-      .stat:last-child { border-bottom:none; }
-      .section { padding:80px 24px; }
-      .services-grid { grid-template-columns:1fr; }
-      .team-grid { grid-template-columns:1fr 1fr; gap:14px; }
-      #nosotros { grid-template-columns:1fr; padding:80px 24px; gap:40px; }
-      .about-img-wrap { height:280px; }
-      footer { flex-direction:column; gap:16px; text-align:center; padding:28px 24px; }
-    }
-    @media (max-width:560px) { .team-grid { grid-template-columns:1fr; } }
-  </style>
+</style>
 </head>
+
 <body>
 
 <header>
-  <img src="logo.png" alt="We Sell - Orchids Consulting" class="header-logo">
+  <div>WE SELL</div>
   <nav>
-    <a href="#servicios">Servicios</a>
-    <a href="#equipo">Equipo</a>
-    <a href="#nosotros">Nosotros</a>
-    <a href="#contacto" class="nav-cta">Contacto</a>
+    <a href="#">Servicios</a>
+    <a href="#">Nosotros</a>
+    <a href="#">Contacto</a>
   </nav>
 </header>
 
 <section class="hero">
   <div class="hero-content">
-    <span class="hero-eyebrow">Consultoría en Negocios Digitales</span>
-    <h2><span class="red">VENDEMOS</span><br><span class="outline">SOLUCIONES</span><br>QUE ESCALAN</h2>
-    <p>Combinamos estrategia, tecnología y datos para llevar tu empresa al siguiente nivel en el mundo digital.</p>
-    <div class="hero-actions">
-      <button class="btn-primary" onclick="scrollToSection('contacto')">Agendar llamada</button>
-      <button class="btn-ghost" onclick="scrollToSection('servicios')">Ver servicios →</button>
-    </div>
+    <h1>ESCALAMOS NEGOCIOS<br>DIGITALES</h1>
+    <p>Sistemas que generan ventas predecibles y crecimiento real.</p>
+    <button class="btn">Quiero escalar mi negocio</button>
   </div>
+
   <div class="hero-visual">
-    <div class="ring-bg ring-bg-1"></div>
-    <div class="ring-bg ring-bg-2"></div>
-    <img src="logo.png" alt="We Sell" class="hero-logo-img">
+    <img src="logo.png" width="300">
   </div>
 </section>
 
-<div class="marquee-wrap">
-  <div class="marquee-track">
-    <div class="marquee-item">ESTRATEGIA DIGITAL <span class="marquee-dot"></span> AUTOMATIZACIÓN <span class="marquee-dot"></span> MARKETING & ADS <span class="marquee-dot"></span> CRECIMIENTO <span class="marquee-dot"></span> ROI <span class="marquee-dot"></span> DATOS <span class="marquee-dot"></span></div>
-    <div class="marquee-item">ESTRATEGIA DIGITAL <span class="marquee-dot"></span> AUTOMATIZACIÓN <span class="marquee-dot"></span> MARKETING & ADS <span class="marquee-dot"></span> CRECIMIENTO <span class="marquee-dot"></span> ROI <span class="marquee-dot"></span> DATOS <span class="marquee-dot"></span></div>
-  </div>
-</div>
-
-<div class="stats-bar">
-  <div class="stat reveal"><span class="stat-num" data-target="120" data-prefix="+">0</span><span class="stat-label">Clientes activos</span></div>
-  <div class="stat reveal" style="transition-delay:0.1s"><span class="stat-num" data-target="8" data-suffix="x">0</span><span class="stat-label">ROI promedio</span></div>
-  <div class="stat reveal" style="transition-delay:0.2s"><span class="stat-num" data-target="5">0</span><span class="stat-label">Años de experiencia</span></div>
-  <div class="stat reveal" style="transition-delay:0.3s"><span class="stat-num" data-target="98" data-suffix="%">0</span><span class="stat-label">Satisfacción</span></div>
-</div>
-
-<section id="servicios" class="section">
-  <span class="section-label reveal">Lo que hacemos</span>
-  <h2 class="section-title reveal">Nuestros Servicios</h2>
-  <div class="services-grid">
-    <div class="service-card reveal" onclick="window.location.href='estrategia-digital.html'" style="cursor:pointer"><span class="service-num">01</span><h3>Estrategia Digital</h3><p>Diseñamos planes de crecimiento online adaptados a tu modelo de negocio y objetivos reales.</p><span class="service-arrow">↗</span></div>
-    <div class="service-card reveal" style="transition-delay:0.1s" onclick="window.location.href='automatizacion.html'" style="cursor:pointer"><span class="service-num">02</span><h3>Automatización</h3><p>Implementamos sistemas inteligentes para escalar ventas sin incrementar el esfuerzo manual.</p><span class="service-arrow">↗</span></div>
-    <div class="service-card reveal" style="transition-delay:0.2s" onclick="window.location.href='marketing-ads.html'" style="cursor:pointer">
-      <span class="service-num">03</span>
-      <h3>Marketing & Ads</h3>
-      <p>Estrategia, publicidad y análisis de datos para escalar tu negocio de forma efectiva y medible.</p>
-      <span class="service-arrow">↗</span>
-    </div>
-  </div>
-</section>
-
-<section id="equipo" class="section">
-  <span class="section-label reveal">Quiénes somos</span>
-  <h2 class="section-title reveal">Nuestro Equipo</h2>
-  <div class="team-grid">
-    <div class="team-card reveal"><img src="foto.jpg" alt="Santiago Silberstein"><div class="team-overlay"><span class="team-name">Santiago Silberstein</span><span class="team-role">Founder</span></div></div>
-  </div>
-</section>
-
-<section id="nosotros" class="section">
-  <div class="about-img-wrap reveal-left">
-    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80" alt="Equipo" class="about-img-main">
-    <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&q=80" alt="Reunión" class="about-img-accent">
-    <span class="about-tag">DESDE 2019</span>
-  </div>
-  <div class="about-text reveal-right">
-    <span class="section-label">Sobre nosotros</span>
-    <h2 class="section-title">Expertos en Crecimiento Digital</h2>
-    <div class="red-line"></div>
-    <p>Somos un equipo de estrategas, tecnólogos y creativos con una obsesión en común: hacer crecer negocios de manera sostenible y medible.</p>
-    <p>No vendemos soluciones genéricas. Cada cliente recibe una estrategia construida desde cero, basada en sus datos, su mercado y sus metas.</p>
-  </div>
-</section>
-
-<section id="contacto" class="section">
-  <span class="section-label reveal">Hablemos</span>
-  <h2 class="section-title reveal">Empecemos a Trabajar Juntos</h2>
-  <div class="contact-inner reveal">
-    <p>Dejanos tu información y un asesor se contactará con vos dentro de las próximas 24 horas para coordinar una llamada sin compromiso.</p>
-    <div class="contact-fields">
-      <input type="text" id="from_name" placeholder="Tu nombre completo" required>
-      <input type="email" id="reply_to" placeholder="tu@email.com" required>
-      <textarea id="message" placeholder="¿En qué podemos ayudarte?"></textarea>
-    </div>
-    <button class="btn-submit" id="btn-enviar" onclick="enviarFormulario()">Enviar mensaje</button>
-    <p class="success-msg" id="success">✓ ¡Gracias! Te contactaremos pronto.</p>
-    <p class="error-msg" id="error-msg">✗ Hubo un error. Por favor intentá de nuevo.</p>
+<section class="section">
+  <h2>Servicios</h2>
+  <div class="services">
+    <div class="card">Estrategia Digital</div>
+    <div class="card">Automatización</div>
+    <div class="card">Marketing & Ads</div>
   </div>
 </section>
 
 <footer>
-  <img src="logo.png" alt="We Sell Orchids" class="footer-logo">
-  <p>© 2026 Orchids Consulting — Todos los derechos reservados</p>
+  © 2026 We Sell
 </footer>
 
-<!-- WHATSAPP FLOTANTE -->
-<a href="https://wa.me/5491135019702" target="_blank" class="whatsapp-btn" title="Chateá con nosotros">
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.17 1.595 5.938L.057 23.929l6.188-1.517A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.817 9.817 0 01-5.003-1.368l-.36-.214-3.722.912.947-3.628-.235-.374A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
-</a>
-
-<style>
-.whatsapp-btn {
-  position: fixed; bottom: 28px; right: 28px; z-index: 999;
-  background: #25d366; width: 60px; height: 60px; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  box-shadow: 0 4px 20px rgba(37,211,102,0.4);
-  transition: transform 0.3s, box-shadow 0.3s;
-  animation: waPulse 2.5s ease-in-out infinite;
-}
-.whatsapp-btn:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.6); }
-@keyframes waPulse {
-  0%,100% { box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
-  50% { box-shadow: 0 4px 30px rgba(37,211,102,0.7); }
-}
-</style>
-
-<script>
-  // ── EMAILJS INIT ──
-  // IMPORTANTE: Reemplazá "TU_PUBLIC_KEY" con tu clave pública de EmailJS
-  // Conseguila en: https://dashboard.emailjs.com/admin/account
-  emailjs.init("TU_PUBLIC_KEY");
-
-  // ── SCROLL TO SECTION ──
-  function scrollToSection(id) {
-    document.getElementById(id).scrollIntoView({ behavior: 'smooth' });
-  }
-
-  // ── FORMULARIO CON EMAILJS ──
-  function enviarFormulario() {
-    const name    = document.getElementById("from_name").value.trim();
-    const email   = document.getElementById("reply_to").value.trim();
-    const message = document.getElementById("message").value.trim();
-    const btn     = document.getElementById("btn-enviar");
-    const success = document.getElementById("success");
-    const errorMsg= document.getElementById("error-msg");
-
-    // Validación
-    if (!name) { alert("Por favor ingresá tu nombre"); return; }
-    if (!email || !email.includes('@')) { alert("Por favor ingresá un email válido"); return; }
-
-    btn.disabled = true;
-    btn.textContent = "Enviando...";
-
-    // IMPORTANTE: Reemplazá los valores siguientes con los tuyos de EmailJS:
-    // - "TU_SERVICE_ID"  → ID del servicio (ej: "service_abc123")
-    // - "TU_TEMPLATE_ID" → ID del template (ej: "template_xyz456")
-    emailjs.send("TU_SERVICE_ID", "TU_TEMPLATE_ID", {
-      from_name: name,
-      reply_to:  email,
-      message:   message || "(sin mensaje)"
-    })
-    .then(() => {
-      success.style.display = 'block';
-      errorMsg.style.display = 'none';
-      document.getElementById("from_name").value = '';
-      document.getElementById("reply_to").value  = '';
-      document.getElementById("message").value   = '';
-      btn.textContent = "Enviar mensaje";
-      btn.disabled = false;
-      setTimeout(() => { success.style.display = 'none'; }, 6000);
-    })
-    .catch((err) => {
-      console.error("EmailJS error:", err);
-      errorMsg.style.display = 'block';
-      success.style.display  = 'none';
-      btn.textContent = "Enviar mensaje";
-      btn.disabled = false;
-    });
-  }
-
-  // ── SCROLL REVEAL ──
-  const revealObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.12 });
-
-  document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
-    revealObserver.observe(el);
-  });
-
-  // ── CONTADORES ANIMADOS ──
-  function animateCounter(el) {
-    const target  = parseInt(el.dataset.target);
-    const prefix  = el.dataset.prefix  || '';
-    const suffix  = el.dataset.suffix  || '';
-    const duration = 1800;
-    const step    = 16;
-    const steps   = duration / step;
-    let current   = 0;
-
-    const timer = setInterval(() => {
-      current += target / steps;
-      if (current >= target) {
-        current = target;
-        clearInterval(timer);
-      }
-      el.textContent = prefix + Math.floor(current) + suffix;
-    }, step);
-  }
-
-  const counterObserver = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting && !entry.target.dataset.animated) {
-        entry.target.dataset.animated = 'true';
-        animateCounter(entry.target);
-      }
-    });
-  }, { threshold: 0.5 });
-
-  document.querySelectorAll('.stat-num[data-target]').forEach(el => {
-    counterObserver.observe(el);
-  });
-</script>
 </body>
 </html>
