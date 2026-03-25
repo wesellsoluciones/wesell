@@ -7,6 +7,9 @@
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <!-- EmailJS -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <!-- Calendly -->
+  <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
+  <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
   <style>
     :root {
       --bg: #0a0f1e;
@@ -189,6 +192,19 @@
     .footer-logo { height:48px; width:48px; border-radius:50%; object-fit:cover; }
     footer p { font-size:12px; color:#222222; letter-spacing:0.06em; }
 
+    /* ── CALENDLY ── */
+    .calendly-wrap {
+      border: 1px solid var(--border-gray);
+      border-radius: 4px;
+      overflow: hidden;
+      max-width: 900px;
+    }
+    .calendly-inline-widget iframe {
+      border-radius: 4px;
+    }
+    /* Ocultar estilos del widget.css de Calendly que rompen el layout */
+    .calendly-overlay { background: rgba(10,15,30,0.85) !important; }
+
     /* ── SCROLL REVEAL ── */
     .reveal {
       opacity: 0;
@@ -257,7 +273,7 @@
     <h2><span class="red">VENDEMOS</span><br><span class="outline">SOLUCIONES</span><br>QUE ESCALAN</h2>
     <p>Combinamos estrategia, tecnología y datos para llevar tu empresa al siguiente nivel en el mundo digital.</p>
     <div class="hero-actions">
-      <button class="btn-primary" onclick="scrollToSection('contacto')">Agendar llamada</button>
+      <button class="btn-primary" onclick="Calendly.initPopupWidget({url:'https://calendly.com/wesellsoluciones/entrevista?primary_color=e03030&text_color=ffffff&background_color=131929'});return false;">Agendar reunión</button>
       <button class="btn-ghost" onclick="scrollToSection('servicios')">Ver servicios →</button>
     </div>
   </div>
@@ -322,17 +338,31 @@
 
 <section id="contacto" class="section">
   <span class="section-label reveal">Hablemos</span>
-  <h2 class="section-title reveal">Empecemos a Trabajar Juntos</h2>
-  <div class="contact-inner reveal">
-    <p>Dejanos tu información y un asesor se contactará con vos dentro de las próximas 24 horas para coordinar una llamada sin compromiso.</p>
-    <div class="contact-fields">
-      <input type="text" id="from_name" placeholder="Tu nombre completo" required>
-      <input type="email" id="reply_to" placeholder="tu@email.com" required>
-      <textarea id="message" placeholder="¿En qué podemos ayudarte?"></textarea>
+  <h2 class="section-title reveal">Agendá tu Llamada</h2>
+  <p class="reveal" style="font-size:15px;color:var(--muted);max-width:560px;margin-bottom:48px;line-height:1.75;">
+    Elegí el horario que mejor te quede. La reunión se crea en Google Meet automáticamente y se agrega al calendario de los dos.
+  </p>
+
+  <!-- CALENDLY INLINE WIDGET -->
+  <div class="reveal calendly-wrap">
+    <!-- 
+      IMPORTANTE: Reemplazá la URL de abajo con la tuya.
+      Formato: https://calendly.com/wesellsoluciones/entrevista
+      La conseguís en: calendly.com → Event Types → copiar link
+    -->
+    <div
+      class="calendly-inline-widget"
+      data-url="https://calendly.com/wesellsoluciones/entrevista?hide_event_type_details=1&hide_gdpr_banner=1&primary_color=e03030&text_color=ffffff&background_color=131929"
+      style="min-width:320px;height:700px;">
     </div>
-    <button class="btn-submit" id="btn-enviar" onclick="enviarFormulario()">Enviar mensaje</button>
-    <p class="success-msg" id="success">✓ ¡Gracias! Te contactaremos pronto.</p>
-    <p class="error-msg" id="error-msg">✗ Hubo un error. Por favor intentá de nuevo.</p>
+  </div>
+
+  <!-- Alternativa: botón que abre Calendly en popup -->
+  <div class="reveal" style="margin-top:32px;text-align:center;">
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">¿Preferís abrirlo en una ventana aparte?</p>
+    <button class="btn-primary" onclick="Calendly.initPopupWidget({url:'https://calendly.com/wesellsoluciones/entrevista?primary_color=e03030&text_color=ffffff&background_color=131929'});return false;">
+      📅 Agendar llamada
+    </button>
   </div>
 </section>
 
