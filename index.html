@@ -107,6 +107,10 @@
       display: flex; align-items: center; justify-content: center;
       position: relative; z-index: 3;
       box-shadow: 0 0 0 1px rgba(220,38,38,0.3), 0 20px 60px rgba(0,0,0,0.4);
+      cursor: pointer; transition: box-shadow 0.3s;
+    }
+    .logo-circle:hover {
+      box-shadow: 0 0 0 1px rgba(220,38,38,0.5), 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(220,38,38,0.3);
     }
 
     /* Anillos giratorios alrededor del círculo */
@@ -117,13 +121,6 @@
 
 
     /* ── HOVER LOGO: GIRO + MENSAJE ── */
-    .logo-circle {
-      cursor: pointer;
-      transition: box-shadow 0.3s;
-    }
-    .logo-circle:hover {
-      box-shadow: 0 0 0 1px rgba(220,38,38,0.5), 0 20px 60px rgba(0,0,0,0.5), 0 0 30px rgba(220,38,38,0.3);
-    }
     .hero-logo-img.spinning {
       animation: logoSpin 0.7s cubic-bezier(0.4,0,0.2,1) both !important;
     }
@@ -133,31 +130,23 @@
       100% { transform: rotate(360deg) scale(1); }
     }
     .logo-msg {
-      position: absolute;
-      bottom: -70px; left: 50%;
-      transform: translateX(-50%);
-      background: rgba(10,15,30,0.92);
+      position: fixed;
+      background: rgba(10,15,30,0.95);
       border: 1px solid var(--red);
       border-radius: 6px;
       padding: 10px 18px;
-      font-size: 12px; font-weight: 500;
+      font-size: 13px; font-weight: 500;
       color: #ffffff; letter-spacing: 0.04em;
       white-space: nowrap;
       opacity: 0; pointer-events: none;
       transition: opacity 0.3s, transform 0.3s;
-      transform: translateX(-50%) translateY(6px);
-      z-index: 10;
+      transform: translateY(6px);
+      z-index: 9999;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.4);
     }
     .logo-msg.visible {
       opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
-    .logo-msg::before {
-      content: '';
-      position: absolute; top: -6px; left: 50%; transform: translateX(-50%);
-      border-left: 6px solid transparent;
-      border-right: 6px solid transparent;
-      border-bottom: 6px solid var(--red);
+      transform: translateY(0);
     }
     /* ── EFECTO SELLO EN LOGO ── */
     .logo-seal-wrap {
@@ -662,12 +651,19 @@
   }
 
   function logoHover() {
-    const logo = document.getElementById('hero-logo');
-    const msg  = document.getElementById('logo-msg');
+    const logo   = document.getElementById('hero-logo');
+    const circle = logo.closest('.logo-circle');
+    const msg    = document.getElementById('logo-msg');
+    const rect   = circle.getBoundingClientRect();
+
     logo.classList.remove('spinning');
     void logo.offsetWidth;
     logo.classList.add('spinning');
+
     msg.textContent = getFraseRandom();
+    const msgW = msg.offsetWidth || 260;
+    msg.style.top  = (rect.bottom + 12) + 'px';
+    msg.style.left = (rect.left + rect.width/2 - msgW/2) + 'px';
     msg.classList.add('visible');
     clearTimeout(logoTimeout);
     logo.addEventListener('animationend', () => logo.classList.remove('spinning'), { once: true });
