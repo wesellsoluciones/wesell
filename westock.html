@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WeStock — Sistema de Gestión de Stock | Orchids Consulting</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #0a0f1e;
+      --surface: #131929;
+      --surface2: #1a2235;
+      --red: #e03030;
+      --red-bright: #f04040;
+      --text: #ffffff;
+      --muted: #8899b4;
+      --border: rgba(220,38,38,0.2);
+      --border-gray: rgba(255,255,255,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 10px 60px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: #ffffff;
+      border-bottom: 2px solid var(--red);
+      box-shadow: 0 2px 20px rgba(220,38,38,0.12);
+    }
+    .header-logo { height: 56px; width: 56px; border-radius: 50%; object-fit: cover; transition: transform 0.3s; }
+    .header-logo:hover { transform: scale(1.04); }
+    nav { display: flex; gap: 32px; align-items: center; }
+    nav a { text-decoration: none; color: #222222; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; transition: color 0.3s; }
+    nav a:hover { color: var(--red); }
+    .nav-back { border: 1px solid var(--red) !important; color: var(--red) !important; padding: 8px 20px; border-radius: 2px; transition: background 0.3s, color 0.3s !important; }
+    .nav-back:hover { background: var(--red) !important; color: #fff !important; }
+
+    /* ── CANVAS PARTÍCULAS ── */
+    #hero-canvas {
+      position: fixed; top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 0; pointer-events: none;
+      opacity: 0.4;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 120px 60px 80px;
+      position: relative; overflow: hidden;
+      background: var(--bg);
+    }
+    .hero-inner {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column; align-items: flex-start;
+      max-width: 1100px; width: 100%; margin: 0 auto;
+      gap: 0;
+    }
+
+    /* Badge */
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(224,48,48,0.1); border: 1px solid rgba(224,48,48,0.3);
+      border-radius: 2px; padding: 6px 16px;
+      font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 28px;
+      opacity: 0; animation: fadeUp 0.8s 0.2s ease both;
+    }
+    .hero-badge::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--red); animation: blink 1.5s ease infinite; }
+    @keyframes blink { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+    .hero h1 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(72px, 10vw, 140px);
+      font-weight: 400; line-height: 0.9;
+      letter-spacing: 0.02em;
+      margin-bottom: 10px;
+      opacity: 0; animation: fadeUp 0.8s 0.4s ease both;
+    }
+    .hero h1 .outline { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.2); }
+    .hero h1 .red { color: var(--red); }
+
+    .hero-sub {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(20px, 2.5vw, 32px);
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--muted); margin-bottom: 36px;
+      opacity: 0; animation: fadeUp 0.8s 0.55s ease both;
+    }
+
+    .hero-desc {
+      font-size: 15px; color: var(--muted); line-height: 1.85;
+      max-width: 600px; margin-bottom: 48px;
+      opacity: 0; animation: fadeUp 0.8s 0.7s ease both;
+    }
+
+    .hero-actions {
+      display: flex; gap: 16px; align-items: center;
+      opacity: 0; animation: fadeUp 0.8s 0.85s ease both;
+    }
+
+    @keyframes fadeUp { from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:translateY(0);} }
+    @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+
+    /* ── SCROLL INDICATOR ── */
+    .scroll-hint {
+      position: absolute; bottom: 36px; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: 8px;
+      font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase;
+      color: var(--muted); z-index: 2;
+      opacity: 0; animation: fadeIn 1s 1.5s ease both;
+    }
+    .scroll-line {
+      width: 1px; height: 40px;
+      background: linear-gradient(to bottom, var(--red), transparent);
+      animation: scrollPulse 2s ease-in-out infinite;
+    }
+    @keyframes scrollPulse { 0%,100%{opacity:1;transform:scaleY(1);} 50%{opacity:0.4;transform:scaleY(0.6);} }
+
+    /* ── BOTONES ── */
+    .btn-primary {
+      padding: 16px 40px; background: var(--red); color: #fff;
+      border: none; font-family: 'DM Sans', sans-serif;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; cursor: pointer; border-radius: 2px;
+      transition: transform 0.2s, box-shadow 0.3s, background 0.3s;
+      text-decoration: none; display: inline-block;
+    }
+    .btn-primary:hover { background: var(--red-bright); transform: translateY(-2px); box-shadow: 0 14px 40px rgba(220,38,38,0.45); }
+
+    .btn-ghost {
+      color: var(--muted); font-size: 12px; letter-spacing: 0.1em;
+      cursor: pointer; background: none; border: 1px solid var(--border-gray);
+      font-family: 'DM Sans', sans-serif; padding: 15px 28px; border-radius: 2px;
+      transition: color 0.3s, border-color 0.3s; text-decoration: none;
+      display: inline-block;
+    }
+    .btn-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.25); }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap { overflow: hidden; border-top: 2px solid var(--red); border-bottom: 2px solid var(--red); background: #ffffff; padding: 16px 0; }
+    .marquee-track { display: flex; gap: 50px; width: max-content; animation: marquee 20s linear infinite; }
+    @keyframes marquee { from{transform:translateX(0);} to{transform:translateX(-50%);} }
+    .marquee-item { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.2em; color: #0a0f1e; display: flex; align-items: center; gap: 50px; white-space: nowrap; }
+    .marquee-dot { width: 5px; height: 5px; background: var(--red); border-radius: 50%; }
+
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left { opacity: 0; transform: translateX(-30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right { opacity: 0; transform: translateX(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+    /* ── SECTION BASE ── */
+    .section { padding: 110px 60px; position: relative; max-width: 1200px; margin: 0 auto; }
+    .section-label { font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: #ffffff; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red); }
+    .section-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 5vw, 68px); font-weight: 400; line-height: 1; letter-spacing: 0.03em; margin-bottom: 56px; }
+
+    /* ── QUÉ ES ── */
+    #que-es { background: var(--surface); }
+    #que-es .section-wrap { max-width: 1200px; margin: 0 auto; padding: 110px 60px; }
+    .que-es-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .que-es-text p { font-size: 15px; color: var(--muted); line-height: 1.9; margin-bottom: 20px; }
+    .que-es-text p strong { color: var(--text); font-weight: 500; }
+
+    /* Visual mockup WeStock */
+    .westock-mockup {
+      background: var(--surface2); border: 1px solid var(--border-gray);
+      border-radius: 8px; overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(220,38,38,0.1);
+    }
+    .mockup-topbar {
+      background: #0d1220; border-bottom: 1px solid var(--border-gray);
+      padding: 12px 20px; display: flex; align-items: center; gap: 8px;
+    }
+    .mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .mockup-title-bar { flex: 1; text-align: center; font-size: 11px; letter-spacing: 0.1em; color: var(--muted); }
+    .mockup-body { padding: 20px; }
+    .mockup-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .mockup-heading { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.06em; color: var(--text); }
+    .mockup-badge-red { background: rgba(224,48,48,0.15); color: var(--red); font-size: 10px; letter-spacing: 0.1em; padding: 3px 10px; border-radius: 2px; border: 1px solid rgba(224,48,48,0.3); }
+    .mockup-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+    .mockup-stat { background: #0d1220; border: 1px solid var(--border-gray); border-radius: 4px; padding: 12px; }
+    .mockup-stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--red); display: block; line-height: 1; }
+    .mockup-stat-label { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 3px; display: block; }
+    .mockup-table-head { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; padding: 6px 8px; font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border-gray); margin-bottom: 6px; }
+    .mockup-row { display: grid; grid-template-columns: 2fr 1fr 1fr 1fr; gap: 8px; padding: 8px; font-size: 11px; border-radius: 3px; transition: background 0.2s; }
+    .mockup-row:nth-child(odd) { background: rgba(255,255,255,0.02); }
+    .mockup-row-name { color: var(--text); font-weight: 400; }
+    .mockup-row-val { color: var(--muted); }
+    .stock-ok { color: #4ade80; }
+    .stock-low { color: #fbbf24; }
+    .stock-out { color: var(--red); }
+
+    /* ── FEATURES ── */
+    #features { background: var(--bg); }
+    #features .section-wrap { max-width: 1200px; margin: 0 auto; padding: 110px 60px; }
+    .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border-gray); border: 1px solid var(--border-gray); }
+    .feature-card {
+      background: var(--bg); padding: 44px 36px;
+      position: relative; overflow: hidden;
+      transition: background 0.4s;
+    }
+    .feature-card::after { content: ''; position: absolute; bottom: 0; left: 0; width: 100%; height: 2px; background: var(--red); transform: scaleX(0); transform-origin: left; transition: transform 0.4s ease; }
+    .feature-card:hover { background: var(--surface); }
+    .feature-card:hover::after { transform: scaleX(1); }
+    .feature-icon { font-size: 36px; margin-bottom: 20px; display: block; }
+    .feature-card h3 { font-family: 'Bebas Neue', sans-serif; font-size: 24px; font-weight: 400; letter-spacing: 0.06em; margin-bottom: 12px; color: var(--text); }
+    .feature-card p { font-size: 13px; color: var(--muted); line-height: 1.75; }
+
+    /* ── CÓMO FUNCIONA ── */
+    #como-funciona { background: var(--surface); }
+    #como-funciona .section-wrap { max-width: 1200px; margin: 0 auto; padding: 110px 60px; }
+    .steps-list { display: flex; flex-direction: column; gap: 0; }
+    .step {
+      display: grid; grid-template-columns: 80px 1fr; gap: 36px;
+      padding: 40px 0; border-bottom: 1px solid var(--border-gray);
+      align-items: flex-start;
+    }
+    .step:last-child { border-bottom: none; }
+    .step-num {
+      font-family: 'Bebas Neue', sans-serif; font-size: 72px;
+      color: rgba(224,48,48,0.2); line-height: 1;
+      transition: color 0.3s;
+    }
+    .step:hover .step-num { color: var(--red); }
+    .step-content h3 { font-family: 'Bebas Neue', sans-serif; font-size: 28px; font-weight: 400; letter-spacing: 0.04em; margin-bottom: 10px; color: var(--text); }
+    .step-content p { font-size: 14px; color: var(--muted); line-height: 1.8; max-width: 560px; }
+
+    /* ── CTA COMPRA ── */
+    #comprar { background: var(--bg); position: relative; overflow: hidden; }
+    #comprar .section-wrap { max-width: 1200px; margin: 0 auto; padding: 110px 60px; }
+    .cta-inner {
+      background: var(--surface);
+      border: 1px solid var(--border-gray);
+      border-top: 3px solid var(--red);
+      border-radius: 4px;
+      padding: 72px 80px;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 60px; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .cta-inner::before {
+      content: 'WESTOCK'; position: absolute;
+      font-family: 'Bebas Neue', sans-serif; font-size: 200px;
+      color: rgba(224,48,48,0.04); letter-spacing: 0.05em;
+      right: -20px; bottom: -30px; line-height: 1;
+      pointer-events: none; user-select: none;
+    }
+    .cta-label { font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--red); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .cta-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red); }
+    .cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 4vw, 60px); line-height: 1; letter-spacing: 0.03em; margin-bottom: 16px; }
+    .cta-desc { font-size: 14px; color: var(--muted); line-height: 1.8; max-width: 480px; }
+
+    .price-box { text-align: center; flex-shrink: 0; }
+    .price-tag { font-family: 'Bebas Neue', sans-serif; font-size: 72px; color: var(--text); line-height: 1; letter-spacing: 0.02em; }
+    .price-tag span { font-size: 28px; color: var(--muted); vertical-align: super; }
+    .price-period { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; margin-top: 4px; }
+    .price-features { list-style: none; margin-bottom: 28px; display: flex; flex-direction: column; gap: 8px; text-align: left; }
+    .price-features li { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+    .price-features li::before { content: '✓'; color: var(--red); font-weight: 700; font-size: 13px; flex-shrink: 0; }
+
+    .btn-buy {
+      display: inline-block; width: 100%;
+      padding: 18px 40px; background: var(--red); color: #fff;
+      border: none; font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; cursor: pointer; border-radius: 2px;
+      transition: transform 0.2s, box-shadow 0.3s, background 0.3s;
+      text-decoration: none; text-align: center;
+    }
+    .btn-buy:hover { background: var(--red-bright); transform: translateY(-2px); box-shadow: 0 16px 50px rgba(220,38,38,0.5); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border-gray);
+      padding: 32px 60px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--surface);
+    }
+    footer p { font-size: 12px; color: var(--muted); letter-spacing: 0.04em; }
+    footer a { color: var(--muted); text-decoration: none; font-size: 12px; transition: color 0.3s; }
+    footer a:hover { color: var(--red); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      header { padding: 10px 24px; }
+      .hero { padding: 100px 24px 60px; }
+      .que-es-grid { grid-template-columns: 1fr; gap: 40px; }
+      .features-grid { grid-template-columns: 1fr 1fr; }
+      .cta-inner { grid-template-columns: 1fr; padding: 48px 36px; }
+      .price-box { text-align: left; }
+      #que-es .section-wrap, #features .section-wrap, #como-funciona .section-wrap, #comprar .section-wrap { padding: 70px 24px; }
+      footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
+    }
+    @media (max-width: 560px) {
+      .features-grid { grid-template-columns: 1fr; }
+      .hero h1 { font-size: clamp(56px, 14vw, 96px); }
+      .step { grid-template-columns: 56px 1fr; gap: 20px; }
+      .step-num { font-size: 52px; }
+      .cta-inner::before { font-size: 120px; }
+    }
+  </style>
+</head>
+<body>
+
+<canvas id="hero-canvas"></canvas>
+
+<!-- HEADER -->
+<header>
+  <a href="index.html">
+    <img src="logo.png" alt="We Sell - Orchids Consulting" class="header-logo">
+  </a>
+  <nav>
+    <a href="index.html">Inicio</a>
+    <a href="index.html#servicios">Servicios</a>
+    <a href="#comprar" class="nav-back">Obtener WeStock</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div class="hero-badge">Producto — Orchids Consulting</div>
+    <h1>
+      WE<span class="red">STOCK</span><br>
+      <span class="outline">SISTEMA DE</span><br>
+      <span class="outline">GESTIÓN</span>
+    </h1>
+    <p class="hero-sub">Control total de tu inventario</p>
+    <p class="hero-desc">
+      WeStock es la herramienta diseñada para que nunca más pierdas el control de tu stock.
+      Gestioná productos, movimientos y alertas desde un solo lugar, de forma simple y eficiente.
+    </p>
+    <div class="hero-actions">
+      <a href="#comprar" class="btn-primary">Obtener ahora</a>
+      <a href="#que-es" class="btn-ghost">Ver más</a>
+    </div>
+  </div>
+  <div class="scroll-hint">
+    <div class="scroll-line"></div>
+    Scroll
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-item">GESTIÓN DE STOCK <div class="marquee-dot"></div> CONTROL DE INVENTARIO <div class="marquee-dot"></div> ALERTAS EN TIEMPO REAL <div class="marquee-dot"></div> REPORTES AUTOMÁTICOS <div class="marquee-dot"></div> ORCHIDS CONSULTING <div class="marquee-dot"></div> WESTOCK <div class="marquee-dot"></div></div>
+    <div class="marquee-item">GESTIÓN DE STOCK <div class="marquee-dot"></div> CONTROL DE INVENTARIO <div class="marquee-dot"></div> ALERTAS EN TIEMPO REAL <div class="marquee-dot"></div> REPORTES AUTOMÁTICOS <div class="marquee-dot"></div> ORCHIDS CONSULTING <div class="marquee-dot"></div> WESTOCK <div class="marquee-dot"></div></div>
+  </div>
+</div>
+
+<!-- QUÉ ES WESTOCK -->
+<div id="que-es" style="background:var(--surface);">
+  <div class="section-wrap">
+    <div class="que-es-grid">
+      <div class="que-es-text reveal-left">
+        <p class="section-label">Qué es WeStock</p>
+        <h2 class="section-title">Tu stock,<br>siempre <span style="color:var(--red)">bajo control</span></h2>
+        <p>
+          WeStock es un <strong>sistema de gestión de inventario</strong> desarrollado por Orchids Consulting para negocios que necesitan tener visibilidad total de sus productos, movimientos y existencias en todo momento.
+        </p>
+        <p>
+          Olvidate de las planillas desactualizadas y los errores manuales. Con WeStock podés registrar entradas y salidas, recibir alertas cuando el stock baja y tomar decisiones basadas en datos reales.
+        </p>
+        <p>
+          Diseñado para ser <strong>simple, rápido y confiable</strong>, sin curvas de aprendizaje complicadas ni configuraciones técnicas que te hagan perder tiempo.
+        </p>
+      </div>
+      <div class="reveal-right">
+        <!-- Mockup visual del sistema -->
+        <div class="westock-mockup">
+          <div class="mockup-topbar">
+            <div class="mockup-dot" style="background:#e03030;"></div>
+            <div class="mockup-dot" style="background:#fbbf24;"></div>
+            <div class="mockup-dot" style="background:#4ade80;"></div>
+            <span class="mockup-title-bar">WeStock — Panel de control</span>
+          </div>
+          <div class="mockup-body">
+            <div class="mockup-header-row">
+              <span class="mockup-heading">Inventario</span>
+              <span class="mockup-badge-red">● En vivo</span>
+            </div>
+            <div class="mockup-stats">
+              <div class="mockup-stat">
+                <span class="mockup-stat-num">247</span>
+                <span class="mockup-stat-label">Productos</span>
+              </div>
+              <div class="mockup-stat">
+                <span class="mockup-stat-num" style="color:#fbbf24;">12</span>
+                <span class="mockup-stat-label">Stock bajo</span>
+              </div>
+              <div class="mockup-stat">
+                <span class="mockup-stat-num" style="color:#4ade80;">98%</span>
+                <span class="mockup-stat-label">Cobertura</span>
+              </div>
+            </div>
+            <div class="mockup-table-head">
+              <span>Producto</span><span>Stock</span><span>Mín.</span><span>Estado</span>
+            </div>
+            <div class="mockup-row">
+              <span class="mockup-row-name">Remera talle M</span>
+              <span class="mockup-row-val">84</span>
+              <span class="mockup-row-val">10</span>
+              <span class="stock-ok">✓ OK</span>
+            </div>
+            <div class="mockup-row">
+              <span class="mockup-row-name">Pantalón cargo</span>
+              <span class="mockup-row-val">7</span>
+              <span class="mockup-row-val">10</span>
+              <span class="stock-low">⚠ Bajo</span>
+            </div>
+            <div class="mockup-row">
+              <span class="mockup-row-name">Campera L</span>
+              <span class="mockup-row-val">0</span>
+              <span class="mockup-row-val">5</span>
+              <span class="stock-out">✕ Agotado</span>
+            </div>
+            <div class="mockup-row">
+              <span class="mockup-row-name">Zapatillas 42</span>
+              <span class="mockup-row-val">23</span>
+              <span class="mockup-row-val">8</span>
+              <span class="stock-ok">✓ OK</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FEATURES -->
+<div id="features" style="background:var(--bg);">
+  <div class="section-wrap">
+    <p class="section-label reveal">Funcionalidades</p>
+    <h2 class="section-title reveal">Todo lo que<br>necesitás</h2>
+    <div class="features-grid">
+      <div class="feature-card reveal">
+        <span class="feature-icon">📦</span>
+        <h3>Control de inventario</h3>
+        <p>Registrá todos tus productos con nombre, categoría, cantidad mínima y precio. Accedé al estado actualizado de tu stock en cualquier momento.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">🔔</span>
+        <h3>Alertas de stock bajo</h3>
+        <p>Configurá umbrales mínimos por producto y recibí alertas automáticas cuando el stock está por debajo del nivel definido. Nunca más te quedés sin mercadería sin avisar.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">📊</span>
+        <h3>Movimientos registrados</h3>
+        <p>Cada entrada y salida queda registrada con fecha, cantidad y usuario. Trazabilidad total de tu inventario para auditorías o revisiones internas.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">📋</span>
+        <h3>Reportes simples</h3>
+        <p>Visualizá el estado de tu stock de forma clara. Identificá productos más rotados, faltantes críticos y tendencias de consumo.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">👥</span>
+        <h3>Multi-usuario</h3>
+        <p>Permitís acceso a tu equipo con roles diferenciados. El encargado de depósito carga movimientos, el administrativo revisa reportes.</p>
+      </div>
+      <div class="feature-card reveal">
+        <span class="feature-icon">⚡</span>
+        <h3>Fácil de usar</h3>
+        <p>Interfaz pensada para cualquier nivel de conocimiento técnico. Sin instalaciones complicadas, sin manuales interminables. Empezás el mismo día.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CÓMO FUNCIONA -->
+<div id="como-funciona" style="background:var(--surface);">
+  <div class="section-wrap">
+    <p class="section-label reveal">Proceso</p>
+    <h2 class="section-title reveal">Cómo funciona<br><span style="color:var(--red)">WeStock</span></h2>
+    <div class="steps-list">
+      <div class="step reveal">
+        <span class="step-num">01</span>
+        <div class="step-content">
+          <h3>Adquirís el sistema</h3>
+          <p>Realizás el pago a través de Mercado Pago de forma segura. En minutos recibís el acceso y los datos de configuración inicial.</p>
+        </div>
+      </div>
+      <div class="step reveal">
+        <span class="step-num">02</span>
+        <div class="step-content">
+          <h3>Configuramos tu cuenta</h3>
+          <p>El equipo de Orchids Consulting te acompaña en la configuración inicial: carga de productos, categorías y usuarios del sistema.</p>
+        </div>
+      </div>
+      <div class="step reveal">
+        <span class="step-num">03</span>
+        <div class="step-content">
+          <h3>Empezás a operar</h3>
+          <p>Desde el primer día podés registrar movimientos, consultar el estado del stock y recibir alertas. Tu inventario, siempre actualizado.</p>
+        </div>
+      </div>
+      <div class="step reveal">
+        <span class="step-num">04</span>
+        <div class="step-content">
+          <h3>Soporte continuo</h3>
+          <p>Contás con soporte de Orchids Consulting para resolver dudas, ajustes y mejoras. No estás solo después de la compra.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CTA COMPRA -->
+<div id="comprar" style="background:var(--bg);">
+  <div class="section-wrap">
+    <div class="cta-inner reveal">
+      <div>
+        <p class="cta-label">Obtener WeStock</p>
+        <h2 class="cta-title">Empezá a gestionar<br>tu stock <span style="color:var(--red)">hoy</span></h2>
+        <p class="cta-desc">
+          Adquirí WeStock con un solo pago y tomá el control total de tu inventario. Sin suscripciones ocultas, sin sorpresas.
+        </p>
+      </div>
+      <div class="price-box">
+        <div class="price-tag"><span>$</span>7.999</div>
+        <p class="price-period">ARS · Pago único · Acceso total</p>
+        <ul class="price-features">
+          <li>Sistema completo de inventario</li>
+          <li>Alertas de stock bajo</li>
+          <li>Registro de movimientos</li>
+          <li>Multi-usuario incluido</li>
+          <li>Soporte de Orchids Consulting</li>
+          <li>Configuración asistida</li>
+        </ul>
+        <a href="https://mpago.la/1EACobY" target="_blank" rel="noopener" class="btn-buy">
+          Comprar con Mercado Pago →
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 Orchids Consulting — WeStock</p>
+  <a href="index.html">← Volver al sitio principal</a>
+</footer>
+
+<script>
+  // ── PARTÍCULAS ──
+  (function() {
+    const canvas = document.getElementById('hero-canvas');
+    const ctx = canvas.getContext('2d');
+    let W, H, particles = [];
+    const COUNT = 60;
+    const MAX_DIST = 130;
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+
+    function Particle() {
+      this.x = Math.random() * W;
+      this.y = Math.random() * H;
+      this.vx = (Math.random() - 0.5) * 0.4;
+      this.vy = (Math.random() - 0.5) * 0.4;
+      this.r  = Math.random() * 1.6 + 0.5;
+    }
+
+    Particle.prototype.update = function() {
+      this.x += this.vx;
+      this.y += this.vy;
+      if (this.x < 0 || this.x > W) this.vx *= -1;
+      if (this.y < 0 || this.y > H) this.vy *= -1;
+    };
+
+    function init() {
+      particles = [];
+      for (let i = 0; i < COUNT; i++) particles.push(new Particle());
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      for (let i = 0; i < particles.length; i++) {
+        particles[i].update();
+        ctx.beginPath();
+        ctx.arc(particles[i].x, particles[i].y, particles[i].r, 0, Math.PI * 2);
+        ctx.fillStyle = 'rgba(224,48,48,0.5)';
+        ctx.fill();
+        for (let j = i + 1; j < particles.length; j++) {
+          const dx = particles[i].x - particles[j].x;
+          const dy = particles[i].y - particles[j].y;
+          const dist = Math.sqrt(dx*dx + dy*dy);
+          if (dist < MAX_DIST) {
+            const alpha = (1 - dist / MAX_DIST) * 0.15;
+            ctx.beginPath();
+            ctx.moveTo(particles[i].x, particles[i].y);
+            ctx.lineTo(particles[j].x, particles[j].y);
+            ctx.strokeStyle = `rgba(224,48,48,${alpha})`;
+            ctx.lineWidth = 0.5;
+            ctx.stroke();
+          }
+        }
+      }
+      requestAnimationFrame(draw);
+    }
+
+    window.addEventListener('resize', () => { resize(); init(); });
+    resize(); init(); draw();
+  })();
+
+  // ── SCROLL REVEAL ──
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => {
+    revealObserver.observe(el);
+  });
+</script>
+</body>
+</html>
