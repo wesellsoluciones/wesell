@@ -518,25 +518,151 @@
       transform: translateX(0);
     }
 
-    /* ── RESPONSIVE ── */
+    /* ── RESPONSIVE COMPLETO ── */
+
+    /* Tablet (900px) */
     @media (max-width:900px) {
       header { padding:10px 20px; }
-      nav { gap:16px; }
-      .hero { grid-template-columns:1fr; }
-      .hero-content { padding:120px 24px 60px; }
-      .hero-visual { padding:50px 24px; min-height:340px; border-left:none; border-top:2px solid rgba(220,38,38,0.15); }
-      .hero-logo-img { width:260px; height:260px; }
+      nav { gap:14px; }
+      nav a { font-size:11px; }
+
+      /* Hero */
+      .hero { flex-direction:column; min-height:auto; }
+      .hero-content { padding:100px 24px 40px; flex:none; }
+      .hero-visual { padding:30px 24px 50px; flex-shrink:0; justify-content:center; }
+      .hero-metric { display:none; }
+      .hero-vline { display:none; }
+
+      /* Logo circular */
+      .logo-circle { width:180px; height:180px; }
+      .hero-logo-img { width:130px; height:130px; }
+      .seal-pulse, .seal-pulse-2 { width:180px; height:180px; }
+      .seal-ring-glow { width:200px; height:200px; }
+      .ring-bg-1 { width:220px; height:220px; }
+      .ring-bg-2 { width:270px; height:270px; }
+
+      /* Stats */
       .stats-bar { flex-direction:column; gap:28px; padding:40px 24px; }
       .stat { border-right:none; border-bottom:1px solid var(--border-gray); padding-bottom:24px; }
       .stat:last-child { border-bottom:none; }
-      .section { padding:80px 24px; }
+      .stat-num { font-size:48px; }
+
+      /* Sections */
+      .section { padding:70px 24px; }
+      .section-title { font-size:clamp(32px,5vw,56px); margin-bottom:36px; }
+
+      /* Servicios */
       .services-grid { grid-template-columns:1fr; }
-      .team-grid { grid-template-columns:1fr 1fr; gap:14px; }
-      #nosotros { grid-template-columns:1fr; padding:80px 24px; gap:40px; }
-      .about-img-wrap { height:280px; }
+
+      /* Carrusel */
+      .carousel-3d-wrap { padding:20px 0 50px; }
+      .carousel-3d { width:280px; height:360px; }
+      .carousel-card { width:280px; height:360px; }
+      .carousel-card.prev { transform:translateX(-160px) translateZ(-140px) rotateY(30deg) scale(0.82); }
+      .carousel-card.next { transform:translateX(160px) translateZ(-140px) rotateY(-30deg) scale(0.82); }
+      .carousel-prev { left:-20px; }
+      .carousel-next { right:-20px; }
+
+      /* Nosotros */
+      #nosotros { grid-template-columns:1fr; padding:70px 24px; gap:40px; }
+      .about-img-wrap { height:260px; }
+      .about-img-main { width:85%; height:220px; }
+      .about-img-accent { width:55%; height:160px; }
+
+      /* Contacto */
+      .contact-inner { max-width:100%; }
+      .calendly-wrap { max-width:100%; }
+
+      /* Footer */
       footer { flex-direction:column; gap:16px; text-align:center; padding:28px 24px; }
+
+      /* Popup perfil */
+      .profile-modal { padding:24px; }
+      .profile-header { flex-direction:column; align-items:center; text-align:center; gap:16px; }
+      .profile-photo { width:80px; height:80px; }
     }
-    @media (max-width:560px) { .team-grid { grid-template-columns:1fr; } }
+
+    /* Mobile (560px) */
+    @media (max-width:560px) {
+      /* Header */
+      header { padding:8px 16px; }
+      nav { gap:10px; }
+      nav a { font-size:10px; letter-spacing:0.08em; }
+      .nav-cta { padding:6px 12px; }
+      .header-logo { height:44px; width:44px; }
+
+      /* Hero */
+      .hero-content { padding:90px 18px 30px; }
+      .hero-content h2 { font-size:clamp(44px,12vw,72px); }
+      .hero-content p { font-size:13px; margin-bottom:28px; }
+      .hero-actions { flex-direction:column; gap:12px; width:100%; }
+      .btn-primary, .btn-ghost { width:100%; text-align:center; padding:14px 20px; }
+      .hero-visual { padding:20px 18px 40px; }
+      .logo-circle { width:150px; height:150px; }
+      .hero-logo-img { width:110px; height:110px; }
+      .seal-pulse, .seal-pulse-2 { width:150px; height:150px; }
+      .ring-bg-1 { width:190px; height:190px; }
+      .ring-bg-2 { width:240px; height:240px; }
+
+      /* Marquee */
+      .marquee-item { font-size:16px; gap:40px; }
+
+      /* Stats */
+      .stat-num { font-size:40px; }
+      .stat-label { font-size:10px; }
+
+      /* Sections */
+      .section { padding:60px 18px; }
+      .section-title { font-size:clamp(28px,9vw,48px); margin-bottom:28px; }
+      .section-label { font-size:10px; }
+
+      /* Servicios */
+      .service-card { padding:32px 24px; }
+      .service-num { font-size:60px; }
+      .service-card h3 { font-size:22px; }
+
+      /* Carrusel */
+      .carousel-3d { width:260px; height:320px; }
+      .carousel-card { width:260px; height:320px; }
+      .carousel-card.prev { transform:translateX(-130px) translateZ(-120px) rotateY(30deg) scale(0.82); }
+      .carousel-card.next { transform:translateX(130px) translateZ(-120px) rotateY(-30deg) scale(0.82); }
+      .carousel-name { font-size:20px; }
+      .carousel-btn { width:38px; height:38px; font-size:24px; }
+      .carousel-prev { left:-14px; }
+      .carousel-next { right:-14px; }
+
+      /* Nosotros */
+      #nosotros { padding:60px 18px; gap:30px; }
+      .about-img-wrap { height:220px; }
+      .about-img-main { width:90%; height:180px; }
+      .about-img-accent { width:60%; height:130px; }
+      .about-tag { font-size:12px; padding:6px 12px; }
+      .about-text p { font-size:14px; }
+
+      /* Contacto */
+      .contact-inner > p { font-size:14px; }
+
+      /* Footer */
+      footer { padding:24px 18px; }
+      footer p { font-size:11px; }
+
+      /* Popup perfil */
+      .profile-modal { padding:18px; margin:10px; }
+      .profile-modal-name { font-size:24px; }
+      .profile-tab { padding:8px 14px; font-size:11px; }
+      .profile-tab-content { font-size:13px; }
+
+      /* WhatsApp btn */
+      .whatsapp-btn { width:50px; height:50px; bottom:20px; right:20px; }
+    }
+
+    /* Mobile pequeño (380px) */
+    @media (max-width:380px) {
+      nav a:not(.nav-cta) { display:none; }
+      .hero-content h2 { font-size:38px; }
+      .carousel-3d { width:230px; height:290px; }
+      .carousel-card { width:230px; height:290px; }
+    }
   </style>
 </head>
 <body>
@@ -642,7 +768,7 @@
       </div>
       <div class="carousel-card" data-index="1" style="background:#0a0f1e;" onclick="openProfile(1)">
         <div class="carousel-card-inner">
-          <img src="IT_Implementation_Analyst.png" alt="Nahuel Decima" style="object-fit:cover; object-position: center 20%; filter: grayscale(30%) contrast(1.05); transform: scale(1.8); transform-origin: center 25%;">
+          <img src="IT_Implementation_Analyst.png" alt="Nahuel Decima" style="object-fit:cover; object-position: center top; filter: grayscale(30%) contrast(1.05);">
           <div class="carousel-overlay">
             <span class="carousel-name">Nahuel Decima</span>
             <span class="carousel-role">IT Implementation Analyst</span>
