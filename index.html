@@ -383,7 +383,43 @@
     }
     .carousel-dot.active { background: var(--red); transform: scale(1.3); }
 
-    /* ── TEAM (viejo, por si acaso) ── */
+    .carousel-hint { font-size:10px; letter-spacing:0.1em; color:rgba(255,255,255,0.6); margin-top:4px; display:block; }
+
+    /* ── POPUP PERFIL ── */
+    .profile-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: rgba(10,15,30,0.88);
+      display: none; align-items: center; justify-content: center;
+      padding: 20px;
+    }
+    .profile-overlay.open { display: flex; animation: fadeIn 0.3s ease; }
+    .profile-modal {
+      background: var(--surface); border: 1px solid var(--border-gray);
+      border-radius: 8px; max-width: 680px; width: 100%;
+      max-height: 85vh; overflow-y: auto;
+      position: relative; padding: 40px;
+    }
+    .profile-close {
+      position: absolute; top: 16px; right: 16px;
+      background: none; border: none; color: var(--muted);
+      font-size: 20px; cursor: pointer; transition: color 0.2s;
+    }
+    .profile-close:hover { color: var(--text); }
+    .profile-header { display: flex; gap: 28px; align-items: flex-start; margin-bottom: 28px; }
+    .profile-photo { width: 100px; height: 100px; border-radius: 50%; object-fit: cover; border: 2px solid var(--red); flex-shrink: 0; background: #0a0f1e; }
+    .profile-modal-name { font-family:'Bebas Neue',sans-serif; font-size:32px; letter-spacing:0.04em; color:var(--text); margin-bottom:6px; }
+    .profile-modal-role { display:inline-block; background:var(--red); color:#fff; font-size:11px; letter-spacing:0.12em; text-transform:uppercase; padding:3px 10px; border-radius:2px; margin-bottom:10px; }
+    .profile-tagline { font-size:13px; color:var(--muted); line-height:1.6; }
+    .profile-tabs { display:flex; gap:0; border-bottom:1px solid var(--border-gray); margin-bottom:24px; }
+    .profile-tab { background:none; border:none; color:var(--muted); font-family:'DM Sans',sans-serif; font-size:13px; letter-spacing:0.08em; text-transform:uppercase; padding:10px 24px; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-1px; transition:color 0.2s, border-color 0.2s; }
+    .profile-tab.active { color:var(--text); border-bottom-color:var(--red); }
+    .profile-tab-content { font-size:14px; color:var(--muted); line-height:1.85; }
+    .profile-tab-content p { margin-bottom:14px; }
+    .profile-tab-content ul { padding-left:18px; margin-bottom:14px; }
+    .profile-tab-content ul li { margin-bottom:6px; }
+    .profile-tab-content h4 { font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--text); letter-spacing:0.06em; margin:20px 0 10px; }
+
+    /* ── TEAM (viejo) ── */
     #equipo { background:var(--surface); }
     .team-grid { display:grid; grid-template-columns:400px; justify-content:center; gap:20px; }
     .team-card { position:relative; overflow:hidden; border-radius:3px; border:1px solid var(--border-gray); transition:transform 0.3s,box-shadow 0.3s; }
@@ -594,33 +630,51 @@
 
   <div class="carousel-3d-wrap">
     <div class="carousel-3d" id="team-carousel">
-      <!-- Para agregar más miembros: copiar un .carousel-card y cambiar datos -->
-      <div class="carousel-card" data-index="0">
+      <div class="carousel-card" data-index="0" onclick="openProfile(0)">
         <div class="carousel-card-inner">
           <img src="foto.jpg" alt="Santiago Silberstein">
           <div class="carousel-overlay">
             <span class="carousel-name">Santiago Silberstein</span>
             <span class="carousel-role">Founder</span>
+            <span class="carousel-hint">Ver perfil →</span>
           </div>
         </div>
       </div>
-      <div class="carousel-card" data-index="1" style="background:#0a0f1e;">
+      <div class="carousel-card" data-index="1" style="background:#0a0f1e;" onclick="openProfile(1)">
         <div class="carousel-card-inner">
           <img src="IT_Implementation_Analyst.png" alt="Nahuel Decima" style="object-fit:cover; object-position: center 25%; background:#0a0f1e; transform: scale(2.8); transform-origin: center 35%;">
           <div class="carousel-overlay">
             <span class="carousel-name">Nahuel Decima</span>
             <span class="carousel-role">IT Implementation Analyst</span>
+            <span class="carousel-hint">Ver perfil →</span>
           </div>
         </div>
       </div>
     </div>
-
-    <!-- Controles -->
     <button class="carousel-btn carousel-prev" onclick="carouselMove(-1)">&#8249;</button>
     <button class="carousel-btn carousel-next" onclick="carouselMove(1)">&#8250;</button>
-
-    <!-- Dots -->
     <div class="carousel-dots" id="carousel-dots"></div>
+  </div>
+
+  <!-- POPUP PERFIL -->
+  <div class="profile-overlay" id="profile-overlay" onclick="closeProfile(event)">
+    <div class="profile-modal">
+      <button class="profile-close" onclick="closeProfile()">✕</button>
+      <div class="profile-header">
+        <img class="profile-photo" id="profile-photo" src="" alt="">
+        <div class="profile-info">
+          <h3 class="profile-modal-name" id="profile-modal-name"></h3>
+          <span class="profile-modal-role" id="profile-modal-role"></span>
+          <p class="profile-tagline" id="profile-tagline"></p>
+        </div>
+      </div>
+      <div class="profile-tabs">
+        <button class="profile-tab active" onclick="switchTab('descripcion')">Descripción</button>
+        <button class="profile-tab" onclick="switchTab('acerca')">Acerca de</button>
+      </div>
+      <div class="profile-tab-content" id="tab-descripcion"></div>
+      <div class="profile-tab-content" id="tab-acerca" style="display:none"></div>
+    </div>
   </div>
 </section>
 
@@ -792,6 +846,106 @@
   function logoLeave() {
     const msg = document.getElementById('logo-msg');
     logoTimeout = setTimeout(() => msg.classList.remove('visible'), 400);
+  }
+
+  // ── PERFILES DEL EQUIPO ──
+  const perfiles = [
+    {
+      nombre: 'Santiago Silberstein',
+      rol: 'Founder',
+      foto: 'foto.jpg',
+      tagline: 'International Digital Business Consultant | Project Manager | Continuous Improvement Specialist | Strategy Planner | Commercial and Analytical Profile',
+      descripcion: `<p>Profesional con enfoque internacional especializado en transformación digital, gestión de proyectos y optimización de procesos, con una sólida combinación de visión estratégica, orientación comercial y capacidad analítica.</p>
+      <p>Experiencia liderando iniciativas de negocio en entornos dinámicos y multiculturales, impulsando el crecimiento a través de soluciones digitales, mejora continua y toma de decisiones basada en datos. Capacidad para identificar oportunidades, diseñar estrategias escalables y ejecutar proyectos end-to-end, alineando objetivos comerciales con capacidades tecnológicas.</p>
+      <h4>Responsabilidades y áreas de impacto</h4>
+      <ul>
+        <li>Asesorar a organizaciones en estrategias de negocio digital y expansión internacional.</li>
+        <li>Liderar proyectos de implementación y transformación (desde la planificación hasta la ejecución).</li>
+        <li>Analizar datos comerciales y operativos para detectar oportunidades de crecimiento y eficiencia.</li>
+        <li>Diseñar e implementar procesos de mejora continua (optimización de costos, productividad y performance).</li>
+        <li>Desarrollar estrategias comerciales y planes de acción basados en insights del mercado.</li>
+        <li>Coordinar equipos multidisciplinarios y stakeholders en diferentes regiones.</li>
+        <li>Definir KPIs, dashboards y métricas clave para la toma de decisiones.</li>
+        <li>Evaluar e integrar herramientas digitales (CRM, ERP, automatización, analytics).</li>
+      </ul>
+      <h4>Habilidades clave</h4>
+      <ul>
+        <li>Project Management (Agile, Scrum, metodologías híbridas).</li>
+        <li>Pensamiento estratégico y planificación de negocios.</li>
+        <li>Fuerte orientación a resultados y enfoque comercial.</li>
+        <li>Análisis de datos y toma de decisiones basada en insights.</li>
+        <li>Comunicación efectiva y gestión de stakeholders.</li>
+        <li>Adaptabilidad en entornos globales y digitales.</li>
+      </ul>
+      <h4>Perfil</h4>
+      <p>Profesional versátil con mentalidad estratégica y ejecución práctica, capaz de conectar negocio, tecnología y datos para generar impacto real y sostenible en organizaciones que buscan escalar y optimizar su performance en mercados digitales.</p>`,
+      acerca: `<p>Me desarrollé profesionalmente en roles comerciales desde hace más de 14 años. Hace más de 8 años que trabajo especializándome en proyectos digitales enfocándome mayormente en comercio electrónico, brindando a las empresas soluciones óptimas para lograr una excelente performance.</p>
+      <p>Lideré equipos de trabajo y áreas responsables en alcanzar los objetivos según los proyectos asignados. Apliqué un estándar para dirigir varios proyectos y desarrollé roadmaps para poder realizar seguimientos de los planes de acciones previamente diseñados, para finalmente lograr los resultados esperados.</p>
+      <p>Coordiné todas las partes interesadas de proyectos y estudié sobre cómo mejorar su funcionabilidad y operatoria, para luego poder medir los KPIs y poder establecer estrategias acordes y segmentadas. Controlé los recursos asignados al proyecto con el fin de cumplir con los objetivos marcados y asegurar la rentabilidad del mismo.</p>
+      <p>Gestioné las restricciones (alcance, cronograma, costo, calidad, etc.). Hace 5 años que soy consultor internacional de negocios digitales y he adoptado y desarrollado diferentes modelos de negocios para lograr una expansión en los diferentes terrenos del comercio electrónico transitando por diferentes rubros y mercados (B2C, B2B, C2C).</p>
+      <p>También participé en proyectos web, marketing y publicidad inbound y desarrollos a medida enfocados a la transformación digital. Me capacité y obtuve conocimientos como: diferentes integraciones, Sistemas de gestión (ERPs y CRMs), desarrollos web, plataformas de e-commerce, marketplaces, indicadores, alcance, calendario, costos, calidad, comunicaciones entre áreas, Customer experience, journey de compra, stock, riesgos y rentabilidad.</p>
+      <p>Hoy me apasiona el poder transmitir mis conocimientos a diferentes empresas o clientes como consultor y coach, orientándome en la mejora continua, rentabilidad y escalabilidad. Me ajusto a sus inquietudes para poder brindar un servicio personalizado de consultoría comercial, teniendo en cuenta el insight del mercado y comprendiendo la motivación de los consumidores para detectar nuevas oportunidades.</p>`
+    },
+    {
+      nombre: 'Nahuel Decima',
+      rol: 'IT Implementation Analyst',
+      foto: 'IT_Implementation_Analyst.png',
+      tagline: 'Especialista en vincular el mundo de los negocios con las nuevas tecnologías.',
+      descripcion: `<p>El IT Implementation Analyst es responsable de planificar, coordinar y ejecutar la implementación de soluciones tecnológicas dentro de una organización, asegurando su correcta integración con los sistemas existentes y el cumplimiento de los objetivos del negocio.</p>
+      <p>Actúa como puente entre los equipos técnicos y las áreas funcionales, traduciendo requerimientos de negocio en especificaciones técnicas, y garantizando que los proyectos se entreguen en tiempo, forma y dentro del presupuesto establecido.</p>
+      <h4>Responsabilidades principales</h4>
+      <ul>
+        <li>Analizar requerimientos del negocio y definir soluciones tecnológicas adecuadas.</li>
+        <li>Coordinar la implementación de sistemas, aplicaciones o mejoras tecnológicas.</li>
+        <li>Gestionar proyectos IT, incluyendo planificación, seguimiento y control de avances.</li>
+        <li>Colaborar con equipos de desarrollo, QA, infraestructura y stakeholders.</li>
+        <li>Configurar, testear y validar soluciones antes de su puesta en producción.</li>
+        <li>Documentar procesos, configuraciones y cambios implementados.</li>
+        <li>Brindar soporte post-implementación y gestionar incidencias.</li>
+        <li>Identificar oportunidades de mejora en procesos y sistemas existentes.</li>
+      </ul>
+      <h4>Requisitos y habilidades</h4>
+      <ul>
+        <li>Conocimientos en gestión de proyectos (Agile, Scrum o Waterfall).</li>
+        <li>Experiencia con sistemas empresariales (ERP, CRM, APIs, integraciones).</li>
+        <li>Habilidades analíticas y resolución de problemas.</li>
+        <li>Capacidad de comunicación efectiva con perfiles técnicos y no técnicos.</li>
+        <li>Conocimientos básicos de bases de datos, testing y arquitectura de sistemas.</li>
+        <li>Nivel intermedio/avanzado de inglés (deseable).</li>
+      </ul>
+      <h4>Perfil ideal</h4>
+      <p>Profesional orientado a resultados, con fuerte capacidad de organización, pensamiento crítico y habilidades interpersonales, capaz de gestionar múltiples proyectos y adaptarse a entornos dinámicos.</p>`,
+      acerca: `<p>Quienes me conocen me definen como analítico, explorador y creativo. Mi especialidad es vincular el mundo de los negocios con las nuevas tecnologías, especialmente en relación al E-Commerce.</p>
+      <p>Me gusta trabajar en un ambiente desafiante y colaborativo. Actitud proactiva y propositiva, con la idea de que todo se puede mejorar. Pasión por el aprendizaje.</p>`
+    }
+  ];
+
+  function openProfile(idx) {
+    const p = perfiles[idx];
+    document.getElementById('profile-photo').src = p.foto;
+    document.getElementById('profile-photo').style.objectFit = idx === 1 ? 'contain' : 'cover';
+    document.getElementById('profile-modal-name').textContent = p.nombre;
+    document.getElementById('profile-modal-role').textContent = p.rol;
+    document.getElementById('profile-tagline').textContent = p.tagline;
+    document.getElementById('tab-descripcion').innerHTML = p.descripcion;
+    document.getElementById('tab-acerca').innerHTML = p.acerca;
+    switchTab('descripcion');
+    document.getElementById('profile-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeProfile(e) {
+    if (e && e.target !== document.getElementById('profile-overlay') && !e.target.classList.contains('profile-close')) return;
+    document.getElementById('profile-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function switchTab(tab) {
+    document.querySelectorAll('.profile-tab').forEach((t,i) => {
+      t.classList.toggle('active', (i===0 && tab==='descripcion') || (i===1 && tab==='acerca'));
+    });
+    document.getElementById('tab-descripcion').style.display = tab === 'descripcion' ? 'block' : 'none';
+    document.getElementById('tab-acerca').style.display = tab === 'acerca' ? 'block' : 'none';
   }
 
   // ── CARRUSEL 3D EQUIPO ──
