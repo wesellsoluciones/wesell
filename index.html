@@ -953,18 +953,33 @@
   function logoHover() {
     const logo   = document.getElementById('hero-logo');
     const circle = logo.closest('.logo-circle');
+    const wrap   = circle.closest('.logo-seal-wrap');
     const msg    = document.getElementById('logo-msg');
-    const rect   = circle.getBoundingClientRect();
+    const rect   = wrap.getBoundingClientRect();
 
     logo.classList.remove('spinning');
     void logo.offsetWidth;
     logo.classList.add('spinning');
 
     msg.textContent = getFraseRandom();
-    const msgW = msg.offsetWidth || 260;
-    msg.style.top  = (rect.bottom + 12) + 'px';
-    msg.style.left = (rect.left + rect.width/2 - msgW/2) + 'px';
     msg.classList.add('visible');
+
+    // Esperar un frame para que el texto esté renderizado y tener el ancho real
+    requestAnimationFrame(() => {
+      const msgW = msg.offsetWidth || 280;
+      const msgH = msg.offsetHeight || 44;
+      let top  = rect.bottom + window.scrollY + 16;
+      let left = rect.left + rect.width / 2 - msgW / 2;
+
+      // Que no se salga por los bordes
+      const margin = 12;
+      if (left < margin) left = margin;
+      if (left + msgW > window.innerWidth - margin) left = window.innerWidth - msgW - margin;
+
+      msg.style.top  = top + 'px';
+      msg.style.left = left + 'px';
+    });
+
     clearTimeout(logoTimeout);
     logo.addEventListener('animationend', () => logo.classList.remove('spinning'), { once: true });
   }
@@ -973,6 +988,12 @@
     const msg = document.getElementById('logo-msg');
     logoTimeout = setTimeout(() => msg.classList.remove('visible'), 400);
   }
+
+  // Ocultar mensaje al scrollear
+  window.addEventListener('scroll', () => {
+    const msg = document.getElementById('logo-msg');
+    if (msg) msg.classList.remove('visible');
+  });
 
   // ── PERFILES DEL EQUIPO ──
   const perfiles = [
