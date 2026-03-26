@@ -184,7 +184,7 @@
 
     /* Tinta salpicada */
     .ink-container {
-      position: absolute; width: 340px; height: 340px;
+      position: absolute; width: 260px; height: 260px;
       top: 50%; left: 50%; transform: translate(-50%, -50%);
       z-index: 1; pointer-events: none;
     }
@@ -200,26 +200,26 @@
       transform-origin: top center;
       transform: scaleY(0); opacity: 0;
     }
-    /* Splashes en distintas posiciones */
-    .s1{width:18px;height:18px;top:2px;left:50%;margin-left:-9px;animation:inkPop 0.25s 1.05s ease-out both;}
-    .s2{width:12px;height:12px;top:15px;left:18%;animation:inkPop 0.25s 1.1s ease-out both;}
-    .s3{width:22px;height:22px;top:8px;right:14%;animation:inkPop 0.25s 1.08s ease-out both;}
-    .s4{width:10px;height:10px;top:30%;left:2px;animation:inkPop 0.25s 1.12s ease-out both;}
-    .s5{width:16px;height:16px;top:28%;right:4px;animation:inkPop 0.25s 1.07s ease-out both;}
-    .s6{width:8px;height:8px;bottom:10%;left:12%;animation:inkPop 0.25s 1.15s ease-out both;}
-    .s7{width:14px;height:14px;bottom:5%;right:18%;animation:inkPop 0.25s 1.1s ease-out both;}
-    .s8{width:9px;height:9px;bottom:18%;left:4%;animation:inkPop 0.2s 1.18s ease-out both;}
+    /* Splashes más cerca del círculo */
+    .s1{width:14px;height:14px;top:4px;left:50%;margin-left:-7px;animation:inkPop 0.25s 1.05s ease-out both;}
+    .s2{width:10px;height:10px;top:18px;left:20%;animation:inkPop 0.25s 1.1s ease-out both;}
+    .s3{width:16px;height:16px;top:12px;right:16%;animation:inkPop 0.25s 1.08s ease-out both;}
+    .s4{width:8px;height:8px;top:35%;left:4px;animation:inkPop 0.25s 1.12s ease-out both;}
+    .s5{width:12px;height:12px;top:32%;right:6px;animation:inkPop 0.25s 1.07s ease-out both;}
+    .s6{width:7px;height:7px;bottom:18%;left:14%;animation:inkPop 0.25s 1.15s ease-out both;}
+    .s7{width:11px;height:11px;bottom:12%;right:20%;animation:inkPop 0.25s 1.1s ease-out both;}
+    .s8{width:8px;height:8px;bottom:25%;left:6%;animation:inkPop 0.2s 1.18s ease-out both;}
     @keyframes inkPop {
       0%  { transform: scale(0); opacity: 0.9; }
       60% { transform: scale(1.3); opacity: 0.85; }
       100%{ transform: scale(1);  opacity: 0.7; }
     }
-    /* Chorreos */
-    .d1{width:5px;height:28px;top:0;left:48%;animation:inkDrip 0.4s 1.1s ease-in both;}
-    .d2{width:4px;height:20px;top:0;left:35%;animation:inkDrip 0.4s 1.15s ease-in both;}
-    .d3{width:6px;height:35px;top:0;left:60%;animation:inkDrip 0.5s 1.12s ease-in both;}
-    .d4{width:4px;height:24px;bottom:0;left:45%;transform-origin:bottom center;animation:inkDripDown 0.4s 1.1s ease-in both;}
-    .d5{width:5px;height:30px;bottom:0;right:30%;transform-origin:bottom center;animation:inkDripDown 0.45s 1.14s ease-in both;}
+    /* Chorreos más cortos */
+    .d1{width:4px;height:18px;top:0;left:48%;animation:inkDrip 0.4s 1.1s ease-in both;}
+    .d2{width:3px;height:14px;top:0;left:35%;animation:inkDrip 0.4s 1.15s ease-in both;}
+    .d3{width:5px;height:22px;top:0;left:60%;animation:inkDrip 0.5s 1.12s ease-in both;}
+    .d4{width:3px;height:16px;bottom:0;left:45%;transform-origin:bottom center;animation:inkDripDown 0.4s 1.1s ease-in both;}
+    .d5{width:4px;height:20px;bottom:0;right:30%;transform-origin:bottom center;animation:inkDripDown 0.45s 1.14s ease-in both;}
     @keyframes inkDrip     { 0%{transform:scaleY(0);opacity:0.9;} 100%{transform:scaleY(1);opacity:0.75;} }
     @keyframes inkDripDown { 0%{transform:scaleY(0);opacity:0.9;} 100%{transform:scaleY(1);opacity:0.75;} }
 
