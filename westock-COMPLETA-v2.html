@@ -2078,12 +2078,34 @@ async function mlCargarPublicaciones(){
 
 function mlCruzarSKUs(){
   mlMatches=[];
+  let creados=0;
   for(const pub of mlPublicaciones){
-    if(!pub.sku) continue;
-    const wsProd = productos.find(p=>p.sku.trim().toUpperCase()===pub.sku);
-    if(wsProd){
-      mlMatches.push({sku:pub.sku, ws_prod:wsProd, ml_item:pub, checked:true});
+    // Si no tiene SKU → inventar uno automático
+    if(!pub.sku){
+      pub.sku = 'ML-'+pub.id;
     }
+    let wsProd = productos.find(p=>p.sku.trim().toUpperCase()===pub.sku.trim().toUpperCase());
+    // Si no existe en WeStock → crear el producto automáticamente
+    if(!wsProd){
+      wsProd = {
+        id: Date.now()+Math.random(),
+        sku: pub.sku,
+        nombre: pub.titulo,
+        categoria: 'Mercado Libre',
+        deposito: 'Depósito 1',
+        stock: pub.stock_ml,
+        min: 5,
+        precio: 0,
+        canales: ['ml']
+      };
+      productos.push(wsProd);
+      creados++;
+    }
+    mlMatches.push({sku:pub.sku, ws_prod:wsProd, ml_item:pub, checked:true});
+  }
+  if(creados>0){
+    autoSave();
+    showToast('✅ '+creados+' producto'+( creados>1?'s':'')+' creado'+( creados>1?'s':'')+' automáticamente en WeStock');
   }
   if(mlMatches.length===0){
     document.getElementById('ml-no-match').style.display='block';
@@ -2096,8 +2118,8 @@ function mlCruzarSKUs(){
   document.getElementById('ml-tabla-wrap').style.display='block';
   document.getElementById('ml-btn-aplicar').disabled=false;
   document.getElementById('ml-resumen-match').textContent=
-    mlMatches.length+' SKUs coincidentes de '+mlPublicaciones.length+' publicaciones en ML';
-  showToast('✅ '+mlMatches.length+' SKUs encontrados en ML');
+    mlMatches.length+' publicaciones cargadas ('+creados+' productos nuevos creados)';
+  showToast('✅ '+mlMatches.length+' publicaciones de ML cargadas');
 }
 
 function mlRenderTabla(){
