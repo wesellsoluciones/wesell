@@ -5,13 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WeStock — Sistema de Gestión de Stock | Orchids Consulting</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
-  <!-- EmailJS -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <script>
-    (function(){
-      emailjs.init('Pt5hWHT_GJ0s5WKxp');
-    })();
-  </script>
+
 
   <style>
     /* ── MODAL OVERLAY ── */
@@ -783,8 +777,8 @@
 
   // ── MODAL ──
   const MERCADOPAGO_URL = 'https://mpago.la/1EACobY';
-  const EMAILJS_SERVICE_ID  = 'service_poptmet';
-  const EMAILJS_TEMPLATE_ID = 'template_mx86zmt';
+  const WEB3FORMS_KEY = '11c7daa5-1fa9-45aa-a0a2-473672536ad2';
+
 
   function abrirModal() {
     document.getElementById('modalOverlay').classList.add('active');
@@ -832,25 +826,42 @@
     btn.classList.add('loading');
     btn.disabled = true;
 
-    const templateParams = {
-      nombre_completo: `${nombre} ${apellido}`,
-      email_comprador: email,
-      empresa:         empresa || '—',
-      telefono:        telefono || '—',
-      producto:        'WeStock — Sistema de Gestión de Stock',
-      monto:           '$7.999 ARS (pago único)',
-      fecha:           new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' }),
-    };
-
     try {
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+      const formData = new FormData();
+      formData.append('access_key', WEB3FORMS_KEY);
+      formData.append('subject', `🛒 Nueva compra WeStock — ${nombre} ${apellido}`);
+      formData.append('from_name', 'WeStock — Orchids Consulting');
+      formData.append('nombre_completo', `${nombre} ${apellido}`);
+      formData.append('email_comprador', email);
+      formData.append('empresa', empresa || '—');
+      formData.append('telefono', telefono || '—');
+      formData.append('producto', 'WeStock — Sistema de Gestión de Stock');
+      formData.append('monto', '$7.999 ARS (pago único)');
+      formData.append('fecha', new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' }));
+      formData.append('message',
+        `Nueva compra recibida:\n\n` +
+        `Nombre: ${nombre} ${apellido}\n` +
+        `Email: ${email}\n` +
+        `Empresa: ${empresa || '—'}\n` +
+        `Teléfono: ${telefono || '—'}\n` +
+        `Producto: WeStock — Sistema de Gestión de Stock\n` +
+        `Monto: $7.999 ARS (pago único)\n` +
+        `Fecha: ${new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })}`
+      );
+
+      const response = await fetch('https://api.web3forms.com/submit', {
+        method: 'POST',
+        body: formData
+      });
+      const result = await response.json();
+      if (!result.success) throw new Error(result.message);
       mostrarToast('✅ ¡Todo listo! Redirigiendo al pago…');
       setTimeout(() => {
         cerrarModal();
         window.open(MERCADOPAGO_URL, '_blank');
       }, 1400);
     } catch (err) {
-      console.error('EmailJS error:', err);
+      console.error('Web3Forms error:', err);
       // Si falla el mail, igual mandamos al pago para no bloquear la compra
       mostrarToast('⚠ Hubo un problema al registrar los datos, pero te redirigimos al pago.', 'error');
       setTimeout(() => {
