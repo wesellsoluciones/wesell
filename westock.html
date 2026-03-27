@@ -5,7 +5,131 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>WeStock — Sistema de Gestión de Stock | Orchids Consulting</title>
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <!-- EmailJS -->
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script>
+    (function(){
+      emailjs.init('TU_PUBLIC_KEY'); // ← Reemplazá con tu Public Key de EmailJS
+    })();
+  </script>
+
   <style>
+    /* ── MODAL OVERLAY ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 1000;
+      background: rgba(0,0,0,0.75);
+      backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden;
+      transition: opacity 0.35s ease, visibility 0.35s ease;
+      padding: 20px;
+    }
+    .modal-overlay.active { opacity: 1; visibility: visible; }
+
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border-gray);
+      border-top: 3px solid var(--red);
+      border-radius: 6px;
+      padding: 52px 48px;
+      max-width: 500px; width: 100%;
+      position: relative;
+      transform: translateY(20px);
+      transition: transform 0.35s ease;
+    }
+    .modal-overlay.active .modal { transform: translateY(0); }
+
+    .modal-close {
+      position: absolute; top: 20px; right: 20px;
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); font-size: 22px; line-height: 1;
+      transition: color 0.2s;
+    }
+    .modal-close:hover { color: var(--red); }
+
+    .modal-label {
+      font-size: 10px; letter-spacing: 0.28em; text-transform: uppercase;
+      color: var(--red); margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .modal-label::before { content: ''; display: block; width: 18px; height: 1px; background: var(--red); }
+
+    .modal h2 {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 36px; letter-spacing: 0.03em; line-height: 1.1;
+      margin-bottom: 8px; color: var(--text);
+    }
+    .modal-sub {
+      font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 32px;
+    }
+
+    .form-group { margin-bottom: 18px; }
+    .form-group label {
+      display: block; font-size: 10px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted); margin-bottom: 7px;
+    }
+    .form-group input {
+      width: 100%; padding: 13px 16px;
+      background: var(--surface2); border: 1px solid var(--border-gray);
+      border-radius: 3px; color: var(--text);
+      font-family: 'DM Sans', sans-serif; font-size: 14px;
+      outline: none; transition: border-color 0.25s;
+    }
+    .form-group input:focus { border-color: var(--red); }
+    .form-group input::placeholder { color: rgba(136,153,180,0.5); }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+
+    .btn-modal-submit {
+      width: 100%; margin-top: 8px;
+      padding: 16px; background: var(--red); color: #fff;
+      border: none; border-radius: 3px; cursor: pointer;
+      font-family: 'DM Sans', sans-serif; font-size: 13px;
+      font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+      transition: background 0.25s, transform 0.2s, box-shadow 0.3s;
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+    }
+    .btn-modal-submit:hover:not(:disabled) {
+      background: var(--red-bright);
+      transform: translateY(-2px);
+      box-shadow: 0 14px 40px rgba(220,38,38,0.45);
+    }
+    .btn-modal-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    .modal-privacy {
+      font-size: 11px; color: var(--muted); text-align: center; margin-top: 16px; line-height: 1.6;
+    }
+
+    /* Spinner */
+    .spinner {
+      width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff; border-radius: 50%;
+      animation: spin 0.7s linear infinite; display: none;
+    }
+    .btn-modal-submit.loading .spinner { display: inline-block; }
+    .btn-modal-submit.loading .btn-text { display: none; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Toast */
+    .toast {
+      position: fixed; bottom: 32px; left: 50%; transform: translateX(-50%) translateY(20px);
+      background: var(--surface2); border: 1px solid var(--border-gray);
+      border-radius: 4px; padding: 14px 24px;
+      font-size: 13px; color: var(--text);
+      z-index: 2000; opacity: 0;
+      transition: opacity 0.3s, transform 0.3s;
+      white-space: nowrap;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .toast.success { border-color: rgba(74,222,128,0.4); }
+    .toast.error { border-color: rgba(224,48,48,0.4); }
+
+    @media (max-width: 560px) {
+      .modal { padding: 40px 24px; }
+      .form-row { grid-template-columns: 1fr; }
+    }
+  </style>
     :root {
       --bg: #0a0f1e;
       --surface: #131929;
@@ -536,13 +660,57 @@
           <li>Soporte de Orchids Consulting</li>
           <li>Configuración asistida</li>
         </ul>
-        <a href="https://mpago.la/1EACobY" target="_blank" rel="noopener" class="btn-buy">
+        <button onclick="abrirModal()" class="btn-buy">
           Comprar con Mercado Pago →
-        </a>
+        </button>
       </div>
     </div>
   </div>
 </div>
+
+<!-- MODAL DATOS DE COMPRA -->
+<div class="modal-overlay" id="modalOverlay" onclick="cerrarModalOverlay(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="cerrarModal()" aria-label="Cerrar">✕</button>
+    <p class="modal-label">Último paso</p>
+    <h2>Completá tus<br>datos</h2>
+    <p class="modal-sub">Necesitamos esta información para configurar tu cuenta de WeStock y enviarte el acceso.</p>
+
+    <div id="modalForm">
+      <div class="form-row">
+        <div class="form-group">
+          <label for="campo-nombre">Nombre</label>
+          <input type="text" id="campo-nombre" placeholder="Tu nombre" required>
+        </div>
+        <div class="form-group">
+          <label for="campo-apellido">Apellido</label>
+          <input type="text" id="campo-apellido" placeholder="Tu apellido" required>
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="campo-email">Email</label>
+        <input type="email" id="campo-email" placeholder="tu@email.com" required>
+      </div>
+      <div class="form-group">
+        <label for="campo-empresa">Empresa / Negocio</label>
+        <input type="text" id="campo-empresa" placeholder="Nombre de tu empresa">
+      </div>
+      <div class="form-group">
+        <label for="campo-telefono">Teléfono / WhatsApp</label>
+        <input type="tel" id="campo-telefono" placeholder="+54 11 xxxx-xxxx">
+      </div>
+
+      <button class="btn-modal-submit" id="btnSubmit" onclick="procesarCompra()">
+        <span class="btn-text">Continuar al pago →</span>
+        <span class="spinner"></span>
+      </button>
+      <p class="modal-privacy">🔒 Tus datos son usados únicamente para configurar tu acceso a WeStock.</p>
+    </div>
+  </div>
+</div>
+
+<!-- TOAST NOTIFICACIÓN -->
+<div class="toast" id="toast"></div>
 
 <!-- FOOTER -->
 <footer>
@@ -614,7 +782,88 @@
     resize(); init(); draw();
   })();
 
-  // ── SCROLL REVEAL ──
+  // ── MODAL ──
+  const MERCADOPAGO_URL = 'https://mpago.la/1EACobY';
+  const EMAILJS_SERVICE_ID  = 'TU_SERVICE_ID';   // ← Reemplazá
+  const EMAILJS_TEMPLATE_ID = 'TU_TEMPLATE_ID';  // ← Reemplazá
+
+  function abrirModal() {
+    document.getElementById('modalOverlay').classList.add('active');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function cerrarModal() {
+    document.getElementById('modalOverlay').classList.remove('active');
+    document.body.style.overflow = '';
+  }
+
+  function cerrarModalOverlay(e) {
+    if (e.target === document.getElementById('modalOverlay')) cerrarModal();
+  }
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') cerrarModal();
+  });
+
+  function mostrarToast(msg, tipo = 'success') {
+    const t = document.getElementById('toast');
+    t.textContent = msg;
+    t.className = `toast ${tipo} show`;
+    setTimeout(() => { t.classList.remove('show'); }, 3500);
+  }
+
+  async function procesarCompra() {
+    const nombre   = document.getElementById('campo-nombre').value.trim();
+    const apellido = document.getElementById('campo-apellido').value.trim();
+    const email    = document.getElementById('campo-email').value.trim();
+    const empresa  = document.getElementById('campo-empresa').value.trim();
+    const telefono = document.getElementById('campo-telefono').value.trim();
+
+    if (!nombre || !apellido || !email) {
+      mostrarToast('⚠ Por favor completá nombre, apellido y email.', 'error');
+      return;
+    }
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      mostrarToast('⚠ Ingresá un email válido.', 'error');
+      return;
+    }
+
+    const btn = document.getElementById('btnSubmit');
+    btn.classList.add('loading');
+    btn.disabled = true;
+
+    const templateParams = {
+      nombre_completo: `${nombre} ${apellido}`,
+      email_comprador: email,
+      empresa:         empresa || '—',
+      telefono:        telefono || '—',
+      producto:        'WeStock — Sistema de Gestión de Stock',
+      monto:           '$7.999 ARS (pago único)',
+      fecha:           new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' }),
+    };
+
+    try {
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams);
+      mostrarToast('✅ ¡Todo listo! Redirigiendo al pago…');
+      setTimeout(() => {
+        cerrarModal();
+        window.open(MERCADOPAGO_URL, '_blank');
+      }, 1400);
+    } catch (err) {
+      console.error('EmailJS error:', err);
+      // Si falla el mail, igual mandamos al pago para no bloquear la compra
+      mostrarToast('⚠ Hubo un problema al registrar los datos, pero te redirigimos al pago.', 'error');
+      setTimeout(() => {
+        cerrarModal();
+        window.open(MERCADOPAGO_URL, '_blank');
+      }, 2000);
+    } finally {
+      btn.classList.remove('loading');
+      btn.disabled = false;
+    }
+  }
+
   const revealObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) entry.target.classList.add('visible');
