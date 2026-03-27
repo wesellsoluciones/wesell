@@ -1963,6 +1963,7 @@ function actualizarClavesEnMemoria(){
 // SINCRONIZACION MERCADO LIBRE
 // ══════════════════════════════════════════════════════════
 
+const ML_PROXY = 'https://ml-proxy.wesellsoluciones.workers.dev';
 let mlToken = localStorage.getItem('ws_ml_token') || '';
 let mlUserId = '';
 let mlPublicaciones = []; // [{id, sku, titulo, stock_ml}]
@@ -1984,7 +1985,7 @@ async function mlVerificarToken(){
   mlMostrarError('');
   mlBadge('Verificando...','');
   try {
-    const res = await fetch('https://api.mercadolibre.com/users/me',{headers:{'Authorization':'Bearer '+t}});
+    const res = await fetch(ML_PROXY+'/users/me',{headers:{'Authorization':'Bearer '+t}});
     if(!res.ok) throw new Error('Token invalido o expirado ('+res.status+')');
     const u = await res.json();
     mlToken = t;
@@ -2021,7 +2022,7 @@ async function mlFetchTodosIds(){
   // Trae todos los IDs de publicaciones activas paginando
   let ids=[], offset=0, total=null;
   while(total===null || offset<total){
-    const res=await fetch(`https://api.mercadolibre.com/users/${mlUserId}/items/search?status=active&limit=100&offset=${offset}`,{headers:{'Authorization':'Bearer '+mlToken}});
+    const res=await fetch(ML_PROXY+`/users/${mlUserId}/items/search?status=active&limit=100&offset=${offset}`,{headers:{'Authorization':'Bearer '+mlToken}});
     if(!res.ok) throw new Error('Error al traer publicaciones ('+res.status+')');
     const d=await res.json();
     total=d.paging.total;
@@ -2038,7 +2039,7 @@ async function mlFetchDetalles(ids){
   const items=[];
   for(let i=0;i<ids.length;i+=20){
     const batch=ids.slice(i,i+20);
-    const res=await fetch(`https://api.mercadolibre.com/items?ids=${batch.join(',')}`,{headers:{'Authorization':'Bearer '+mlToken}});
+    const res=await fetch(ML_PROXY+`/items?ids=${batch.join(',')}`,{headers:{'Authorization':'Bearer '+mlToken}});
     if(!res.ok) throw new Error('Error al traer detalles de items ('+res.status+')');
     const data=await res.json();
     for(const entry of data){
@@ -2160,7 +2161,7 @@ async function mlAplicarSincronizacion(){
         // Enviar stock de WeStock a ML
         const nuevo=m.ws_prod.stock;
         if(nuevo===m.ml_item.stock_ml) continue;
-        const res=await fetch(`https://api.mercadolibre.com/items/${m.ml_item.id}`,{
+        const res=await fetch(ML_PROXY+`/items/${m.ml_item.id}`,{
           method:'PUT',
           headers:{'Authorization':'Bearer '+mlToken,'Content-Type':'application/json'},
           body:JSON.stringify({available_quantity:nuevo})
@@ -2186,7 +2187,7 @@ async function mlAplicarSincronizacion(){
 // Auto-reconectar si habia token guardado
 (function mlAutoConectar(){
   if(!mlToken) return;
-  fetch('https://api.mercadolibre.com/users/me',{headers:{'Authorization':'Bearer '+mlToken}})
+  fetch(ML_PROXY+'/users/me',{headers:{'Authorization':'Bearer '+mlToken}})
     .then(r=>{ if(!r.ok) throw new Error(); return r.json(); })
     .then(u=>{
       mlUserId=String(u.id);
