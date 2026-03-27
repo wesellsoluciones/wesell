@@ -580,7 +580,7 @@
 
 <!-- HEADER -->
 <header>
-  <a href="index.html">
+  <a href="index.html" id="logo-link">
     <img src="logo.png" alt="We Sell - Orchids Consulting" class="header-logo">
   </a>
   <nav>
@@ -1153,22 +1153,33 @@
 
   // ── ADMIN PANEL — Triple click en logo ──
   (function() {
+    var logoLink = document.getElementById('logo-link');
     var logo = document.querySelector('.header-logo');
+    var target = logoLink || logo;
     var clickCount = 0;
     var clickTimer = null;
-    if (logo) {
-      logo.style.cursor = 'pointer';
-      logo.addEventListener('click', function(e) {
+    if (target) {
+      target.style.cursor = 'pointer';
+      target.addEventListener('click', function(e) {
         e.preventDefault();
+        e.stopPropagation();
         clickCount++;
         if (clickTimer) clearTimeout(clickTimer);
         if (clickCount >= 3) {
           clickCount = 0;
+          clearTimeout(clickTimer);
           document.getElementById('admin-panel-overlay').classList.add('active');
           document.body.style.overflow = 'hidden';
           setTimeout(function(){ document.getElementById('admin-usr').focus(); }, 100);
+          return;
         }
-        clickTimer = setTimeout(function() { clickCount = 0; }, 800);
+        // Si no es triple click, navegar normalmente después del timeout
+        clickTimer = setTimeout(function() {
+          if (clickCount > 0 && clickCount < 3) {
+            window.location.href = 'index.html';
+          }
+          clickCount = 0;
+        }, 600);
       });
     }
   })();
