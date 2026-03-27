@@ -829,15 +829,8 @@
     try {
       const formData = new FormData();
       formData.append('access_key', WEB3FORMS_KEY);
-      formData.append('subject', `🛒 Nueva compra WeStock — ${nombre} ${apellido}`);
-      formData.append('from_name', 'WeStock — Orchids Consulting');
-      formData.append('nombre_completo', `${nombre} ${apellido}`);
-      formData.append('email_comprador', email);
-      formData.append('empresa', empresa || '—');
-      formData.append('telefono', telefono || '—');
-      formData.append('producto', 'WeStock — Sistema de Gestión de Stock');
-      formData.append('monto', '$7.999 ARS (pago único)');
-      formData.append('fecha', new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' }));
+      formData.append('subject', `✦ Nueva compra WeStock — ${nombre} ${apellido}`);
+      formData.append('from_name', 'We Sell Soluciones');
       formData.append('message',
         `✦ NUEVA COMPRA RECIBIDA ✦\n\n` +
         `▸ Nombre     ${nombre} ${apellido}\n` +
