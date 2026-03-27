@@ -932,12 +932,17 @@
     btn.disabled = true;
 
     try {
-      const formData = new FormData();
-      formData.append('access_key', WEB3FORMS_KEY);
-      formData.append('subject', `✦ Nueva compra WeStock — ${nombre} ${apellido}`);
-      formData.append('from_name', 'We Sell Soluciones');
-      formData.append('message',
-        `✦ NUEVA COMPRA RECIBIDA ✦\n\n` +
+      const fechaHora = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
+
+      // ── Email al admin: datos del comprador, pago pendiente ──
+      const formAdmin = new FormData();
+      formAdmin.append('access_key', WEB3FORMS_KEY);
+      formAdmin.append('subject', `⏳ Datos de compra WeStock · Pago pendiente — ${nombre} ${apellido}`);
+      formAdmin.append('from_name', 'We Sell Soluciones');
+      formAdmin.append('message',
+        `⏳ PAGO PENDIENTE — DATOS DEL COMPRADOR\n\n` +
+        `El cliente completó el formulario y fue redirigido a Mercado Pago.\n` +
+        `El pago aún NO fue confirmado.\n\n` +
         `▸ Nombre     ${nombre} ${apellido}\n` +
         `▸ Email      ${email}\n` +
         `▸ Empresa    ${empresa || '—'}\n` +
@@ -945,17 +950,39 @@
         `─────────────────────────\n` +
         `▸ Producto   WeStock — Sistema de Gestión de Stock\n` +
         `▸ Monto      $7.999 ARS · Pago único\n` +
-        `▸ Fecha      ${new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })}\n` +
+        `▸ Fecha      ${fechaHora}\n` +
         `─────────────────────────\n\n` +
+        `Una vez confirmado el pago, generá la clave de activación\n` +
+        `y enviásela al cliente a: ${email}\n\n` +
         `WE SELL SOLUCIONES`
       );
+      await fetch('https://api.web3forms.com/submit', { method: 'POST', body: formAdmin });
 
-      const response = await fetch('https://api.web3forms.com/submit', {
-        method: 'POST',
-        body: formData
-      });
-      const result = await response.json();
-      if (!result.success) throw new Error(result.message);
+      // ── Email al comprador: confirmación y aviso de clave ──
+      const formComprador = new FormData();
+      formComprador.append('access_key', WEB3FORMS_KEY);
+      formComprador.append('to', email);
+      formComprador.append('subject', `Tu compra de WeStock — Próximos pasos`);
+      formComprador.append('from_name', 'We Sell Soluciones');
+      formComprador.append('message',
+        `Hola ${nombre}!\n\n` +
+        `Recibimos tus datos correctamente. Estás a un paso de tener WeStock funcionando.\n\n` +
+        `─────────────────────────\n` +
+        `IMPORTANTE — Leé esto antes de continuar\n` +
+        `─────────────────────────\n\n` +
+        `Una vez que tu pago sea acreditado, te enviaremos un código de activación\n` +
+        `personal e intransferible a este mismo correo (${email}).\n\n` +
+        `▸ Verificá que este email sea el correcto antes de completar el pago.\n` +
+        `  Si tiene un error, respondé este mensaje con el email correcto\n` +
+        `  antes de continuar.\n\n` +
+        `▸ El código tiene una validez de 24 horas desde que lo recibís.\n` +
+        `  Asegurate de activar WeStock dentro de ese plazo.\n\n` +
+        `─────────────────────────\n\n` +
+        `Cualquier consulta respondé este email o escribinos a orchidsconsulting@gmail.com\n\n` +
+        `Equipo de We Sell Soluciones`
+      );
+      await fetch('https://api.web3forms.com/submit', { method: 'POST', body: formComprador });
+
       mostrarToast('✅ ¡Todo listo! Redirigiendo al pago…');
       setTimeout(() => {
         cerrarModal();
@@ -963,7 +990,6 @@
       }, 1400);
     } catch (err) {
       console.error('Web3Forms error:', err);
-      // Si falla el mail, igual mandamos al pago para no bloquear la compra
       mostrarToast('⚠ Hubo un problema al registrar los datos, pero te redirigimos al pago.', 'error');
       setTimeout(() => {
         cerrarModal();
