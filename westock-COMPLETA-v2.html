@@ -1,0 +1,2219 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>WeStock — Gestión de Inventario</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#f4f5f7;--surface:#fff;--surface2:#f0f1f3;--surface3:#e8e9ec;--accent:#e03030;--accent2:#1a1a2e;--warn:#f59e0b;--danger:#dc2626;--success:#16a34a;--text:#111827;--dark:#111827;--muted:#6b7280;--border:rgba(0,0,0,0.07);--border2:rgba(0,0,0,0.12);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:14px;overflow-x:hidden;}
+.sidebar{position:fixed;top:0;left:0;width:220px;height:100vh;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:100;}
+.sidebar-logo{padding:24px 20px 20px;border-bottom:1px solid var(--border);}
+.sidebar-logo h1{font-size:22px;font-weight:800;letter-spacing:-0.5px;}
+.sidebar-logo h1 .we{color:var(--accent);}
+.sidebar-logo h1 .st{color:var(--dark);}
+.sidebar-logo p{font-size:10px;color:var(--muted);letter-spacing:0.1em;text-transform:uppercase;margin-top:2px;}
+.sidebar-nav{flex:1;padding:16px 12px;display:flex;flex-direction:column;gap:4px;overflow-y:auto;}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;cursor:pointer;color:var(--muted);font-size:13px;font-weight:500;transition:all 0.2s;border:none;background:none;width:100%;text-align:left;font-family:'Space Grotesk',sans-serif;}
+.nav-item:hover{background:var(--surface2);color:var(--text);}
+.nav-item.active{background:rgba(224,48,48,0.08);color:var(--accent);}
+.nav-item .icon{width:20px;height:20px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.nav-section{font-size:10px;color:var(--muted);letter-spacing:0.12em;text-transform:uppercase;padding:16px 12px 6px;}
+.sidebar-bottom{padding:16px 12px;border-top:1px solid var(--border);}
+.sidebar-user{display:flex;align-items:center;gap:10px;}
+.user-avatar{width:32px;height:32px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;}
+.user-info p{font-size:12px;font-weight:600;}
+.user-info span{font-size:10px;color:var(--muted);}
+.main{margin-left:220px;min-height:100vh;}
+.topbar{position:sticky;top:0;z-index:50;background:rgba(244,245,247,0.92);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);padding:14px 28px;display:flex;justify-content:space-between;align-items:center;}
+.topbar-title{font-size:16px;font-weight:600;}
+.topbar-actions{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+.btn{padding:8px 16px;border-radius:8px;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:600;cursor:pointer;border:none;transition:all 0.2s;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{background:#c82020;transform:translateY(-1px);}
+.btn-ghost{background:var(--surface2);color:var(--text);border:1px solid var(--border2);}
+.btn-ghost:hover{background:var(--surface3);}
+.btn-danger{background:rgba(220,38,38,0.08);color:var(--danger);border:1px solid rgba(220,38,38,0.2);}
+.content{padding:24px 28px;}
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:24px;}
+.kpi-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:20px;position:relative;overflow:hidden;}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.kpi-card.green::before{background:var(--success);}
+.kpi-card.blue::before{background:var(--accent2);}
+.kpi-card.orange::before{background:var(--warn);}
+.kpi-card.red::before{background:var(--danger);}
+.kpi-label{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:10px;}
+.kpi-value{font-size:32px;font-weight:700;font-family:'JetBrains Mono',monospace;line-height:1;margin-bottom:6px;}
+.kpi-value.green{color:var(--success);}
+.kpi-value.blue{color:var(--accent2);}
+.kpi-value.orange{color:var(--warn);}
+.kpi-value.red{color:var(--danger);}
+.kpi-sub{font-size:11px;color:var(--muted);}
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:12px;overflow:hidden;}
+.panel-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+.panel-title{font-size:13px;font-weight:600;}
+.grid-3{display:grid;grid-template-columns:2fr 1fr;gap:16px;margin-bottom:24px;}
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+thead th{padding:10px 16px;text-align:left;font-size:10px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.1em;border-bottom:1px solid var(--border);white-space:nowrap;background:var(--surface2);}
+tbody tr{border-bottom:1px solid var(--border);transition:background 0.15s;}
+tbody tr:hover{background:var(--surface2);}
+tbody tr:last-child{border-bottom:none;}
+tbody td{padding:11px 16px;font-size:13px;vertical-align:middle;}
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:20px;font-size:11px;font-weight:600;}
+.badge-ok{background:rgba(22,163,74,0.1);color:var(--success);}
+.badge-low{background:rgba(245,158,11,0.1);color:var(--warn);}
+.badge-out{background:rgba(220,38,38,0.1);color:var(--danger);}
+.badge-mp{background:rgba(255,230,0,0.12);color:#8a7200;border:1px solid rgba(255,230,0,0.3);}
+.badge-amz{background:rgba(255,153,0,0.12);color:#cc7a00;border:1px solid rgba(255,153,0,0.3);}
+.badge-tn{background:rgba(111,46,255,0.08);color:#6f2eff;border:1px solid rgba(111,46,255,0.2);}
+.badge-sh{background:rgba(150,191,72,0.1);color:#5a8c1e;border:1px solid rgba(150,191,72,0.25);}
+.sku-code{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);background:var(--surface2);padding:2px 6px;border-radius:4px;}
+.stock-bar-wrap{display:flex;align-items:center;gap:8px;}
+.stock-bar{flex:1;height:4px;background:var(--surface3);border-radius:2px;overflow:hidden;min-width:60px;}
+.stock-bar-fill{height:100%;border-radius:2px;}
+.stock-num{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:600;min-width:28px;text-align:right;}
+.mp-dots{display:flex;gap:5px;}
+.mp-dot{width:8px;height:8px;border-radius:50%;opacity:0.2;}
+.mp-dot.active{opacity:1;}
+.mp-dot.ml{background:#b8a400;}
+.mp-dot.amz{background:#cc7a00;}
+.mp-dot.tn{background:#6f2eff;}
+.mp-dot.sh{background:#5a8c1e;}
+.filters{display:flex;gap:10px;align-items:center;padding:14px 16px;border-bottom:1px solid var(--border);flex-wrap:wrap;}
+.search-wrap{position:relative;flex:1;min-width:200px;}
+.search-wrap input{width:100%;padding:8px 12px 8px 34px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:13px;outline:none;transition:border-color 0.2s;}
+.search-wrap input:focus{border-color:var(--accent);}
+.search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--muted);font-size:14px;}
+.filter-select{padding:8px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:12px;outline:none;cursor:pointer;}
+.bulk-bar{display:none;align-items:center;gap:12px;padding:10px 16px;background:rgba(224,48,48,0.05);border-bottom:1px solid rgba(224,48,48,0.12);font-size:13px;}
+.bulk-bar.visible{display:flex;}
+.cb-all,.cb-row{width:15px;height:15px;cursor:pointer;accent-color:var(--accent);}
+.alert-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);transition:background 0.15s;cursor:pointer;}
+.alert-item:hover{background:var(--surface2);}
+.alert-item:last-child{border-bottom:none;}
+.alert-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.alert-dot.danger{background:var(--danger);}
+.alert-dot.warn{background:var(--warn);}
+.alert-info{flex:1;}
+.alert-name{font-size:12px;font-weight:500;}
+.alert-detail{font-size:11px;color:var(--muted);}
+.alert-stock{font-family:'JetBrains Mono',monospace;font-size:14px;font-weight:700;}
+.mp-stat-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);}
+.mp-stat-row:last-child{border-bottom:none;}
+.mp-name{font-size:12px;font-weight:600;width:90px;}
+.mp-bar-wrap{flex:1;height:5px;background:var(--surface2);border-radius:3px;overflow:hidden;}
+.mp-bar{height:100%;border-radius:3px;}
+.mp-pct{font-size:11px;color:var(--muted);width:36px;text-align:right;font-family:'JetBrains Mono',monospace;}
+.mp-count{font-size:12px;font-weight:700;width:30px;text-align:right;font-family:'JetBrains Mono',monospace;}
+.mov-item{display:flex;align-items:center;gap:12px;padding:10px 16px;border-bottom:1px solid var(--border);}
+.mov-item:last-child{border-bottom:none;}
+.mov-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;}
+.mov-icon.entrada{background:rgba(22,163,74,0.1);}
+.mov-icon.salida{background:rgba(220,38,38,0.08);}
+.mov-icon.ajuste{background:rgba(37,99,235,0.08);}
+.mov-info{flex:1;}
+.mov-name{font-size:12px;font-weight:500;}
+.mov-detail{font-size:11px;color:var(--muted);}
+.mov-qty{font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;}
+.mov-qty.pos{color:var(--success);}
+.mov-qty.neg{color:var(--danger);}
+.mov-time{font-size:10px;color:var(--muted);text-align:right;}
+.mini-bars{display:flex;align-items:flex-end;gap:6px;height:80px;}
+.mini-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;}
+.mini-bar{width:100%;border-radius:3px 3px 0 0;}
+.mini-label{font-size:9px;color:var(--muted);}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);z-index:999;display:none;align-items:center;justify-content:center;padding:20px;}
+.modal-overlay.open{display:flex;}
+.modal{background:var(--surface);border:1px solid var(--border2);border-radius:16px;width:100%;max-width:560px;overflow:hidden;max-height:90vh;overflow-y:auto;}
+.modal-header{padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--surface);z-index:1;}
+.modal-title{font-size:15px;font-weight:700;}
+.modal-close{background:none;border:none;color:var(--muted);font-size:20px;cursor:pointer;}
+.modal-body{padding:24px;display:flex;flex-direction:column;gap:16px;}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;position:sticky;bottom:0;background:var(--surface);}
+.form-group{display:flex;flex-direction:column;gap:6px;}
+.form-label{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:0.08em;}
+.form-input{padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:13px;outline:none;transition:border-color 0.2s;}
+.form-input:focus{border-color:var(--accent);}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;}
+.mp-checkboxes{display:flex;gap:8px;flex-wrap:wrap;}
+.mp-check{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:20px;border:1px solid var(--border);cursor:pointer;font-size:12px;font-weight:600;transition:all 0.2s;color:var(--muted);}
+.mp-check.ml.checked{background:rgba(255,230,0,0.1);border-color:#ffe600;color:#8a7200;}
+.mp-check.amz.checked{background:rgba(255,153,0,0.1);border-color:#ff9900;color:#cc7a00;}
+.mp-check.tn.checked{background:rgba(111,46,255,0.08);border-color:#6f2eff;color:#6f2eff;}
+.mp-check.sh.checked{background:rgba(150,191,72,0.1);border-color:#96bf48;color:#5a8c1e;}
+.tab{padding:12px 16px;font-size:12px;font-weight:600;color:var(--muted);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-1px;transition:all 0.2s;background:none;border-top:none;border-left:none;border-right:none;font-family:'Space Grotesk',sans-serif;}
+.tab.active{color:var(--accent);border-bottom-color:var(--accent);}
+.chat-msg{display:flex;gap:8px;}
+.chat-msg.user{flex-direction:row-reverse;}
+.chat-bubble{max-width:78%;padding:10px 14px;border-radius:14px;font-size:13px;line-height:1.65;}
+.chat-bubble.bot{background:var(--surface2);border:1px solid var(--border);color:var(--text);border-bottom-left-radius:4px;}
+.chat-bubble.user{background:var(--accent);color:#fff;border-bottom-right-radius:4px;}
+.chat-suggestion{padding:6px 12px;background:var(--surface);border:1px solid var(--border);border-radius:20px;font-size:12px;font-weight:500;cursor:pointer;color:var(--text);font-family:'Space Grotesk',sans-serif;transition:all 0.2s;}
+.chat-suggestion:hover{background:var(--accent);color:#fff;border-color:var(--accent);}
+.chat-typing{display:flex;gap:4px;align-items:center;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:14px;border-bottom-left-radius:4px;}
+.chat-typing span{width:6px;height:6px;border-radius:50%;background:var(--muted);animation:typingDot 1.2s ease-in-out infinite;}
+.chat-typing span:nth-child(2){animation-delay:0.2s;}
+.chat-typing span:nth-child(3){animation-delay:0.4s;}
+@keyframes typingDot{0%,80%,100%{transform:scale(0.8);opacity:0.4}40%{transform:scale(1.1);opacity:1}}
+.chat-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;align-self:flex-end;background:var(--accent);}
+.chat-avatar.user{background:var(--accent2);}
+.empty{padding:40px;text-align:center;color:var(--muted);}
+.empty-icon{font-size:32px;margin-bottom:10px;}
+.toast{position:fixed;bottom:24px;right:24px;background:var(--dark);border:1px solid var(--accent);border-radius:10px;padding:12px 20px;font-size:13px;color:#fff;font-weight:500;z-index:9999;opacity:0;transform:translateY(10px);transition:all 0.3s;pointer-events:none;}
+.toast.show{opacity:1;transform:translateY(0);}
+.demo-banner{position:fixed;top:0;left:0;right:0;z-index:9998;background:linear-gradient(90deg,#1a1a2e,#e03030);color:#fff;text-align:center;padding:9px 16px;font-size:12px;font-weight:600;letter-spacing:0.03em;display:flex;align-items:center;justify-content:center;gap:12px;}
+.demo-banner .demo-badge{background:rgba(255,255,255,0.2);border-radius:20px;padding:2px 10px;font-size:11px;letter-spacing:0.1em;}
+body.demo-mode .sidebar{top:36px;height:calc(100vh - 36px);}
+body.demo-mode .main{padding-top:36px;}
+.lock-overlay{position:fixed;inset:0;background:linear-gradient(135deg,#0f0f1a 0%,#1a1a2e 50%,#0f0f1a 100%);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;}
+.lock-box{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);border-radius:20px;padding:40px;width:100%;max-width:420px;text-align:center;}
+.lock-logo{font-size:32px;font-weight:800;letter-spacing:-1px;margin-bottom:6px;}
+.lock-logo .we{color:#e03030;}.lock-logo .st{color:#fff;}
+.lock-sub{font-size:12px;color:rgba(255,255,255,0.4);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:32px;}
+.lock-title{font-size:18px;font-weight:700;color:#fff;margin-bottom:8px;}
+.lock-desc{font-size:13px;color:rgba(255,255,255,0.5);margin-bottom:28px;line-height:1.6;}
+.lock-input{width:100%;padding:14px 18px;background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.12);border-radius:10px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:15px;text-align:center;letter-spacing:0.15em;outline:none;margin-bottom:12px;transition:border-color 0.2s;}
+.lock-input::placeholder{color:rgba(255,255,255,0.25);letter-spacing:0.05em;}
+.lock-input:focus{border-color:#e03030;}
+.lock-input.error{border-color:#dc2626;animation:shake 0.3s ease;}
+@keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-6px)}75%{transform:translateX(6px)}}
+.lock-btn{width:100%;padding:14px;background:#e03030;border:none;border-radius:10px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:all 0.2s;margin-bottom:16px;}
+.lock-btn:hover{background:#c82020;transform:translateY(-1px);}
+.lock-error{font-size:12px;color:#f87171;margin-bottom:12px;min-height:18px;}
+.lock-mp-btn{width:100%;padding:13px;background:#009ee3;border:none;border-radius:10px;color:#fff;font-family:'Space Grotesk',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:all 0.2s;display:flex;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;}
+.lock-mp-btn:hover{background:#007ab8;transform:translateY(-1px);}
+.lock-divider{display:flex;align-items:center;gap:12px;margin:4px 0 16px;color:rgba(255,255,255,0.2);font-size:11px;}
+.lock-divider::before,.lock-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.1);}
+.lock-demo-link{font-size:12px;color:rgba(255,255,255,0.35);cursor:pointer;text-decoration:underline;transition:color 0.2s;}
+.lock-demo-link:hover{color:rgba(255,255,255,0.65);}
+@media(max-width:900px){
+  .sidebar{width:60px;}
+  .sidebar-logo,.nav-section,.user-info,.nav-item span:not(.icon){display:none;}
+  .nav-item{justify-content:center;padding:12px;}
+  .main{margin-left:60px;}
+  .kpi-grid{grid-template-columns:1fr 1fr;}
+  .grid-3{grid-template-columns:1fr;}
+}
+@media(max-width:560px){
+  .kpi-grid{grid-template-columns:1fr;}
+  .content{padding:16px;}
+  .topbar{padding:12px 16px;}
+  .form-row,.form-row-3{grid-template-columns:1fr;}
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-logo">
+    <h1><span class="we">We</span><span class="st">Stock</span></h1>
+    <p>Inventory Manager</p>
+  </div>
+  <nav class="sidebar-nav">
+    <span class="nav-section">Principal</span>
+    <button class="nav-item active" onclick="showView('dashboard')"><span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span><span>Dashboard</span></button>
+    <button class="nav-item" onclick="showView('inventario')"><span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></span><span>Inventario</span></button>
+    <button class="nav-item" onclick="showView('movimientos')"><span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16V4m0 0L3 8m4-4l4 4"/><path d="M17 8v12m0 0l4-4m-4 4l-4-4"/></svg></span><span>Movimientos</span></button>
+    <button class="nav-item" onclick="showView('alertas')"><span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg></span><span>Alertas</span></button>
+    <button class="nav-item" onclick="showView('combos')"><span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5" rx="1"/><line x1="10" y1="12" x2="14" y2="12"/></svg></span><span>Combos</span></button>
+    <span class="nav-section">Análisis</span>
+    <button class="nav-item" onclick="showView('reportes')"><span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span><span>Reportes</span></button>
+    <button class="nav-item" onclick="showView('marketplaces')"><span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg></span><span>Marketplaces</span></button>
+    <span class="nav-section">Ayuda</span>
+    <button class="nav-item" onclick="showView('soporte')"><span class="icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></span><span>Soporte</span></button>
+  </nav>
+  <div class="sidebar-bottom">
+    <div class="sidebar-user">
+      <div class="user-avatar" id="sidebar-avatar">WS</div>
+      <div class="user-info">
+        <p id="sidebar-username">WeStock</p>
+        <span id="sidebar-mode">Cargando...</span>
+      </div>
+    </div>
+    <button class="btn btn-ghost" style="width:100%;font-size:10px;padding:5px;margin-top:8px" onclick="abrirAdminPanel()">⚙️ Admin / Claves</button>
+    <button class="btn btn-ghost" style="width:100%;font-size:10px;padding:5px;margin-top:4px;color:var(--danger)" id="btn-deactivate" onclick="desactivarLicencia()">🔓 Desactivar licencia</button>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <span class="topbar-title" id="view-title">Dashboard</span>
+    <div class="topbar-actions">
+      <button class="btn btn-ghost" onclick="descargarPlantilla()">📋 Plantilla</button>
+      <button class="btn btn-ghost" onclick="exportCSV()">⬇ Exportar</button>
+      <button class="btn btn-ghost" onclick="document.getElementById('file-import').click()">📤 Importar</button>
+      <input type="file" id="file-import" accept=".xlsx,.xls,.csv" style="display:none" onchange="importarArchivo(event)">
+      <button class="btn btn-primary" onclick="openModal()">+ Nuevo SKU</button>
+    </div>
+  </div>
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div id="view-dashboard">
+      <div class="kpi-grid">
+        <div class="kpi-card green"><div class="kpi-label">Total SKUs</div><div class="kpi-value green" id="kpi-total">0</div><div class="kpi-sub">productos activos</div></div>
+        <div class="kpi-card blue"><div class="kpi-label">Stock Total</div><div class="kpi-value blue" id="kpi-stock">0</div><div class="kpi-sub">unidades</div></div>
+        <div class="kpi-card orange"><div class="kpi-label">Stock Bajo</div><div class="kpi-value orange" id="kpi-low">0</div><div class="kpi-sub">a reponer</div></div>
+        <div class="kpi-card red"><div class="kpi-label">Sin Stock</div><div class="kpi-value red" id="kpi-out">0</div><div class="kpi-sub">agotados</div></div>
+      </div>
+      <div class="grid-3">
+        <div class="panel"><div class="panel-header"><span class="panel-title">🔔 Alertas</span><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="showView('alertas')">Ver todas</button></div><div id="dash-alerts"></div></div>
+        <div class="panel"><div class="panel-header"><span class="panel-title">🛒 Marketplaces</span></div><div id="mp-stats"></div></div>
+      </div>
+      <div class="panel"><div class="panel-header"><span class="panel-title">↕ Últimos Movimientos</span><button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="showView('movimientos')">Ver todos</button></div><div id="dash-movimientos"></div></div>
+    </div>
+
+    <!-- INVENTARIO -->
+    <div id="view-inventario" style="display:none">
+      <div class="panel">
+        <div class="bulk-bar" id="bulk-bar">
+          <input type="checkbox" class="cb-all" id="cb-top" onchange="toggleAllCB(this)">
+          <span class="bulk-count" id="bulk-label">0 seleccionados</span>
+          <button class="btn btn-danger" style="font-size:12px;padding:6px 14px" onclick="eliminarSeleccionados()">🗑 Eliminar seleccionados</button>
+          <button class="btn btn-ghost" style="font-size:12px;padding:6px 14px" onclick="deseleccionarTodos()">✕ Cancelar</button>
+        </div>
+        <div class="filters">
+          <div class="search-wrap"><span class="search-icon">🔍</span><input type="text" placeholder="Buscar por nombre o SKU..." id="search-input" oninput="renderTabla()"></div>
+          <select class="filter-select" id="filter-mp" onchange="renderTabla()"><option value="">Todos los canales</option><option value="ml">Mercado Libre</option><option value="amz">Amazon</option><option value="tn">Tiendanube</option><option value="sh">Shopify</option></select>
+          <select class="filter-select" id="filter-status" onchange="renderTabla()"><option value="">Todos los estados</option><option value="ok">En stock</option><option value="low">Stock bajo</option><option value="out">Sin stock</option></select>
+          <select class="filter-select" id="filter-dep" onchange="renderTabla()"><option value="">Todos los depósitos</option><option value="Depósito 1">Depósito 1</option><option value="Depósito 2">Depósito 2</option><option value="Casa central">Casa central</option></select>
+          <button class="btn btn-ghost" style="font-size:12px;padding:6px 14px;white-space:nowrap" onclick="seleccionarTodos()">☑ Seleccionar todos</button>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th><input type="checkbox" class="cb-all" id="cb-header" onchange="toggleAllCB(this)"></th><th>SKU</th><th>Producto</th><th>Depósito</th><th>Stock</th><th>Mín</th><th>Estado</th><th>Canales</th><th>Acciones</th></tr></thead>
+            <tbody id="tabla-body"></tbody>
+          </table>
+        </div>
+        <div style="padding:10px 16px;border-top:1px solid var(--border);font-size:11px;color:var(--muted)" id="tabla-footer"></div>
+      </div>
+    </div>
+
+    <!-- MOVIMIENTOS -->
+    <div id="view-movimientos" style="display:none">
+      <div class="panel" style="margin-bottom:16px">
+        <div class="panel-header"><span class="panel-title">Registrar Movimiento</span></div>
+        <div style="padding:16px;display:flex;gap:12px;flex-wrap:wrap;align-items:flex-end">
+          <div class="form-group" style="flex:1;min-width:160px"><label class="form-label">SKU</label><select class="form-input" id="mov-sku"></select></div>
+          <div class="form-group"><label class="form-label">Tipo</label><select class="form-input" id="mov-tipo"><option value="entrada">📥 Entrada</option><option value="salida">📤 Salida</option><option value="ajuste">🔧 Ajuste</option></select></div>
+          <div class="form-group"><label class="form-label">Cantidad</label><input class="form-input" type="number" id="mov-qty" min="1" value="1" style="width:90px"></div>
+          <div class="form-group" style="flex:1;min-width:140px"><label class="form-label">Motivo</label><input class="form-input" type="text" id="mov-motivo" placeholder="Ej: Venta ML #123"></div>
+          <button class="btn btn-primary" onclick="registrarMovimiento()">Registrar</button>
+        </div>
+      </div>
+      <div class="panel"><div class="panel-header"><span class="panel-title">Historial</span><button class="btn btn-danger" style="font-size:11px;padding:4px 12px" onclick="limpiarMovimientos()">🗑 Limpiar</button></div><div id="movimientos-list"></div></div>
+    </div>
+
+    <!-- ALERTAS -->
+    <div id="view-alertas" style="display:none"><div class="panel"><div class="panel-header"><span class="panel-title">🔔 Productos a Reponer</span></div><div id="alertas-list"></div></div></div>
+
+    <!-- REPORTES -->
+    <div id="view-reportes" style="display:none">
+      <div class="kpi-grid" style="margin-bottom:24px">
+        <div class="kpi-card green"><div class="kpi-label">Entradas</div><div class="kpi-value green" id="rep-entradas">0</div><div class="kpi-sub">unidades ingresadas</div></div>
+        <div class="kpi-card red"><div class="kpi-label">Salidas</div><div class="kpi-value red" id="rep-salidas">0</div><div class="kpi-sub">unidades salidas</div></div>
+        <div class="kpi-card blue"><div class="kpi-label">Valor inventario</div><div class="kpi-value blue" id="rep-valor">$0</div><div class="kpi-sub">precio costo</div></div>
+        <div class="kpi-card orange"><div class="kpi-label">Rotación</div><div class="kpi-value orange" id="rep-rot">0%</div><div class="kpi-sub">productos movidos</div></div>
+      </div>
+      <div class="panel"><div class="panel-header"><span class="panel-title">📊 Stock por Categoría</span></div><div style="padding:16px"><div class="mini-bars" id="chart-bars"></div><div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap" id="chart-legend"></div></div></div>
+    </div>
+
+    <!-- MARKETPLACES -->
+    <div id="view-marketplaces" style="display:none">
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-label">Mercado Libre</div><div class="kpi-value" style="color:#b8a400" id="mp-ml-count">0</div><div class="kpi-sub">SKUs</div></div>
+        <div class="kpi-card"><div class="kpi-label">Amazon</div><div class="kpi-value" style="color:#cc7a00" id="mp-amz-count">0</div><div class="kpi-sub">SKUs</div></div>
+        <div class="kpi-card"><div class="kpi-label">Tiendanube</div><div class="kpi-value" style="color:#6f2eff" id="mp-tn-count">0</div><div class="kpi-sub">SKUs</div></div>
+        <div class="kpi-card"><div class="kpi-label">Shopify</div><div class="kpi-value" style="color:#5a8c1e" id="mp-sh-count">0</div><div class="kpi-sub">SKUs</div></div>
+      </div>
+      <div class="panel"><div class="panel-header"><span class="panel-title">Distribución por Canal</span></div><div class="table-wrap"><table><thead><tr><th>Producto</th><th>SKU</th><th>ML</th><th>Amazon</th><th>TN</th><th>Shopify</th><th>Stock</th></tr></thead><tbody id="mp-tabla"></tbody></table></div></div>
+
+      <!-- SINCRONIZACION ML -->
+      <div class="panel" style="margin-top:16px">
+        <div class="panel-header">
+          <span class="panel-title" style="display:flex;align-items:center;gap:8px">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#b8a400" stroke-width="2"><path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/></svg>
+            Sincronizacion Mercado Libre
+          </span>
+          <div style="display:flex;gap:8px;align-items:center">
+            <span id="ml-status-badge" style="font-size:11px;padding:3px 10px;border-radius:20px;background:var(--surface2);color:var(--muted)">Sin conectar</span>
+            <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px;display:none" id="ml-btn-desconectar" onclick="mlDesconectar()">Desconectar</button>
+          </div>
+        </div>
+
+        <div id="ml-panel-token">
+          <div style="background:var(--surface2);border-radius:8px;padding:14px 16px;margin-bottom:16px;font-size:13px;line-height:1.8;color:var(--muted)">
+            <strong style="color:var(--text)">Como obtener tu Access Token:</strong><br>
+            1. Ingresa a <a href="https://developers.mercadolibre.com.ar" target="_blank" style="color:var(--accent)">developers.mercadolibre.com.ar</a> con tu cuenta de vendedor<br>
+            2. Crea una aplicacion o usa una existente y copia el <strong style="color:var(--text)">Access Token</strong><br>
+            3. Pegalo abajo y hace clic en <strong style="color:var(--text)">Verificar conexion</strong>
+          </div>
+          <div style="display:flex;gap:10px;align-items:flex-end;flex-wrap:wrap">
+            <div style="flex:1;min-width:200px">
+              <label class="form-label">Access Token de Mercado Libre</label>
+              <input class="form-input" type="password" id="ml-token-input" placeholder="APP_USR-..." autocomplete="off">
+            </div>
+            <button class="btn btn-primary" style="white-space:nowrap" onclick="mlVerificarToken()">Verificar conexion</button>
+          </div>
+          <div id="ml-token-error" style="font-size:12px;color:var(--danger);margin-top:8px;display:none"></div>
+        </div>
+
+        <div id="ml-panel-sync" style="display:none">
+          <div style="background:var(--surface2);border-radius:8px;padding:12px 16px;margin-bottom:16px;display:flex;align-items:center;gap:12px;flex-wrap:wrap">
+            <div style="width:40px;height:40px;border-radius:50%;background:rgba(184,164,0,0.15);display:flex;align-items:center;justify-content:center;font-size:18px">👤</div>
+            <div>
+              <div style="font-size:14px;font-weight:600" id="ml-user-nombre">—</div>
+              <div style="font-size:12px;color:var(--muted)" id="ml-user-id">ID: —</div>
+            </div>
+            <div style="margin-left:auto;text-align:right">
+              <div style="font-size:11px;color:var(--muted)">Publicaciones activas</div>
+              <div style="font-size:22px;font-weight:700;font-family:monospace;color:#b8a400" id="ml-total-items">—</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:10px;margin-bottom:16px;flex-wrap:wrap;align-items:center">
+            <button class="btn btn-primary" onclick="mlCargarPublicaciones()" id="ml-btn-cargar">↻ Cargar publicaciones</button>
+            <select class="filter-select" id="ml-dir-select" style="min-width:260px">
+              <option value="ml_to_ws">ML → WeStock  (traer stock desde ML)</option>
+              <option value="ws_to_ml">WeStock → ML  (enviar stock a ML)</option>
+            </select>
+            <button class="btn" id="ml-btn-aplicar" disabled onclick="mlAplicarSincronizacion()"
+              style="background:rgba(34,197,94,0.1);color:var(--success);border:1px solid rgba(34,197,94,0.25)">
+              ✅ Aplicar sincronizacion
+            </button>
+          </div>
+
+          <div id="ml-tabla-wrap" style="display:none">
+            <div style="font-size:12px;color:var(--muted);margin-bottom:10px" id="ml-resumen-match"></div>
+            <div class="table-wrap">
+              <table>
+                <thead><tr>
+                  <th><input type="checkbox" id="ml-cb-all" onchange="mlToggleAll(this)"></th>
+                  <th>SKU</th>
+                  <th>Producto WeStock</th>
+                  <th>Titulo ML</th>
+                  <th>Stock WeStock</th>
+                  <th>Stock ML</th>
+                  <th>Diferencia</th>
+                </tr></thead>
+                <tbody id="ml-tabla-body"></tbody>
+              </table>
+            </div>
+          </div>
+          <div id="ml-no-match" style="display:none;text-align:center;padding:24px;color:var(--muted);font-size:13px">
+            No se encontraron publicaciones de ML con SKU coincidente en WeStock.<br>
+            Verifica que el campo SKU de tus publicaciones en ML coincida exactamente con los SKUs de WeStock.
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- COMBOS -->
+    <div id="view-combos" style="display:none">
+      <div style="display:flex;justify-content:flex-end;margin-bottom:16px"><button class="btn btn-primary" onclick="abrirModalCombo()">+ Nuevo Combo</button></div>
+      <div id="combos-grid" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px"></div>
+    </div>
+
+    <!-- SOPORTE -->
+    <div id="view-soporte" style="display:none">
+      <div style="display:flex;gap:0;border-bottom:1px solid var(--border);margin-bottom:24px">
+        <button class="tab active" id="tab-guia" onclick="switchSupportTab('guia')">📖 Guía de uso</button>
+        <button class="tab" id="tab-chat" onclick="switchSupportTab('chat')">🤖 Asistente IA</button>
+      </div>
+      <div id="support-guia">
+        <div style="background:var(--accent2);border-radius:16px;padding:28px;margin-bottom:20px;position:relative;overflow:hidden">
+          <div style="position:absolute;top:-20px;right:-20px;width:140px;height:140px;border-radius:50%;background:rgba(255,255,255,0.04)"></div>
+          <div style="position:relative;z-index:1">
+            <div style="font-size:11px;letter-spacing:0.1em;text-transform:uppercase;color:rgba(255,255,255,0.4);margin-bottom:8px">📚 Documentación</div>
+            <h2 style="font-size:22px;font-weight:700;color:#fff;margin-bottom:6px">Guía completa de WeStock</h2>
+            <p style="font-size:13px;color:rgba(255,255,255,0.55);line-height:1.6">Todo lo que necesitás saber para gestionar tu inventario.</p>
+          </div>
+        </div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-bottom:20px" id="guia-cards"></div>
+        <div class="panel"><div class="panel-header"><span class="panel-title">❓ Preguntas frecuentes</span></div><div id="faq-list"></div></div>
+      </div>
+      <div id="support-chat" style="display:none">
+        <div class="panel" style="height:560px;display:flex;flex-direction:column;overflow:hidden">
+          <div style="padding:14px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;flex-shrink:0">
+            <div style="width:38px;height:38px;border-radius:50%;background:var(--accent);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+            <div style="flex:1"><div style="font-size:13px;font-weight:700">Asistente WeStock</div><div style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:5px"><span style="width:6px;height:6px;border-radius:50%;background:var(--success);display:inline-block"></span>En línea</div></div>
+            <button class="btn btn-ghost" style="font-size:11px;padding:4px 10px" onclick="limpiarChat()">🗑 Limpiar</button>
+          </div>
+          <div id="chat-messages" style="flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:12px">
+            <div class="chat-msg">
+              <div class="chat-avatar"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div>
+              <div class="chat-bubble bot">👋 ¡Hola! Soy el asistente de <strong>WeStock</strong>.<br><br>Puedo ayudarte con: productos, movimientos, combos, importación, alertas y más.<br><br>¿En qué puedo ayudarte?</div>
+            </div>
+            <div id="chat-suggestions" style="display:flex;flex-wrap:wrap;gap:6px">
+              <button class="chat-suggestion" onclick="sendSuggestion('Como cargo un producto nuevo')">¿Cómo cargo un producto?</button>
+              <button class="chat-suggestion" onclick="sendSuggestion('Como importo desde Excel')">Importar Excel</button>
+              <button class="chat-suggestion" onclick="sendSuggestion('Como funcionan los combos')">¿Qué es un combo?</button>
+              <button class="chat-suggestion" onclick="sendSuggestion('Como elimino varios productos a la vez')">Eliminar masivo</button>
+              <button class="chat-suggestion" onclick="sendSuggestion('Cuantos SKUs tengo cargados')">¿Cuántos SKUs tengo?</button>
+              <button class="chat-suggestion" onclick="sendSuggestion('Que productos tienen stock bajo')">¿Qué productos tienen stock bajo?</button>
+            </div>
+          </div>
+          <div style="padding:12px 16px;border-top:1px solid var(--border);display:flex;gap:10px;align-items:flex-end;flex-shrink:0">
+            <textarea id="chat-input" placeholder="Escribí tu consulta..." rows="1" style="flex:1;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:10px;color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:13px;outline:none;resize:none;max-height:100px;line-height:1.5;transition:border-color 0.2s" onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();sendChat()}" oninput="this.style.height='auto';this.style.height=Math.min(this.scrollHeight,100)+'px'"></textarea>
+            <button onclick="sendChat()" style="width:38px;height:38px;border-radius:10px;background:var(--accent);border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<!-- MODALES -->
+<div class="modal-overlay" id="modal" onclick="if(event.target.id==='modal')closeModal()">
+  <div class="modal"><div class="modal-header"><span class="modal-title" id="modal-title">Nuevo SKU</span><button class="modal-close" onclick="closeModal()">✕</button></div>
+  <div class="modal-body">
+    <div class="form-row"><div class="form-group"><label class="form-label">Nombre *</label><input class="form-input" type="text" id="f-nombre" placeholder="Nombre del producto"></div><div class="form-group"><label class="form-label">SKU *</label><input class="form-input" type="text" id="f-sku" placeholder="Ej: REM-NEG-M"></div></div>
+    <div class="form-row"><div class="form-group"><label class="form-label">Categoría</label><input class="form-input" type="text" id="f-cat" placeholder="Ej: Indumentaria"></div><div class="form-group"><label class="form-label">Depósito</label><select class="form-input" id="f-dep"><option>Depósito 1</option><option>Depósito 2</option><option>Casa central</option></select></div></div>
+    <div class="form-row-3"><div class="form-group"><label class="form-label">Stock</label><input class="form-input" type="number" id="f-stock" value="0" min="0"></div><div class="form-group"><label class="form-label">Mínimo</label><input class="form-input" type="number" id="f-min" value="5" min="0"></div><div class="form-group"><label class="form-label">Precio costo</label><input class="form-input" type="number" id="f-precio" value="0" min="0"></div></div>
+    <div class="form-group"><label class="form-label">Canales</label><div class="mp-checkboxes"><div class="mp-check ml" onclick="toggleMP(this,'ml')">🟡 ML</div><div class="mp-check amz" onclick="toggleMP(this,'amz')">🟠 AMZ</div><div class="mp-check tn" onclick="toggleMP(this,'tn')">🟣 TN</div><div class="mp-check sh" onclick="toggleMP(this,'sh')">🟢 SH</div></div></div>
+  </div>
+  <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">Cancelar</button><button class="btn btn-primary" onclick="guardarSKU()">Guardar</button></div></div>
+</div>
+
+<div class="modal-overlay" id="modal-ajuste" onclick="if(event.target.id==='modal-ajuste')cerrarAjuste()">
+  <div class="modal" style="max-width:400px"><div class="modal-header"><span class="modal-title">⚖️ Ajustar Stock</span><button class="modal-close" onclick="cerrarAjuste()">✕</button></div>
+  <div class="modal-body">
+    <div style="background:var(--surface2);border-radius:8px;padding:12px 14px"><div style="font-size:12px;color:var(--muted);margin-bottom:4px">Producto</div><div style="font-size:14px;font-weight:700" id="ajuste-nombre"></div><div style="font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--muted);margin-top:2px" id="ajuste-sku-label"></div></div>
+    <div style="display:flex;gap:16px;align-items:center;background:var(--surface2);border-radius:8px;padding:12px 14px"><div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--muted);margin-bottom:4px">ACTUAL</div><div style="font-size:26px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--accent)" id="ajuste-stock-actual">0</div></div><div style="font-size:20px;color:var(--muted)">→</div><div style="flex:1;text-align:center"><div style="font-size:11px;color:var(--muted);margin-bottom:4px">NUEVO</div><div style="font-size:26px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--accent2)" id="ajuste-stock-preview">0</div></div></div>
+    <div class="form-group"><label class="form-label">Stock real</label><input class="form-input" type="number" id="ajuste-nuevo-stock" min="0" oninput="previewAjuste()"></div>
+    <div class="form-group"><label class="form-label">Motivo</label><select class="form-input" id="ajuste-motivo-tipo"><option>Corrección de inventario</option><option>Inventario físico</option><option>Diferencia de stock</option><option>Merma / deterioro</option><option>Error de carga</option><option>Otro</option></select></div>
+    <div class="form-group"><label class="form-label">Nota</label><input class="form-input" type="text" id="ajuste-nota" placeholder="Ej: Conteo físico 26/03"></div>
+  </div>
+  <div class="modal-footer"><button class="btn btn-ghost" onclick="cerrarAjuste()">Cancelar</button><button class="btn btn-primary" onclick="confirmarAjuste()">Confirmar</button></div></div>
+</div>
+
+<div class="modal-overlay" id="modal-import" onclick="if(event.target.id==='modal-import')closeImport()">
+  <div class="modal" style="max-width:780px"><div class="modal-header"><span class="modal-title">📤 Importación Masiva</span><button class="modal-close" onclick="closeImport()">✕</button></div>
+  <div class="modal-body">
+    <div id="import-status" style="padding:10px 14px;border-radius:8px;font-size:13px;display:none"></div>
+    <div style="display:flex;gap:10px;margin-bottom:4px"><span id="import-count" style="font-size:13px;color:var(--muted)"></span><span id="import-errors" style="font-size:13px;color:var(--danger)"></span></div>
+    <div style="overflow:auto;max-height:320px;border:1px solid var(--border);border-radius:8px"><table style="width:100%;border-collapse:collapse"><thead id="import-thead"></thead><tbody id="import-tbody"></tbody></table></div>
+    <div style="background:var(--surface2);border-radius:8px;padding:10px 14px;font-size:12px;color:var(--muted)"><strong style="color:var(--text)">Obligatorias:</strong> SKU, Nombre · <strong style="color:var(--text)">Canales:</strong> ml-amz-tn-sh</div>
+  </div>
+  <div class="modal-footer"><div style="flex:1;font-size:12px;color:var(--muted)" id="import-footer-note"></div><button class="btn btn-ghost" onclick="closeImport()">Cancelar</button><button class="btn btn-primary" onclick="confirmarImport()">✅ Confirmar</button></div></div>
+</div>
+
+<div class="modal-overlay" id="modal-combo" onclick="if(event.target.id==='modal-combo')cerrarModalCombo()">
+  <div class="modal" style="max-width:560px"><div class="modal-header"><span class="modal-title" id="combo-modal-title">🎁 Nuevo Combo</span><button class="modal-close" onclick="cerrarModalCombo()">✕</button></div>
+  <div class="modal-body">
+    <div class="form-row"><div class="form-group"><label class="form-label">Nombre *</label><input class="form-input" type="text" id="combo-nombre" placeholder="Pack verano"></div><div class="form-group"><label class="form-label">SKU *</label><input class="form-input" type="text" id="combo-sku" placeholder="COMBO-VER-01"></div></div>
+    <div class="form-row"><div class="form-group"><label class="form-label">Precio</label><input class="form-input" type="number" id="combo-precio" value="0"></div><div class="form-group"><label class="form-label">Canales</label><div class="mp-checkboxes" style="margin-top:4px"><div class="mp-check ml" onclick="toggleMP(this,'ml')">ML</div><div class="mp-check amz" onclick="toggleMP(this,'amz')">AMZ</div><div class="mp-check tn" onclick="toggleMP(this,'tn')">TN</div><div class="mp-check sh" onclick="toggleMP(this,'sh')">SH</div></div></div></div>
+    <div class="form-group"><label class="form-label">Componentes</label>
+      <div style="border:1px solid var(--border);border-radius:8px;overflow:hidden">
+        <div style="display:flex;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border);background:var(--surface2)"><select class="form-input" id="combo-comp-sku" style="flex:1"><option value="">Seleccionar SKU...</option></select><input class="form-input" type="number" id="combo-comp-qty" min="1" value="1" style="width:70px"><button class="btn btn-primary" style="padding:8px 14px;white-space:nowrap" onclick="agregarComponente()">+ Agregar</button></div>
+        <div id="combo-componentes-list" style="min-height:60px;max-height:200px;overflow-y:auto"><div class="empty" style="padding:20px"><p>Agregá al menos un componente</p></div></div>
+      </div>
+    </div>
+    <div style="background:var(--surface2);border-radius:8px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center"><span style="font-size:12px;color:var(--muted)">Stock disponible:</span><span style="font-size:22px;font-weight:700;font-family:'JetBrains Mono',monospace;color:var(--accent)" id="combo-stock-preview">0</span></div>
+  </div>
+  <div class="modal-footer"><button class="btn btn-ghost" onclick="cerrarModalCombo()">Cancelar</button><button class="btn btn-primary" onclick="guardarCombo()">Guardar</button></div></div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ============================================================
+// CLAVES VÁLIDAS — Agregá una por cada venta
+// ============================================================
+// ── CLAVE SECRETA HMAC (compartida con generador-licencias.html) ──
+// IMPORTANTE: NO compartir esta clave. Cambiarla invalida todas las licencias.
+const WS_SECRET = 'WS-AD3327288CD2C99C477C8195E77DE4CD';
+
+const CLAVES_VALIDAS = []; // Validadas por HMAC, no por lista fija
+const MP_LINK = 'https://mpago.la/1EACobY';
+
+// ── Validación HMAC de licencia ──────────────────────────────
+async function validarLicenciaHMAC(clave) {
+  try {
+    const partes = clave.split('|');
+    if (partes.length !== 3) return false;
+    const [email, fecha, hashRecibido] = partes;
+    const mensaje = email + '|' + fecha;
+    const keyData = new TextEncoder().encode(WS_SECRET);
+    const msgData = new TextEncoder().encode(mensaje);
+    const cryptoKey = await crypto.subtle.importKey('raw', keyData, {name:'HMAC', hash:'SHA-256'}, false, ['sign']);
+    const sig = await crypto.subtle.sign('HMAC', cryptoKey, msgData);
+    const hashCalculado = Array.from(new Uint8Array(sig)).map(b=>b.toString(16).padStart(2,'0')).join('').toUpperCase().slice(0,12);
+    return hashCalculado === hashRecibido;
+  } catch(e) {
+    return false;
+  }
+}
+// ============================================================
+
+let isDemo = false;
+let productos=[], movimientos=[], combos=[];
+let comboComponentes=[], editId=null, editComboId=null, ajusteProductoId=null, selectedMP=[], importData=[], chatHistory=[];
+
+// ── Guardar en localStorage ──────────────────────────────────
+function autoSave(){
+  if(isDemo) return;
+  try{
+    localStorage.setItem('ws_productos', JSON.stringify(productos));
+    localStorage.setItem('ws_movimientos', JSON.stringify(movimientos.map(m=>({...m,fecha:m.fecha instanceof Date?m.fecha.toISOString():m.fecha}))));
+    localStorage.setItem('ws_combos', JSON.stringify(combos));
+  }catch(e){console.warn('Error guardando:',e);}
+}
+
+// ── Cargar desde localStorage ────────────────────────────────
+function loadData(){
+  try{
+    const p=localStorage.getItem('ws_productos');
+    const m=localStorage.getItem('ws_movimientos');
+    const c=localStorage.getItem('ws_combos');
+    if(p) productos=JSON.parse(p);
+    if(m) movimientos=JSON.parse(m).map(x=>({...x,fecha:new Date(x.fecha)}));
+    if(c) combos=JSON.parse(c);
+  }catch(e){console.warn('Error cargando:',e);}
+}
+
+// ── Sistema de licencia ──────────────────────────────────────
+function initAcceso(){
+  // Si viene con sesión admin desde westock.html, saltear el lock
+  const adminSession = sessionStorage.getItem('ws_admin_session');
+  if(adminSession === 'WESELL_ADMIN_2026'){
+    sessionStorage.removeItem('ws_admin_session');
+    isDemo = false;
+    loadData();
+    actualizarSidebarLicenciado('ADMIN');
+    renderDashboard();
+    showToast('✅ Acceso admin concedido. Bienvenido a WeStock.');
+    return;
+  }
+  // Siempre pide la clave al abrir la app
+  mostrarLock();
+}
+
+function actualizarSidebarLicenciado(key){
+  const av=document.getElementById('sidebar-avatar');
+  const un=document.getElementById('sidebar-username');
+  const sm=document.getElementById('sidebar-mode');
+  if(av){av.textContent='✓';av.style.background='var(--success)';}
+  if(un) un.textContent='WeStock Pro';
+  if(sm) sm.textContent='✅ Licencia activa';
+}
+
+function actualizarSidebarDemo(){
+  const av=document.getElementById('sidebar-avatar');
+  const un=document.getElementById('sidebar-username');
+  const sm=document.getElementById('sidebar-mode');
+  if(av){av.textContent='D';av.style.background='var(--warn)';}
+  if(un) un.textContent='Modo Demo';
+  if(sm) sm.textContent='⚠️ Sin guardar datos';
+  const btn=document.getElementById('btn-deactivate');
+  if(btn) btn.style.display='none';
+}
+
+async function mostrarLockAsync(){
+  const licGuardada = localStorage.getItem('ws_license') || '';
+  const yaRegistrado = licGuardada ? await validarLicenciaHMAC(licGuardada) : false;
+  mostrarLockUI(yaRegistrado);
+}
+
+function mostrarLock(){
+  mostrarLockAsync();
+}
+
+function mostrarLockUI(yaRegistrado){
+  const overlay=document.createElement('div');
+  overlay.className='lock-overlay';overlay.id='lock-overlay';
+  overlay.innerHTML=`
+    <div class="lock-box">
+      <div class="lock-logo"><span class="we">We</span><span class="st">Stock</span></div>
+      <div class="lock-sub">Inventory Manager</div>
+      <div class="lock-title">${yaRegistrado ? '🔐 Ingresá tu clave para continuar' : 'Activar WeStock'}</div>
+      <div class="lock-desc">${yaRegistrado ? 'Tu sesión se cerró por seguridad. Ingresá tu clave de activación para acceder a tus datos.' : 'Ingresá tu clave de activación para guardar datos.'}</div>
+      ${!yaRegistrado ? `<button class="lock-mp-btn" onclick="window.open('${MP_LINK}','_blank')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+        Comprar con Mercado Pago
+      </button>
+      <div class="lock-divider">o ingresá tu clave</div>` : ''}
+      <input class="lock-input" id="lock-clave" type="password" placeholder="••••••••••••" maxlength="120"
+        oninput="document.getElementById('lock-err').textContent=''"
+        onkeydown="if(event.key==='Enter')validarClave()">
+      <div class="lock-error" id="lock-err"></div>
+      <button class="lock-btn" onclick="validarClave()">Ingresar →</button>
+      ${!yaRegistrado ? '<div class="lock-demo-link" onclick="entrarDemo()">Probar versión demo (sin guardar datos)</div>' : ''}
+    </div>`;
+  document.body.appendChild(overlay);
+  setTimeout(()=>{ const inp=document.getElementById('lock-clave'); if(inp) inp.focus(); }, 100);
+}
+
+function validarClave(){
+  const clave=document.getElementById('lock-clave').value.trim().toUpperCase();
+  const btn=document.querySelector('.lock-btn');
+  if(btn){btn.disabled=true;btn.textContent='Verificando...';}
+  validarLicenciaHMAC(clave).then(esValida => {
+    if(esValida){
+      localStorage.setItem('ws_license', clave);
+      const ov=document.getElementById('lock-overlay');
+      ov.style.transition='opacity 0.4s';ov.style.opacity='0';
+      setTimeout(()=>ov.remove(),400);
+      isDemo=false;
+      loadData();
+      actualizarSidebarLicenciado(clave);
+      renderDashboard();
+      showToast('✅ Acceso concedido. Bienvenido a WeStock.');
+    } else {
+      const inp=document.getElementById('lock-clave');
+      const err=document.getElementById('lock-err');
+      inp.classList.add('error');
+      inp.value='';
+      err.textContent='Clave incorrecta. Verificá que la copiaste completa.';
+      setTimeout(()=>inp.classList.remove('error'),400);
+      if(btn){btn.disabled=false;btn.textContent='Ingresar →';}
+    }
+  });
+}
+
+function entrarDemo(){
+  document.getElementById('lock-overlay').remove();
+  isDemo=true;
+  productos=[
+    {id:1,sku:'REM-NEG-M',nombre:'Remera básica negra M',categoria:'Indumentaria',deposito:'Depósito 1',stock:45,min:10,precio:1200,canales:['ml','tn']},
+    {id:2,sku:'ZAP-DEP-42',nombre:'Zapatillas deportivas #42',categoria:'Calzado',deposito:'Depósito 2',stock:3,min:5,precio:8500,canales:['ml','amz']},
+    {id:3,sku:'MUG-BLK-01',nombre:'Taza negra premium',categoria:'Hogar',deposito:'Casa central',stock:120,min:20,precio:650,canales:['ml','amz','tn','sh']},
+    {id:4,sku:'PAN-JNS-32',nombre:'Pantalón jeans 32',categoria:'Indumentaria',deposito:'Depósito 1',stock:0,min:8,precio:3200,canales:['ml']},
+  ];
+  movimientos=[
+    {tipo:'entrada',skuId:1,sku:'REM-NEG-M',nombre:'Remera básica negra M',qty:30,motivo:'Reposición proveedor',fecha:new Date(Date.now()-7200000)},
+    {tipo:'salida',skuId:2,sku:'ZAP-DEP-42',nombre:'Zapatillas deportivas #42',qty:2,motivo:'Venta ML #8821',fecha:new Date(Date.now()-18000000)},
+  ];
+  combos=[];
+  const banner=document.createElement('div');
+  banner.className='demo-banner';
+  banner.innerHTML=`<span class="demo-badge">DEMO</span>&nbsp; Modo demo — <strong>Los datos no se guardan al cerrar</strong> &nbsp;·&nbsp; <a style="color:#ffd;cursor:pointer;text-decoration:underline" onclick="window.open('${MP_LINK}','_blank')">🛒 Comprar versión completa</a>`;
+  document.body.prepend(banner);
+  document.body.classList.add('demo-mode');
+  actualizarSidebarDemo();
+  renderDashboard();
+}
+
+function desactivarLicencia(){
+  if(!confirm('¿Desactivar la licencia?\n\nTus datos NO se borrarán, solo tendrás que ingresar la clave de nuevo.'))return;
+  localStorage.removeItem('ws_license');
+  location.reload();
+}
+
+function abrirCarpetaDatos(){
+  if(isDemo){showToast('ℹ️ En modo demo los datos no se guardan');return;}
+  showToast('💾 Los datos se guardan en el navegador/Edge de este equipo');
+}
+
+function getStatus(p){return p.stock===0?'out':p.stock<=p.min?'low':'ok';}
+function statusBadge(p){const s=getStatus(p);return s==='out'?'<span class="badge badge-out">● Sin stock</span>':s==='low'?'<span class="badge badge-low">▲ Stock bajo</span>':'<span class="badge badge-ok">✓ En stock</span>';}
+function mpDots(c){return`<div class="mp-dots"><div class="mp-dot ml${c.includes('ml')?' active':''}"></div><div class="mp-dot amz${c.includes('amz')?' active':''}"></div><div class="mp-dot tn${c.includes('tn')?' active':''}"></div><div class="mp-dot sh${c.includes('sh')?' active':''}"></div></div>`;}
+function stockBar(p){const pct=p.min>0?Math.min((p.stock/Math.max(p.stock,p.min*3))*100,100):50;const c=p.stock===0?'var(--danger)':p.stock<=p.min?'var(--warn)':'var(--success)';return`<div class="stock-bar-wrap"><div class="stock-bar"><div class="stock-bar-fill" style="width:${pct}%;background:${c}"></div></div><span class="stock-num" style="color:${c}">${p.stock}</span></div>`;}
+function timeAgo(d){const diff=Date.now()-d.getTime();return diff<3600000?`hace ${Math.floor(diff/60000)}m`:diff<86400000?`hace ${Math.floor(diff/3600000)}h`:`hace ${Math.floor(diff/86400000)}d`;}
+function showToast(msg){const t=document.getElementById('toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),3000);}
+
+const views=['dashboard','inventario','movimientos','alertas','reportes','marketplaces','combos','soporte'];
+function showView(v){
+  views.forEach(x=>document.getElementById('view-'+x).style.display=x===v?'block':'none');
+  document.querySelectorAll('.nav-item').forEach(b=>b.classList.toggle('active',b.getAttribute('onclick')===`showView('${v}')`));
+  document.getElementById('view-title').textContent={dashboard:'Dashboard',inventario:'Inventario',movimientos:'Movimientos',alertas:'Alertas',reportes:'Reportes',marketplaces:'Marketplaces',combos:'Combos',soporte:'Soporte'}[v]||v;
+  if(v==='dashboard')renderDashboard();
+  if(v==='inventario')renderTabla();
+  if(v==='movimientos')renderMovimientos();
+  if(v==='alertas')renderAlertas();
+  if(v==='reportes')renderReportes();
+  if(v==='marketplaces')renderMarketplaces();
+  if(v==='combos')renderCombos();
+  if(v==='soporte')initSoporte();
+}
+
+function renderDashboard(){
+  document.getElementById('kpi-total').textContent=productos.length;
+  document.getElementById('kpi-stock').textContent=productos.reduce((a,p)=>a+p.stock,0).toLocaleString();
+  document.getElementById('kpi-low').textContent=productos.filter(p=>getStatus(p)==='low').length;
+  document.getElementById('kpi-out').textContent=productos.filter(p=>getStatus(p)==='out').length;
+  const al=productos.filter(p=>getStatus(p)!=='ok').sort((a,b)=>a.stock-b.stock).slice(0,5);
+  document.getElementById('dash-alerts').innerHTML=al.length?al.map(p=>`<div class="alert-item" onclick="showView('inventario')"><div class="alert-dot ${getStatus(p)==='out'?'danger':'warn'}"></div><div class="alert-info"><div class="alert-name">${p.nombre}</div><div class="alert-detail">${p.sku} · ${p.deposito}</div></div><div class="alert-stock" style="color:${p.stock===0?'var(--danger)':'var(--warn)'}">${p.stock}</div></div>`).join(''):'<div class="empty"><div class="empty-icon">✅</div><p>Sin alertas</p></div>';
+  const mps=[{k:'ml',n:'Mercado Libre',c:'#b8a400'},{k:'amz',n:'Amazon',c:'#cc7a00'},{k:'tn',n:'Tiendanube',c:'#6f2eff'},{k:'sh',n:'Shopify',c:'#5a8c1e'}];
+  document.getElementById('mp-stats').innerHTML=mps.map(m=>{const cnt=productos.filter(p=>p.canales.includes(m.k)).length;const pct=productos.length?Math.round(cnt/productos.length*100):0;return`<div class="mp-stat-row"><div class="mp-name" style="color:${m.c}">${m.n.split(' ')[0]}</div><div class="mp-bar-wrap"><div class="mp-bar" style="width:${pct}%;background:${m.c}"></div></div><div class="mp-pct">${pct}%</div><div class="mp-count" style="color:${m.c}">${cnt}</div></div>`;}).join('');
+  document.getElementById('dash-movimientos').innerHTML=movimientos.slice(0,5).map(m=>`<div class="mov-item"><div class="mov-icon ${m.tipo}">${m.tipo==='entrada'?'📥':m.tipo==='salida'?'📤':'🔧'}</div><div class="mov-info"><div class="mov-name">${m.nombre}</div><div class="mov-detail">${m.motivo}</div></div><div><div class="mov-qty ${m.tipo==='salida'?'neg':'pos'}">${m.tipo==='salida'?'-':'+'}${m.qty}</div><div class="mov-time">${timeAgo(m.fecha)}</div></div></div>`).join('');
+}
+
+function renderTabla(){
+  const q=(document.getElementById('search-input')?.value||'').toLowerCase();
+  const mp=document.getElementById('filter-mp')?.value||'';
+  const st=document.getElementById('filter-status')?.value||'';
+  const dep=document.getElementById('filter-dep')?.value||'';
+  let filtered=productos.filter(p=>{
+    if(q&&!p.nombre.toLowerCase().includes(q)&&!p.sku.toLowerCase().includes(q))return false;
+    if(mp&&!p.canales.includes(mp))return false;
+    if(st&&getStatus(p)!==st)return false;
+    if(dep&&p.deposito!==dep)return false;
+    return true;
+  });
+  document.getElementById('tabla-body').innerHTML=filtered.length?filtered.map(p=>`<tr><td><input type="checkbox" class="cb-row" data-id="${p.id}" onchange="updateBulkBar()"></td><td style="cursor:pointer" onclick="editSKU(${p.id})"><span class="sku-code">${p.sku}</span></td><td style="cursor:pointer" onclick="editSKU(${p.id})"><div style="font-weight:500">${p.nombre}</div><div style="font-size:11px;color:var(--muted)">${p.categoria}</div></td><td style="font-size:12px;color:var(--muted)">${p.deposito}</td><td>${stockBar(p)}</td><td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)">${p.min}</td><td>${statusBadge(p)}</td><td>${mpDots(p.canales)}</td><td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="event.stopPropagation();editSKU(${p.id})">✏️</button><button class="btn btn-ghost" style="padding:4px 10px;font-size:11px;color:var(--warn)" onclick="event.stopPropagation();abrirAjusteStock(${p.id})">⚖️</button><button class="btn btn-danger" style="padding:4px 10px;font-size:11px" onclick="event.stopPropagation();deleteSKU(${p.id})">🗑</button></div></td></tr>`).join(''):'<tr><td colspan="9"><div class="empty"><div class="empty-icon">📦</div><p>No se encontraron productos</p></div></td></tr>';
+  document.getElementById('tabla-footer').textContent=`Mostrando ${filtered.length} de ${productos.length} productos`;
+  updateBulkBar();
+}
+
+function seleccionarTodos(){
+  ['search-input','filter-mp','filter-status','filter-dep'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  renderTabla();
+  setTimeout(()=>{
+    document.querySelectorAll('.cb-row').forEach(c=>c.checked=true);
+    document.querySelectorAll('.cb-all').forEach(c=>c.checked=true);
+    updateBulkBar();
+  },60);
+}
+function toggleAllCB(src){
+  document.querySelectorAll('.cb-row').forEach(c=>c.checked=src.checked);
+  document.querySelectorAll('.cb-all').forEach(c=>c.checked=src.checked);
+  updateBulkBar();
+}
+function updateBulkBar(){
+  const sel=document.querySelectorAll('.cb-row:checked');
+  const all=document.querySelectorAll('.cb-row');
+  const bar=document.getElementById('bulk-bar');
+  if(sel.length>0){
+    bar.classList.add('visible');
+    document.getElementById('bulk-label').textContent=`${sel.length} de ${all.length} seleccionados`;
+    document.querySelectorAll('.cb-all').forEach(c=>c.checked=sel.length===all.length);
+  } else {
+    bar.classList.remove('visible');
+    document.querySelectorAll('.cb-all').forEach(c=>c.checked=false);
+  }
+}
+function deseleccionarTodos(){document.querySelectorAll('.cb-row,.cb-all').forEach(c=>c.checked=false);document.getElementById('bulk-bar').classList.remove('visible');}
+function eliminarSeleccionados(){
+  const ids=[...document.querySelectorAll('.cb-row:checked')].map(c=>parseFloat(c.dataset.id));
+  if(!ids.length)return;
+  if(!confirm(`¿Eliminar ${ids.length} producto${ids.length>1?'s':''}?`))return;
+  productos=productos.filter(p=>!ids.includes(p.id));
+  deseleccionarTodos();renderTabla();renderDashboard();
+  showToast(`🗑 ${ids.length} producto${ids.length>1?'s':''} eliminado${ids.length>1?'s':''}`);
+}
+
+function renderMovimientos(){
+  const sel=document.getElementById('mov-sku');
+  if(sel)sel.innerHTML=productos.map(p=>`<option value="${p.id}">${p.sku} — ${p.nombre}</option>`).join('');
+  document.getElementById('movimientos-list').innerHTML=movimientos.length?movimientos.map(m=>`<div class="mov-item"><div class="mov-icon ${m.tipo}">${m.tipo==='entrada'?'📥':m.tipo==='salida'?'📤':'🔧'}</div><div class="mov-info"><div class="mov-name">${m.nombre} <span class="sku-code">${m.sku}</span></div><div class="mov-detail">${m.motivo}</div></div><div style="text-align:right"><div class="mov-qty ${m.tipo==='salida'?'neg':'pos'}">${m.tipo==='salida'?'-':'+'}${m.qty}</div><div class="mov-time">${timeAgo(m.fecha)}</div></div></div>`).join(''):'<div class="empty"><div class="empty-icon">↕</div><p>Sin movimientos</p></div>';
+}
+function registrarMovimiento(){
+  const skuId=parseFloat(document.getElementById('mov-sku').value);
+  const tipo=document.getElementById('mov-tipo').value;
+  const qty=parseInt(document.getElementById('mov-qty').value)||0;
+  const motivo=document.getElementById('mov-motivo').value||'Sin motivo';
+  if(!skuId||qty<=0){showToast('Completá todos los campos');return;}
+  const p=productos.find(x=>x.id===skuId);if(!p)return;
+  if(tipo==='salida'&&p.stock<qty){showToast('Stock insuficiente');return;}
+  if(tipo==='salida')p.stock-=qty;else p.stock+=qty;
+  movimientos.unshift({tipo,skuId,sku:p.sku,nombre:p.nombre,qty,motivo,fecha:new Date()});
+  document.getElementById('mov-qty').value=1;document.getElementById('mov-motivo').value='';
+  renderMovimientos();showToast('✅ Movimiento registrado');autoSave();
+}
+function limpiarMovimientos(){if(!confirm('¿Eliminar todo el historial?'))return;movimientos=[];renderMovimientos();renderDashboard();showToast('🗑 Historial eliminado');}
+
+function renderAlertas(){
+  const al=productos.filter(p=>getStatus(p)!=='ok').sort((a,b)=>a.stock-b.stock);
+  document.getElementById('alertas-list').innerHTML=al.length?al.map(p=>`<div class="alert-item"><div class="alert-dot ${getStatus(p)==='out'?'danger':'warn'}"></div><div class="alert-info"><div class="alert-name">${p.nombre}</div><div class="alert-detail">${p.sku} · ${p.deposito} · Mín: ${p.min}</div></div><div style="text-align:right"><div class="alert-stock" style="color:${p.stock===0?'var(--danger)':'var(--warn)'}">${p.stock}</div>${statusBadge(p)}</div></div>`).join(''):'<div class="empty"><div class="empty-icon">✅</div><p>¡Todo en orden!</p></div>';
+}
+
+function renderReportes(){
+  const ent=movimientos.filter(m=>m.tipo==='entrada').reduce((a,m)=>a+m.qty,0);
+  const sal=movimientos.filter(m=>m.tipo==='salida').reduce((a,m)=>a+m.qty,0);
+  document.getElementById('rep-entradas').textContent=ent;
+  document.getElementById('rep-salidas').textContent=sal;
+  document.getElementById('rep-valor').textContent='$'+productos.reduce((a,p)=>a+p.stock*p.precio,0).toLocaleString();
+  document.getElementById('rep-rot').textContent=productos.length?Math.round(new Set(movimientos.map(m=>m.skuId)).size/productos.length*100)+'%':'0%';
+  const cats={};productos.forEach(p=>{cats[p.categoria]=(cats[p.categoria]||0)+p.stock;});
+  const max=Math.max(...Object.values(cats),1);
+  const colors=['var(--accent)','var(--accent2)','var(--warn)','var(--danger)','#6f2eff','#5a8c1e'];
+  const entries=Object.entries(cats);
+  document.getElementById('chart-bars').innerHTML=entries.map(([k,v],i)=>`<div class="mini-bar-wrap"><div class="mini-bar" style="height:${Math.max(4,Math.round(v/max*70))}px;background:${colors[i%6]}"></div><span class="mini-label">${k.slice(0,6)}</span></div>`).join('');
+  document.getElementById('chart-legend').innerHTML=entries.map(([k,v],i)=>`<span style="font-size:11px;color:var(--muted);display:flex;align-items:center;gap:4px"><span style="width:8px;height:8px;border-radius:50%;background:${colors[i%6]};display:inline-block"></span>${k}: ${v}</span>`).join('');
+}
+
+function renderMarketplaces(){
+  ['ml','amz','tn','sh'].forEach(m=>document.getElementById('mp-'+m+'-count').textContent=productos.filter(p=>p.canales.includes(m)).length);
+  document.getElementById('mp-tabla').innerHTML=productos.map(p=>`<tr><td>${p.nombre}</td><td><span class="sku-code">${p.sku}</span></td><td>${p.canales.includes('ml')?'<span class="badge badge-mp">✓</span>':'<span style="color:var(--muted)">—</span>'}</td><td>${p.canales.includes('amz')?'<span class="badge badge-amz">✓</span>':'<span style="color:var(--muted)">—</span>'}</td><td>${p.canales.includes('tn')?'<span class="badge badge-tn">✓</span>':'<span style="color:var(--muted)">—</span>'}</td><td>${p.canales.includes('sh')?'<span class="badge badge-sh">✓</span>':'<span style="color:var(--muted)">—</span>'}</td><td><span style="font-family:'JetBrains Mono',monospace;font-weight:600;color:${getStatus(p)==='out'?'var(--danger)':getStatus(p)==='low'?'var(--warn)':'var(--success)'}">${p.stock}</span></td></tr>`).join('');
+}
+
+function openModal(){editId=null;document.getElementById('modal-title').textContent='Nuevo SKU';['f-nombre','f-sku','f-cat'].forEach(id=>document.getElementById(id).value='');document.getElementById('f-stock').value='0';document.getElementById('f-min').value='5';document.getElementById('f-precio').value='0';selectedMP=[];document.querySelectorAll('#modal .mp-check').forEach(el=>el.classList.remove('checked'));document.getElementById('modal').classList.add('open');}
+function editSKU(id){
+  const p=productos.find(x=>x.id===id);if(!p)return;
+  editId=id;
+  document.getElementById('modal-title').textContent='Editar SKU';
+  document.getElementById('f-nombre').value=p.nombre;
+  document.getElementById('f-sku').value=p.sku;
+  document.getElementById('f-cat').value=p.categoria;
+  document.getElementById('f-dep').value=p.deposito;
+  document.getElementById('f-stock').value=p.stock;
+  document.getElementById('f-min').value=p.min;
+  document.getElementById('f-precio').value=p.precio;
+  selectedMP=[...p.canales];
+  document.querySelectorAll('#modal .mp-check').forEach(el=>el.classList.toggle('checked',selectedMP.includes(el.classList[1])));
+  document.getElementById('modal').classList.add('open');
+}
+function closeModal(){document.getElementById('modal').classList.remove('open');}
+function toggleMP(el,key){el.classList.toggle('checked');selectedMP=selectedMP.includes(key)?selectedMP.filter(x=>x!==key):[...selectedMP,key];}
+function guardarSKU(){
+  const nombre=document.getElementById('f-nombre').value.trim();
+  const sku=document.getElementById('f-sku').value.trim();
+  if(!nombre||!sku){showToast('Nombre y SKU son obligatorios');return;}
+  const data={nombre,sku,categoria:document.getElementById('f-cat').value||'General',deposito:document.getElementById('f-dep').value,stock:parseInt(document.getElementById('f-stock').value)||0,min:parseInt(document.getElementById('f-min').value)||5,precio:parseInt(document.getElementById('f-precio').value)||0,canales:[...selectedMP]};
+  if(editId){const i=productos.findIndex(x=>x.id===editId);productos[i]={...productos[i],...data};showToast('✅ SKU actualizado');}
+  else{data.id=Date.now();productos.push(data);showToast('✅ SKU agregado');}
+  closeModal();renderTabla();renderDashboard();autoSave();
+}
+function deleteSKU(id){if(!confirm('¿Eliminar este SKU?'))return;productos=productos.filter(x=>x.id!==id);renderTabla();showToast('🗑 SKU eliminado');}
+
+function abrirAjusteStock(id){
+  const p=productos.find(x=>x.id===id);if(!p)return;
+  ajusteProductoId=id;
+  document.getElementById('ajuste-nombre').textContent=p.nombre;
+  document.getElementById('ajuste-sku-label').textContent=p.sku;
+  document.getElementById('ajuste-stock-actual').textContent=p.stock;
+  document.getElementById('ajuste-stock-preview').textContent=p.stock;
+  document.getElementById('ajuste-nuevo-stock').value=p.stock;
+  document.getElementById('ajuste-nota').value='';
+  document.getElementById('modal-ajuste').classList.add('open');
+}
+function previewAjuste(){
+  const val=parseInt(document.getElementById('ajuste-nuevo-stock').value);
+  if(!isNaN(val)&&val>=0){
+    const p=productos.find(x=>x.id===ajusteProductoId);
+    const diff=val-(p?.stock||0);
+    const el=document.getElementById('ajuste-stock-preview');
+    el.textContent=val;
+    el.style.color=diff>0?'var(--success)':diff<0?'var(--danger)':'var(--accent2)';
+  }
+}
+function confirmarAjuste(){
+  const p=productos.find(x=>x.id===ajusteProductoId);if(!p)return;
+  const nuevo=parseInt(document.getElementById('ajuste-nuevo-stock').value);
+  if(isNaN(nuevo)||nuevo<0){showToast('Ingresá un stock válido');return;}
+  const diff=nuevo-p.stock;
+  const motivo=document.getElementById('ajuste-motivo-tipo').value;
+  const nota=document.getElementById('ajuste-nota').value.trim();
+  p.stock=nuevo;
+  movimientos.unshift({tipo:'ajuste',skuId:p.id,sku:p.sku,nombre:p.nombre,qty:Math.abs(diff),motivo:(nota?motivo+' — '+nota:motivo)+` (${diff>=0?'+':''}${diff})`,fecha:new Date()});
+  cerrarAjuste();renderTabla();renderDashboard();
+  showToast(`⚖️ Stock ajustado: ${p.sku} → ${nuevo}`);autoSave();
+}
+function cerrarAjuste(){document.getElementById('modal-ajuste').classList.remove('open');ajusteProductoId=null;}
+
+function cargarXLSX(cb){
+  if(typeof XLSX!=='undefined'){cb();return;}
+  const s=document.createElement('script');
+  s.src='https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+  s.onload=cb;document.head.appendChild(s);
+}
+
+// ── PLANTILLA XLSX con dos hojas ─────────────────────────────
+function descargarPlantilla(){
+  cargarXLSX(()=>{
+    const wb = XLSX.utils.book_new();
+
+    // ── Hoja 1: Productos ──
+    const wsP = XLSX.utils.aoa_to_sheet([
+      ['SKU','Nombre','Categoria','Deposito','Stock','Minimo','Precio','Canales'],
+      ['REM-NEG-M','Remera negra M','Indumentaria','Depósito 1',50,10,1200,'ml-tn'],
+      ['ZAP-DEP-42','Zapatillas #42','Calzado','Depósito 2',20,5,8500,'ml-amz'],
+      ['MUG-BLK-01','Taza negra','Hogar','Casa central',100,20,650,'ml-amz-tn-sh'],
+    ]);
+    // Anchos de columna
+    wsP['!cols'] = [{wch:16},{wch:28},{wch:16},{wch:16},{wch:8},{wch:8},{wch:10},{wch:16}];
+    XLSX.utils.book_append_sheet(wb, wsP, 'Productos');
+
+    // ── Hoja 2: Combos ──
+    const wsC = XLSX.utils.aoa_to_sheet([
+      ['Combo_SKU','Combo_Nombre','Combo_Precio','Combo_Canales','Componente_SKU','Componente_Cantidad'],
+      ['COMBO-VER-01','Kit Verano',2500,'ml-tn','REM-NEG-M',1],
+      ['COMBO-VER-01','Kit Verano',2500,'ml-tn','ZAP-DEP-42',1],
+      ['COMBO-HOG-01','Pack Hogar',800,'ml-amz-tn-sh','MUG-BLK-01',2],
+    ]);
+    wsC['!cols'] = [{wch:16},{wch:22},{wch:12},{wch:16},{wch:18},{wch:20}];
+    XLSX.utils.book_append_sheet(wb, wsC, 'Combos');
+
+    // ── Hoja 3: Instrucciones ──
+    const wsI = XLSX.utils.aoa_to_sheet([
+      ['INSTRUCCIONES DE USO — WeStock'],
+      [''],
+      ['HOJA "Productos":'],
+      ['• SKU y Nombre son OBLIGATORIOS'],
+      ['• Canales: separados con guión → ml-amz-tn-sh'],
+      ['• Si el SKU ya existe, el stock se SUMA al actual'],
+      [''],
+      ['HOJA "Combos":'],
+      ['• Combo_SKU y Combo_Nombre: identifican el combo'],
+      ['• Un combo con varios componentes = varias filas con el mismo Combo_SKU'],
+      ['• Componente_SKU debe existir en el inventario de Productos'],
+      ['• Componente_Cantidad = cuántas unidades de ese SKU usa el combo'],
+      [''],
+      ['CANALES VÁLIDOS:'],
+      ['• ml = Mercado Libre'],
+      ['• amz = Amazon'],
+      ['• tn = Tiendanube'],
+      ['• sh = Shopify'],
+    ]);
+    wsI['!cols'] = [{wch:60}];
+    XLSX.utils.book_append_sheet(wb, wsI, 'Instrucciones');
+
+    XLSX.writeFile(wb, 'plantilla-westock.xlsx');
+    showToast('📋 Plantilla Excel descargada');
+  });
+}
+
+// ── IMPORTAR ARCHIVO (detecta hoja automáticamente) ──────────
+let importDataCombos = [];
+
+function importarArchivo(e){
+  const file=e.target.files[0];if(!file)return;
+  const ext=file.name.split('.').pop().toLowerCase();
+  cargarXLSX(()=>{
+    const r=new FileReader();
+    if(ext==='csv'){
+      r.onload=ev=>procesarCSV(ev.target.result);
+      r.readAsText(file,'UTF-8');
+    } else {
+      r.onload=ev=>procesarXLSXMultiHoja(ev.target.result);
+      r.readAsArrayBuffer(file);
+    }
+  });
+  e.target.value='';
+}
+
+function procesarCSV(text){
+  const lines=text.trim().split('\n').map(l=>l.trim()).filter(Boolean);
+  if(lines.length<2){mostrarPreview(0);return;}
+  const headers=lines[0].split(',').map(h=>h.replace(/"/g,'').trim().toLowerCase());
+  const rows=lines.slice(1).map(line=>(line.match(/(".*?"|[^,]+)/g)||[]).map(v=>v.replace(/"/g,'').trim()));
+  procesarFilasProductos(headers,rows);
+}
+
+function procesarXLSXMultiHoja(buf){
+  const wb=XLSX.read(buf,{type:'arraybuffer'});
+
+  // Buscar hoja de productos
+  const nomP = wb.SheetNames.find(n=>n.toLowerCase().includes('prod')) || wb.SheetNames[0];
+  // Buscar hoja de combos
+  const nomC = wb.SheetNames.find(n=>n.toLowerCase().includes('combo'));
+
+  const wsP = wb.Sheets[nomP];
+  const dataP = XLSX.utils.sheet_to_json(wsP,{header:1,defval:''});
+  if(dataP.length>=2){
+    procesarFilasProductos(
+      dataP[0].map(h=>String(h).toLowerCase().trim()),
+      dataP.slice(1).map(r=>r.map(v=>String(v).trim()))
+    );
+  }
+
+  // Procesar combos si existe la hoja
+  importDataCombos=[];
+  if(nomC){
+    const wsC=wb.Sheets[nomC];
+    const dataC=XLSX.utils.sheet_to_json(wsC,{header:1,defval:''});
+    if(dataC.length>=2){
+      procesarFilasCombos(
+        dataC[0].map(h=>String(h).toLowerCase().trim()),
+        dataC.slice(1).map(r=>r.map(v=>String(v).trim()))
+      );
+    }
+  }
+}
+
+function procesarFilasProductos(headers,rows){
+  const idx={
+    sku:headers.findIndex(h=>h.includes('sku')),
+    nombre:headers.findIndex(h=>h.includes('nombre')||h.includes('name')||h.includes('producto')),
+    cat:headers.findIndex(h=>h.includes('categ')),
+    dep:headers.findIndex(h=>h.includes('dep')||h.includes('almac')),
+    stock:headers.findIndex(h=>h.includes('stock')&&!h.includes('min')),
+    min:headers.findIndex(h=>h.includes('min')),
+    precio:headers.findIndex(h=>h.includes('precio')||h.includes('price')||h.includes('costo')),
+    canales:headers.findIndex(h=>h.includes('canal')||h.includes('market')||h.includes('channel'))
+  };
+  if(idx.sku===-1||idx.nombre===-1){showToast('El archivo debe tener columnas SKU y Nombre');return;}
+  importData=[];let errores=0;
+  rows.forEach((row,i)=>{
+    if(!row[idx.sku]&&!row[idx.nombre])return;
+    const sku=row[idx.sku]||'',nombre=row[idx.nombre]||'';
+    if(!sku||!nombre){errores++;return;}
+    importData.push({
+      sku,nombre,
+      categoria:idx.cat>=0?(row[idx.cat]||'General'):'General',
+      deposito:idx.dep>=0?(row[idx.dep]||'Depósito 1'):'Depósito 1',
+      stock:idx.stock>=0?(parseInt(row[idx.stock])||0):0,
+      min:idx.min>=0?(parseInt(row[idx.min])||5):5,
+      precio:idx.precio>=0?(parseInt(row[idx.precio])||0):0,
+      canales:idx.canales>=0?(row[idx.canales]||'').split('-').map(x=>x.trim().toLowerCase()).filter(x=>['ml','amz','tn','sh'].includes(x)):[],
+      _fila:i+2
+    });
+  });
+  mostrarPreview(errores);
+}
+
+function procesarFilasCombos(headers,rows){
+  // Columnas esperadas: combo_sku, combo_nombre, combo_precio, combo_canales, componente_sku, componente_cantidad
+  const idx={
+    csku: headers.findIndex(h=>h.includes('combo')&&h.includes('sku')),
+    cnombre: headers.findIndex(h=>h.includes('combo')&&h.includes('nombre')),
+    cprecio: headers.findIndex(h=>h.includes('precio')),
+    ccanales: headers.findIndex(h=>h.includes('combo')&&h.includes('canal')),
+    compsku: headers.findIndex(h=>h.includes('componente')&&h.includes('sku')),
+    compqty: headers.findIndex(h=>h.includes('cantidad')||h.includes('qty')),
+  };
+  if(idx.csku===-1||idx.compsku===-1) return;
+  const mapa={};
+  rows.forEach(row=>{
+    const csku=(row[idx.csku]||'').trim();
+    const cnombre=(row[idx.cnombre]>=0?(row[idx.cnombre]||''):'').trim();
+    const compsku=(row[idx.compsku]||'').trim();
+    if(!csku||!compsku) return;
+    if(!mapa[csku]){
+      mapa[csku]={
+        sku:csku,
+        nombre:idx.cnombre>=0?cnombre:csku,
+        precio:idx.cprecio>=0?(parseInt(row[idx.cprecio])||0):0,
+        canales:idx.ccanales>=0?(row[idx.ccanales]||'').split('-').map(x=>x.trim().toLowerCase()).filter(x=>['ml','amz','tn','sh'].includes(x)):[],
+        componentes:[]
+      };
+    }
+    mapa[csku].componentes.push({sku:compsku, qty:idx.compqty>=0?(parseInt(row[idx.compqty])||1):1});
+  });
+  importDataCombos=Object.values(mapa);
+}
+
+function mostrarPreview(errores){
+  document.getElementById('import-thead').innerHTML=`<tr>${['#','SKU','Nombre','Categoría','Depósito','Stock','Mín','Precio','Canales'].map(h=>`<th style="padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;border-bottom:1px solid var(--border);background:var(--surface2)">${h}</th>`).join('')}</tr>`;
+  document.getElementById('import-tbody').innerHTML=importData.map(p=>`<tr style="border-bottom:1px solid var(--border)"><td style="padding:8px 12px;font-size:11px;color:var(--muted)">${p._fila}</td><td style="padding:8px 12px;font-family:'JetBrains Mono',monospace;font-size:11px">${p.sku}</td><td style="padding:8px 12px;font-size:12px;font-weight:500">${p.nombre}</td><td style="padding:8px 12px;font-size:12px;color:var(--muted)">${p.categoria}</td><td style="padding:8px 12px;font-size:12px;color:var(--muted)">${p.deposito}</td><td style="padding:8px 12px;font-size:12px;font-family:'JetBrains Mono',monospace">${p.stock}</td><td style="padding:8px 12px;font-size:12px">${p.min}</td><td style="padding:8px 12px;font-size:12px">$${p.precio}</td><td style="padding:8px 12px;font-size:11px">${p.canales.join('-')||'—'}</td></tr>`).join('');
+
+  // Banner de combos detectados
+  const combosInfo = importDataCombos.length
+    ? `<div style="margin-top:8px;padding:8px 12px;background:rgba(111,46,255,0.07);border:1px solid rgba(111,46,255,0.2);border-radius:8px;font-size:12px;color:#6f2eff">🎁 <strong>${importDataCombos.length} combos</strong> detectados en la hoja "Combos" — se importarán junto con los productos.</div>`
+    : '';
+
+  const st=document.getElementById('import-status');
+  st.style.display='block';
+  st.style.background=importData.length?'rgba(22,163,74,0.08)':'rgba(220,38,38,0.06)';
+  st.style.color=importData.length?'var(--success)':'var(--danger)';
+  st.style.border=importData.length?'1px solid rgba(22,163,74,0.2)':'1px solid rgba(220,38,38,0.2)';
+  st.innerHTML=(importData.length?`✅ ${importData.length} SKUs listos para importar`:'⚠️ Archivo vacío — se vaciará el inventario')+combosInfo;
+
+  document.getElementById('import-count').textContent=`${importData.length} productos encontrados`;
+  document.getElementById('import-errors').textContent=errores>0?`· ${errores} ignorados`:'';
+  document.getElementById('import-footer-note').textContent=importData.length?`${importData.length} SKUs + ${importDataCombos.length} combos`:'Archivo vacío: vaciará el inventario';
+  document.getElementById('modal-import').classList.add('open');
+}
+
+function confirmarImport(){
+  if(importData.length===0 && importDataCombos.length===0){
+    if(!confirm('¿Vaciar todo el inventario?'))return;
+    productos=[];closeImport();renderTabla();renderDashboard();showToast('🗑 Inventario vaciado');autoSave();return;
+  }
+  let nuevos=0,actualizados=0;
+  importData.forEach(p=>{
+    const existe=productos.find(x=>x.sku.toLowerCase()===p.sku.toLowerCase());
+    if(existe){
+      existe.stock+=p.stock;existe.nombre=p.nombre;existe.categoria=p.categoria;existe.deposito=p.deposito;existe.min=p.min;existe.precio=p.precio;
+      if(p.canales.length)existe.canales=p.canales;
+      if(p.stock>0)movimientos.unshift({tipo:'entrada',skuId:existe.id,sku:existe.sku,nombre:existe.nombre,qty:p.stock,motivo:'Importación masiva',fecha:new Date()});
+      actualizados++;
+    } else {
+      const nuevo={id:Date.now()+Math.random(),...p};delete nuevo._fila;
+      productos.push(nuevo);
+      if(p.stock>0)movimientos.unshift({tipo:'entrada',skuId:nuevo.id,sku:nuevo.sku,nombre:nuevo.nombre,qty:p.stock,motivo:'Importación masiva',fecha:new Date()});
+      nuevos++;
+    }
+  });
+
+  // Importar combos
+  let combosNuevos=0, combosAct=0;
+  importDataCombos.forEach(ic=>{
+    // Resolver skuId de cada componente
+    const componentes=ic.componentes.map(comp=>{
+      const prod=productos.find(x=>x.sku.toLowerCase()===comp.sku.toLowerCase());
+      return prod?{skuId:prod.id,sku:prod.sku,nombre:prod.nombre,qty:comp.qty}:null;
+    }).filter(Boolean);
+    if(!componentes.length) return;
+    const existe=combos.find(x=>x.sku.toLowerCase()===ic.sku.toLowerCase());
+    if(existe){
+      existe.nombre=ic.nombre;existe.precio=ic.precio;existe.canales=ic.canales;existe.componentes=componentes;
+      combosAct++;
+    } else {
+      combos.push({id:'combo-'+Date.now()+Math.random(),sku:ic.sku,nombre:ic.nombre,precio:ic.precio,canales:ic.canales,componentes});
+      combosNuevos++;
+    }
+  });
+
+  closeImport();renderTabla();renderDashboard();
+  let msg=`✅ ${nuevos} productos nuevos · ${actualizados} actualizados`;
+  if(combosNuevos||combosAct) msg+=` · 🎁 ${combosNuevos} combos nuevos · ${combosAct} actualizados`;
+  showToast(msg);
+  importData=[];importDataCombos=[];autoSave();
+}
+function closeImport(){document.getElementById('modal-import').classList.remove('open');}
+
+// ── EXPORTAR A XLSX ──────────────────────────────────────────
+function exportCSV(){
+  cargarXLSX(()=>{
+    const wb = XLSX.utils.book_new();
+
+    // Hoja Productos
+    const rowsP = [
+      ['SKU','Nombre','Categoría','Depósito','Stock','Mínimo','Precio','Canales','Estado'],
+      ...productos.map(p=>[p.sku,p.nombre,p.categoria,p.deposito,p.stock,p.min,p.precio,p.canales.join('-'),getStatus(p)==='ok'?'En stock':getStatus(p)==='low'?'Stock bajo':'Sin stock'])
+    ];
+    const wsP=XLSX.utils.aoa_to_sheet(rowsP);
+    wsP['!cols']=[{wch:16},{wch:28},{wch:16},{wch:14},{wch:8},{wch:8},{wch:10},{wch:14},{wch:12}];
+    XLSX.utils.book_append_sheet(wb, wsP, 'Inventario');
+
+    // Hoja Movimientos
+    if(movimientos.length){
+      const rowsM=[
+        ['Tipo','SKU','Producto','Cantidad','Motivo','Fecha'],
+        ...movimientos.map(m=>[m.tipo,m.sku,m.nombre,m.qty,m.motivo,m.fecha instanceof Date?m.fecha.toLocaleString('es-AR'):m.fecha])
+      ];
+      const wsM=XLSX.utils.aoa_to_sheet(rowsM);
+      wsM['!cols']=[{wch:10},{wch:16},{wch:28},{wch:10},{wch:30},{wch:20}];
+      XLSX.utils.book_append_sheet(wb, wsM, 'Movimientos');
+    }
+
+    // Hoja Combos
+    if(combos.length){
+      const rowsC=[['Combo SKU','Combo Nombre','Precio','Canales','Stock Disponible','Componentes']];
+      combos.forEach(c=>{
+        const st=calcularStockCombo(c.componentes);
+        const comps=c.componentes.map(x=>`${x.sku}×${x.qty}`).join(' | ');
+        rowsC.push([c.sku,c.nombre,c.precio,c.canales.join('-'),st,comps]);
+      });
+      const wsC=XLSX.utils.aoa_to_sheet(rowsC);
+      wsC['!cols']=[{wch:16},{wch:24},{wch:10},{wch:14},{wch:16},{wch:40}];
+      XLSX.utils.book_append_sheet(wb, wsC, 'Combos');
+    }
+
+    const fecha=new Date().toLocaleDateString('es-AR').replace(/\//g,'-');
+    XLSX.writeFile(wb, `inventario-westock-${fecha}.xlsx`);
+    showToast('📥 Exportado a Excel correctamente');
+  });
+}
+
+function calcularStockCombo(cs){return cs.length?Math.min(...cs.map(c=>{const p=productos.find(x=>x.id===c.skuId);return p?Math.floor(p.stock/c.qty):0;})):0;}
+function renderCombos(){
+  const g=document.getElementById('combos-grid');
+  if(!combos.length){g.innerHTML='<div class="empty" style="grid-column:1/-1;padding:60px"><div class="empty-icon">🎁</div><p>No hay combos</p></div>';return;}
+  g.innerHTML=combos.map(c=>{
+    const st=calcularStockCombo(c.componentes);
+    const sc=st===0?'var(--danger)':st<=3?'var(--warn)':'var(--success)';
+    return`<div class="panel"><div class="panel-header" style="gap:8px"><div style="flex:1"><div style="font-weight:700;font-size:14px">${c.nombre}</div><div class="sku-code" style="margin-top:2px">${c.sku}</div></div><div style="text-align:right"><div style="font-size:26px;font-weight:700;font-family:'JetBrains Mono',monospace;color:${sc};line-height:1">${st}</div><div style="font-size:10px;color:var(--muted)">combos disp.</div></div></div><div style="padding:10px 16px;border-bottom:1px solid var(--border)">${c.componentes.map(comp=>{const p=productos.find(x=>x.id===comp.skuId);const sd=p?Math.floor(p.stock/comp.qty):0;const es=sd===st&&st<99&&p;return`<div style="display:flex;align-items:center;gap:8px;margin-bottom:5px;padding:6px 8px;border-radius:6px;background:${es?'rgba(245,158,11,0.06)':'var(--surface2)'}"><span style="font-size:14px">📦</span><div style="flex:1"><div style="font-size:12px;font-weight:500">${p?p.nombre:'SKU no encontrado'}</div><div style="font-size:10px;color:var(--muted)">${comp.sku} · x${comp.qty}</div></div><div style="text-align:right"><div style="font-size:12px;font-weight:600">${p?p.stock:0} uds</div></div>${es?'<span>⚠️</span>':''}</div>`;}).join('')}</div><div style="padding:10px 16px;display:flex;justify-content:space-between;align-items:center">${mpDots(c.canales)}<div style="display:flex;gap:6px"><button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="abrirModalCombo('${c.id}')">✏️</button><button class="btn btn-danger" style="padding:4px 10px;font-size:11px" onclick="eliminarCombo('${c.id}')">🗑</button></div></div></div>`;
+  }).join('');
+}
+function abrirModalCombo(id){
+  editComboId=id||null;comboComponentes=[];
+  document.getElementById('combo-modal-title').textContent=id?'🎁 Editar Combo':'🎁 Nuevo Combo';
+  const sel=document.getElementById('combo-comp-sku');
+  sel.innerHTML='<option value="">Seleccionar SKU...</option>'+productos.map(p=>`<option value="${p.id}">${p.sku} — ${p.nombre} (${p.stock})</option>`).join('');
+  selectedMP=[];document.querySelectorAll('#modal-combo .mp-check').forEach(el=>el.classList.remove('checked'));
+  if(id){
+    const c=combos.find(x=>x.id===id);
+    if(c){
+      document.getElementById('combo-nombre').value=c.nombre;
+      document.getElementById('combo-sku').value=c.sku;
+      document.getElementById('combo-precio').value=c.precio;
+      comboComponentes=[...c.componentes];selectedMP=[...c.canales];
+      document.querySelectorAll('#modal-combo .mp-check').forEach(el=>{if(selectedMP.includes(el.classList[1]))el.classList.add('checked');});
+    }
+  } else {
+    document.getElementById('combo-nombre').value='';
+    document.getElementById('combo-sku').value='';
+    document.getElementById('combo-precio').value=0;
+  }
+  renderComponentesList();document.getElementById('modal-combo').classList.add('open');
+}
+function cerrarModalCombo(){document.getElementById('modal-combo').classList.remove('open');comboComponentes=[];editComboId=null;}
+function agregarComponente(){
+  const sel=document.getElementById('combo-comp-sku');
+  const qty=parseInt(document.getElementById('combo-comp-qty').value)||1;
+  const skuId=parseFloat(sel.value);
+  if(!skuId){showToast('Seleccioná un SKU');return;}
+  if(comboComponentes.find(c=>c.skuId===skuId)){showToast('Ese SKU ya está en el combo');return;}
+  const p=productos.find(x=>x.id===skuId);if(!p)return;
+  comboComponentes.push({skuId,sku:p.sku,nombre:p.nombre,qty});
+  sel.value='';document.getElementById('combo-comp-qty').value=1;
+  renderComponentesList();
+}
+function renderComponentesList(){
+  const list=document.getElementById('combo-componentes-list');
+  document.getElementById('combo-stock-preview').textContent=calcularStockCombo(comboComponentes);
+  if(!comboComponentes.length){list.innerHTML='<div class="empty" style="padding:20px"><p>Agregá al menos un componente</p></div>';return;}
+  list.innerHTML=comboComponentes.map(c=>{
+    const p=productos.find(x=>x.id===c.skuId);
+    return`<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-bottom:1px solid var(--border)"><div style="flex:1"><div style="font-size:12px;font-weight:600">${c.nombre}</div><div style="font-size:10px;color:var(--muted)">${c.sku} · Stock: ${p?p.stock:0}</div></div><span style="font-size:11px;color:var(--muted)">x</span><input type="number" min="1" value="${c.qty}" style="width:54px;padding:4px 8px;border:1px solid var(--border);border-radius:6px;background:var(--surface);color:var(--text);font-family:'Space Grotesk',sans-serif;font-size:12px;text-align:center" onchange="actualizarQtyComp(${c.skuId},this.value)"><button onclick="quitarComponente(${c.skuId})" style="background:none;border:none;color:var(--danger);cursor:pointer;font-size:16px;padding:0 4px">✕</button></div>`;
+  }).join('');
+}
+function quitarComponente(skuId){comboComponentes=comboComponentes.filter(c=>c.skuId!==skuId);renderComponentesList();}
+function actualizarQtyComp(skuId,val){const c=comboComponentes.find(x=>x.skuId===skuId);if(c)c.qty=parseInt(val)||1;document.getElementById('combo-stock-preview').textContent=calcularStockCombo(comboComponentes);}
+function guardarCombo(){
+  const nombre=document.getElementById('combo-nombre').value.trim();
+  const sku=document.getElementById('combo-sku').value.trim();
+  if(!nombre||!sku){showToast('Nombre y SKU son obligatorios');return;}
+  if(!comboComponentes.length){showToast('Agregá al menos un componente');return;}
+  const data={nombre,sku,precio:parseInt(document.getElementById('combo-precio').value)||0,canales:[...selectedMP],componentes:[...comboComponentes]};
+  if(editComboId){const i=combos.findIndex(x=>x.id===editComboId);combos[i]={...combos[i],...data};showToast('✅ Combo actualizado');}
+  else{combos.push({id:'combo-'+Date.now(),...data});showToast('✅ Combo creado');}
+  cerrarModalCombo();renderCombos();autoSave();
+}
+function eliminarCombo(id){if(!confirm('¿Eliminar?'))return;combos=combos.filter(x=>x.id!==id);renderCombos();showToast('🗑 Combo eliminado');}
+
+// ===================== SOPORTE =====================
+function initSoporte(){switchSupportTab('guia');renderGuiaCards();renderFaqList();}
+function switchSupportTab(tab){
+  document.getElementById('support-guia').style.display=tab==='guia'?'block':'none';
+  document.getElementById('support-chat').style.display=tab==='chat'?'block':'none';
+  document.getElementById('tab-guia').classList.toggle('active',tab==='guia');
+  document.getElementById('tab-chat').classList.toggle('active',tab==='chat');
+}
+const GUIA_DETALLE={
+  'Dashboard':{ico:'⊞',desc:'KPIs, alertas y últimos movimientos',pasos:[
+    {t:'¿Qué muestra el Dashboard?',c:'Es la pantalla principal. Muestra 4 KPIs en tiempo real: <strong>Total SKUs</strong>, <strong>Stock total</strong>, <strong>Productos con stock bajo</strong> y <strong>Productos sin stock</strong>.'},
+    {t:'Alertas de reposición',c:'El panel inferior izquierdo lista los productos que necesitan reposición urgente, ordenados de menor a mayor stock. Hacé clic en cualquiera para ir directo al Inventario.'},
+    {t:'Distribución por marketplace',c:'El panel derecho muestra qué porcentaje de tus SKUs están activos en cada canal: Mercado Libre, Amazon, Tiendanube y Shopify.'},
+    {t:'Últimos movimientos',c:'Los 5 movimientos más recientes aparecen en la parte inferior con ícono de tipo (📥 entrada, 📤 salida, 🔧 ajuste), producto y cantidad.'},
+    {t:'¿Se actualiza solo?',c:'Sí. Cada vez que entrás al Dashboard o realizás cualquier acción, los datos se recalculan automáticamente desde el inventario actual.'}
+  ]},
+  'Inventario':{ico:'📦',desc:'Agregar, editar, filtrar y eliminar SKUs',pasos:[
+    {t:'Agregar un producto nuevo',c:'Hacé clic en <strong>"+ Nuevo SKU"</strong> en la barra superior. Completá Nombre y SKU (obligatorios), Categoría, Depósito, Stock inicial, Stock mínimo, Precio costo y canales de venta. Guardá.'},
+    {t:'Editar un producto existente',c:'Hacé clic en el ícono <strong>✏️</strong> de la fila, o directamente sobre el nombre o SKU del producto. Se abre el modal con todos los datos actuales para modificar.'},
+    {t:'Ajustar stock con motivo',c:'Usá el botón <strong>⚖️</strong> en la fila del producto. Ingresá el stock real actual, elegí el motivo (inventario físico, corrección, merma) y confirmá. Queda registrado en Movimientos.'},
+    {t:'Filtros disponibles',c:'Tenés 4 filtros combinables: <strong>Búsqueda</strong> por nombre o SKU, <strong>Canal</strong> de venta, <strong>Estado</strong> (en stock / bajo / sin stock) y <strong>Depósito</strong>. Se aplican juntos en tiempo real.'},
+    {t:'Eliminar uno o varios productos',c:'Para eliminar uno: botón 🗑 en la fila. Para eliminar varios: tildá los checkboxes y usá la barra roja que aparece → <strong>"🗑 Eliminar seleccionados"</strong>.'},
+    {t:'Barra de estado (colores)',c:'✅ Verde = en stock · ⚠️ Amarillo = stock bajo (llegó al mínimo) · ❌ Rojo = sin stock (llegó a 0).'}
+  ]},
+  'Movimientos':{ico:'↕',desc:'Registrar entradas, salidas y ajustes',pasos:[
+    {t:'Tipos de movimiento',c:'<strong>📥 Entrada</strong>: suma stock al producto (compra a proveedor, devolución de cliente).<br><strong>📤 Salida</strong>: resta stock (venta, pérdida, robo).<br><strong>🔧 Ajuste</strong>: corrige el stock a un valor exacto.'},
+    {t:'Cómo registrar un movimiento',c:'Andá a la sección <strong>Movimientos</strong>. Elegí el SKU del producto, el tipo de movimiento, la cantidad y escribí el motivo. Hacé clic en <strong>"Registrar"</strong>.'},
+    {t:'Stock insuficiente en salida',c:'Si intentás registrar una salida mayor al stock disponible, el sistema te avisa y no permite la operación para evitar stock negativo.'},
+    {t:'Historial de movimientos',c:'Todos los movimientos quedan listados con fecha, hora relativa, tipo, producto y cantidad. Los más recientes aparecen primero.'},
+    {t:'Limpiar historial',c:'El botón <strong>"🗑 Limpiar"</strong> borra el historial de movimientos pero <strong>no modifica el stock</strong> de ningún producto.'}
+  ]},
+  'Importación masiva':{ico:'📤',desc:'Cargar productos y combos desde Excel (.xlsx)',pasos:[
+    {t:'Descargar la plantilla oficial (.xlsx)',c:'Hacé clic en <strong>"📋 Plantilla"</strong> en la barra superior. Se descarga un archivo <strong>Excel (.xlsx)</strong> con 3 hojas: <strong>Productos</strong>, <strong>Combos</strong> e <strong>Instrucciones</strong>. Abrilo directamente en Excel, completá los datos y guardá.'},
+    {t:'Hoja "Productos" — columnas disponibles',c:'<strong>SKU</strong> y <strong>Nombre</strong> son obligatorios. Las demás son opcionales: <em>Categoria, Deposito, Stock, Minimo, Precio, Canales</em>.<br><br>Los canales van separados con guión: <strong>ml-amz-tn-sh</strong>. Podés poner solo los que usás, por ejemplo: <strong>ml-tn</strong>.'},
+    {t:'Hoja "Combos" — cómo cargar packs',c:'Cada fila es un <strong>componente</strong> de un combo. Si un combo tiene 2 componentes, ocupás 2 filas con el mismo <strong>Combo_SKU</strong>.<br><br>Columnas: <em>Combo_SKU, Combo_Nombre, Combo_Precio, Combo_Canales, Componente_SKU, Componente_Cantidad</em>.<br><br>El Componente_SKU debe existir en la hoja Productos o ya estar en el inventario.'},
+    {t:'Importar el archivo',c:'Hacé clic en <strong>"📤 Importar"</strong> y seleccioná tu archivo .xlsx. El sistema detecta automáticamente las hojas Productos y Combos. Aparece una vista previa: en verde los SKUs detectados y en violeta los combos. Revisá y confirmá.'},
+    {t:'SKU duplicado al importar',c:'Si el SKU ya existe en el inventario, el stock del archivo se <strong>suma</strong> al stock actual. Los demás datos (nombre, precio, canales) se actualizan. No se reemplaza, se acumula.'},
+    {t:'También acepta archivos CSV',c:'Si tenés un CSV viejo, el sistema lo sigue aceptando. Pero la plantilla nueva en .xlsx es más cómoda porque se ve bien en Excel sin problemas de columnas separadas.'},
+    {t:'Archivo vacío o sin filas',c:'Si el archivo no tiene filas de datos (solo encabezado), el sistema vacía el inventario. Usalo con cuidado como opción de reseteo rápido.'}
+  ]},
+  'Combos':{ico:'🎁',desc:'Crear packs y calcular stock automático',pasos:[
+    {t:'¿Qué es un combo?',c:'Un combo es un pack que agrupa varios SKUs del inventario. Por ejemplo: "Kit Verano" = 1 remera + 1 gorra. El stock disponible del combo se calcula automáticamente según los componentes disponibles.'},
+    {t:'Crear un combo manualmente',c:'Andá a <strong>Combos</strong> → <strong>"+ Nuevo Combo"</strong>. Ingresá el nombre, SKU y precio del combo. Luego buscá y agregá los componentes con su cantidad requerida. Guardá.'},
+    {t:'Importar combos desde Excel',c:'Usá la hoja <strong>"Combos"</strong> de la plantilla oficial (.xlsx). Cada fila es un componente: si el combo tiene 3 piezas, ocupás 3 filas con el mismo <strong>Combo_SKU</strong>. Al importar el archivo, los combos se cargan junto con los productos automáticamente.'},
+    {t:'Cómo se calcula el stock disponible',c:'WeStock toma el mínimo entre: <em>stock_componente ÷ cantidad_requerida</em> para cada componente. El resultado es cuántos combos podés armar con el stock actual. Se recalcula en tiempo real.'},
+    {t:'Indicador ⚠️ en componentes',c:'El ícono ⚠️ aparece sobre el componente que está <strong>limitando</strong> la disponibilidad del combo. Es el que tenés que reponer primero para poder armar más unidades.'},
+    {t:'Canales de venta del combo',c:'Podés asignar canales (ML, Amazon, TN, SH) al combo de forma independiente a los canales de cada componente individual.'},
+    {t:'Exportar combos',c:'Al exportar con <strong>"⬇ Exportar"</strong>, los combos aparecen en su propia hoja dentro del Excel con SKU, nombre, precio, canales, stock disponible y lista de componentes.'}
+  ]},
+  'Alertas':{ico:'🔔',desc:'Productos con stock bajo o agotado',pasos:[
+    {t:'¿Cuándo se genera una alerta?',c:'Automáticamente cuando: el stock llega a <strong>0</strong> → alerta roja "Sin stock", o cuando el stock es menor o igual al <strong>mínimo configurado</strong> → alerta amarilla "Stock bajo".'},
+    {t:'Ver todas las alertas',c:'En la sección <strong>🔔 Alertas</strong> aparecen todos los productos con problema, ordenados de menor a mayor stock. Muestra nombre, SKU, depósito y stock mínimo configurado.'},
+    {t:'También aparecen en el Dashboard',c:'El panel de alertas del Dashboard muestra los 5 productos más críticos. Hacé clic en cualquiera para ir al Inventario.'},
+    {t:'Configurar el stock mínimo',c:'Editá el producto (ícono ✏️) y modificá el campo <strong>Mínimo</strong>. Recomendamos poner la cantidad que tardás en reponer (ej: si tardás 1 semana y vendés 10/semana, poné mínimo 10).'},
+    {t:'Resolver una alerta',c:'Registrá una <strong>📥 Entrada</strong> en Movimientos con la cantidad repuesta, o usá el <strong>⚖️ Ajuste de stock</strong>. La alerta desaparece automáticamente.'}
+  ]},
+  'Reportes':{ico:'📊',desc:'Valor inventario, rotación y categorías',pasos:[
+    {t:'KPIs del período',c:'Muestra las <strong>entradas totales</strong> (unidades recibidas), <strong>salidas totales</strong> (unidades vendidas/descontadas) y el <strong>valor total del inventario</strong> a precio costo.'},
+    {t:'Cómo se calcula el valor',c:'Suma stock × precio_costo de cada producto. Para que sea preciso, asegurate de cargar el precio costo al crear o editar cada SKU.'},
+    {t:'% de rotación',c:'Indica qué porcentaje de tus SKUs tuvieron al menos un movimiento. Un 100% significa que todos los productos tuvieron actividad.'},
+    {t:'Gráfico por categoría',c:'El gráfico de barras muestra el stock total agrupado por categoría. Útil para ver qué categorías dominan tu inventario en volumen.'},
+    {t:'Período de análisis',c:'Los reportes de entradas/salidas se calculan sobre el historial de movimientos disponible. Si limpiaste el historial, los totales se reinician.'}
+  ]},
+  'Marketplaces':{ico:'🛒',desc:'Distribución de SKUs por canal de venta',pasos:[
+    {t:'Canales disponibles',c:'WeStock soporta 4 canales: 🟡 <strong>Mercado Libre (ML)</strong>, 🟠 <strong>Amazon (AMZ)</strong>, 🟣 <strong>Tiendanube (TN)</strong>, 🟢 <strong>Shopify (SH)</strong>.'},
+    {t:'Asignar canales a un producto',c:'Al crear o editar un SKU, seleccioná los canales en los que vendés ese producto. Podés elegir uno o varios a la vez.'},
+    {t:'Vista de Marketplaces',c:'La sección <strong>Marketplaces</strong> muestra cuántos SKUs tenés activos en cada canal, con su stock actual y estado (en stock / bajo / sin stock).'},
+    {t:'Dots de color en Inventario',c:'En la tabla de Inventario, cada producto muestra 4 puntos de colores. Los puntos <strong>sólidos</strong> = canal activo, los <strong>opacos</strong> = canal inactivo.'},
+    {t:'Filtrar por canal',c:'En Inventario usá el filtro <strong>"Canal"</strong> para ver solo los productos activos en un marketplace específico.'}
+  ]}
+};
+
+function renderGuiaCards(){
+  const el=document.getElementById('guia-cards');if(!el)return;
+  const items=Object.entries(GUIA_DETALLE);
+  el.innerHTML=items.map(([titulo,{ico,desc}])=>`
+    <div onclick="abrirGuiaDetalle('${titulo}')" style="background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:18px;transition:all 0.2s;cursor:pointer;position:relative"
+      onmouseover="this.style.borderColor='var(--accent)';this.style.transform='translateY(-2px)';this.querySelector('.guia-arrow').style.opacity='1'"
+      onmouseout="this.style.borderColor='var(--border)';this.style.transform='translateY(0)';this.querySelector('.guia-arrow').style.opacity='0'">
+      <div style="font-size:22px;margin-bottom:10px">${ico}</div>
+      <div style="font-size:14px;font-weight:700;margin-bottom:4px">${titulo}</div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.5">${desc}</div>
+      <span class="guia-arrow" style="position:absolute;top:16px;right:16px;color:var(--accent);font-size:16px;opacity:0;transition:opacity 0.2s">→</span>
+    </div>`).join('');
+}
+
+function abrirGuiaDetalle(titulo){
+  const d=GUIA_DETALLE[titulo];if(!d)return;
+  // Crear panel si no existe
+  let panel=document.getElementById('guia-detail-panel');
+  if(!panel){
+    panel=document.createElement('div');
+    panel.id='guia-detail-panel';
+    panel.style.cssText='position:fixed;top:0;right:-440px;width:420px;height:100vh;background:var(--surface);border-left:1px solid var(--border2);z-index:200;display:flex;flex-direction:column;transition:right 0.3s ease;box-shadow:-4px 0 24px rgba(0,0,0,0.08)';
+    panel.innerHTML=`
+      <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;background:var(--surface)">
+        <div>
+          <div id="gpanel-ico" style="font-size:24px;margin-bottom:4px"></div>
+          <div id="gpanel-titulo" style="font-size:16px;font-weight:700"></div>
+          <div id="gpanel-desc" style="font-size:12px;color:var(--muted);margin-top:2px"></div>
+        </div>
+        <button onclick="cerrarGuiaDetalle()" style="background:var(--surface2);border:1px solid var(--border);border-radius:8px;width:32px;height:32px;cursor:pointer;font-size:16px;color:var(--muted);display:flex;align-items:center;justify-content:center">✕</button>
+      </div>
+      <div id="gpanel-body" style="flex:1;overflow-y:auto;padding:20px 24px;display:flex;flex-direction:column;gap:14px"></div>`;
+    document.body.appendChild(panel);
+    // Overlay
+    const ov=document.createElement('div');
+    ov.id='guia-detail-overlay';
+    ov.onclick=cerrarGuiaDetalle;
+    ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,0.3);z-index:199;display:none';
+    document.body.appendChild(ov);
+  }
+  document.getElementById('gpanel-ico').textContent=d.ico;
+  document.getElementById('gpanel-titulo').textContent=titulo;
+  document.getElementById('gpanel-desc').textContent=d.desc;
+  document.getElementById('gpanel-body').innerHTML=d.pasos.map((p,i)=>`
+    <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:14px 16px">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px">
+        <div style="width:22px;height:22px;border-radius:50%;background:var(--accent);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0">${i+1}</div>
+        <div style="font-size:13px;font-weight:600">${p.t}</div>
+      </div>
+      <div style="font-size:12px;color:var(--muted);line-height:1.65;padding-left:32px">${p.c}</div>
+    </div>`).join('');
+  setTimeout(()=>{
+    document.getElementById('guia-detail-panel').style.right='0';
+    document.getElementById('guia-detail-overlay').style.display='block';
+  },10);
+}
+function cerrarGuiaDetalle(){
+  const p=document.getElementById('guia-detail-panel');
+  const o=document.getElementById('guia-detail-overlay');
+  if(p)p.style.right='-440px';
+  if(o)o.style.display='none';
+}
+function renderFaqList(){
+  const el=document.getElementById('faq-list');if(!el)return;
+  const faqs=[
+    ['¿La plantilla es CSV o Excel?','La plantilla descarga un archivo <strong>Excel (.xlsx)</strong> real con 3 hojas: Productos, Combos e Instrucciones. Se abre directo en Excel sin problemas de columnas.'],
+    ['¿Puedo cargar combos desde el Excel?','Sí. La hoja "Combos" de la plantilla tiene las columnas para cargar packs. Cada componente del combo va en una fila separada con el mismo Combo_SKU. Al importar, el sistema los detecta automáticamente.'],
+    ['¿Los datos se guardan automáticamente?','Sí, en versión con licencia los datos se guardan en el navegador Edge del equipo y no se pierden al cerrar. También podés exportar un Excel como backup adicional.'],
+    ['¿El Excel exportado incluye los combos?','Sí. Al exportar con "⬇ Exportar" se genera un .xlsx con 3 hojas: Inventario, Movimientos y Combos. Todo bien formateado.'],
+    ['¿Puedo importar desde Google Sheets?','Sí. Descargá el archivo como .xlsx desde Google Sheets (Archivo → Descargar → Excel) y luego importalo en WeStock.'],
+    ['¿Cómo funciona el stock de un combo?','Se calcula automáticamente: mínimo(stock ÷ cantidad requerida) para cada componente. El ⚠️ señala cuál limita la disponibilidad.'],
+    ['¿Qué pasa si importo un SKU que ya existe?','El stock del archivo se suma al stock actual. Los datos como nombre, precio y canales se actualizan con los del archivo.'],
+    ['¿Cómo corrijo un error en el stock?','Usá el botón ⚖️ en la fila del producto para ajustar con motivo. El ajuste queda registrado en el historial de movimientos.'],
+    ['¿Puedo filtrar por depósito?','Sí. En Inventario usá el filtro "Todos los depósitos" para ver solo productos de un depósito específico.'],
+    ['¿Cómo veo los productos sin stock?','En Inventario → filtro Estado → "Sin stock". También aparecen en la sección Alertas ordenados por urgencia.']
+  ];
+  el.innerHTML=faqs.map(([q,a])=>`<div style="border-bottom:1px solid var(--border);padding:14px 20px;cursor:pointer" onclick="toggleFaqInline(this)"><div style="display:flex;justify-content:space-between;align-items:center"><span style="font-size:13px;font-weight:600">${q}</span><span style="color:var(--muted);font-size:16px;transition:transform 0.2s" class="faq-arr">▾</span></div><div style="display:none;font-size:12px;color:var(--muted);margin-top:8px;line-height:1.6" class="faq-body">${a}</div></div>`).join('');
+}
+function toggleFaqInline(el){const body=el.querySelector('.faq-body');const arr=el.querySelector('.faq-arr');const open=body.style.display==='block';body.style.display=open?'none':'block';arr.style.transform=open?'':'rotate(180deg)';}
+
+// ===================== KNOWLEDGE BASE — CHAT =====================
+const KB=[
+  {k:['nuevo producto','agregar producto','cargar producto','nuevo sku','alta de producto','como agrego','quiero agregar','sumar producto','dar de alta','como cargo','añadir producto','crear producto','registrar producto'],r:'Para agregar un producto:\n• Clic en <strong>"+ Nuevo SKU"</strong>\n• Completá Nombre y SKU (obligatorios)\n• Agregá Categoría, Depósito, Stock inicial, Mínimo y Precio\n• Seleccioná los canales de venta\n• Guardá'},
+  {k:['importar','excel','xlsx','csv','carga masiva','cargar masivo','importacion','subir archivo','sube archivo','cargar archivo','subir productos','importar productos','carga desde archivo','cargar desde excel','cargar desde csv','importar masivo','cargar en masa','plantilla','template'],r:'La plantilla se descarga como <strong>Excel (.xlsx)</strong> con 3 hojas:<br><br>📦 <strong>Productos</strong>: SKU y Nombre son obligatorios. Canales separados con guión: <strong>ml-amz-tn-sh</strong><br>🎁 <strong>Combos</strong>: una fila por componente, con el mismo Combo_SKU para agrupar<br>📖 <strong>Instrucciones</strong>: guía de uso dentro del archivo<br><br>Para importar: clic en <strong>"📤 Importar"</strong> → seleccioná el .xlsx → revisá la vista previa (muestra en violeta los combos detectados) → confirmá.<br><br>SKU existente → stock se <strong>suma</strong>. Ambas hojas se procesan en una sola importación.'},
+  {k:['combo','pack','bundle','paquete','kit','producto compuesto','armar combo','crear combo','nuevo combo','pack de productos','vender junto','agrupar productos','importar combo','cargar combo','combo excel'],r:'Los combos son packs de varios SKUs. Tenés dos formas de crearlos:<br><br>✋ <strong>Manual</strong>: Andá a <strong>Combos</strong> → "+ Nuevo Combo" → ingresá nombre, SKU y precio → agregá componentes con su cantidad → guardá.<br><br>📥 <strong>Desde Excel</strong>: usá la hoja <strong>"Combos"</strong> de la plantilla. Cada fila es un componente; si el combo tiene 3 piezas, son 3 filas con el mismo Combo_SKU. Al importar el .xlsx se cargan junto con los productos.<br><br>El stock disponible se calcula solo: mínimo(stock ÷ cantidad). El ⚠️ señala el componente que <strong>limita</strong> la disponibilidad.'},
+  {k:['ajustar stock','ajuste','corregir stock','diferencia','inventario fisico','conteo fisico','stock real','stock incorrecto','stock equivocado','stock no coincide','cambiar stock','modificar stock','actualizar stock','stock actual','poner stock','setear stock','stock manual'],r:'Para corregir el stock real:\n• Hacé clic en <strong>⚖️</strong> en la fila del producto\n• Ingresá el stock actual real\n• Elegí el motivo (inventario físico, corrección, merma, etc.)\n• Confirmá — el ajuste queda registrado en el historial de movimientos'},
+  {k:['movimiento','entrada','salida','registrar venta','registrar compra','historial movimientos','como registro','anotar venta','anotar compra','registrar movimiento','sumar stock','restar stock','agregar unidades','descontar unidades','vendi','compre','recibi mercaderia','devolucion'],r:'Tipos de movimiento:\n• <strong>📥 Entrada</strong>: suma stock (compra, devolución)\n• <strong>📤 Salida</strong>: resta stock (venta, pérdida)\n• <strong>🔧 Ajuste</strong>: corrige al valor exacto indicado\n\nAndá a Movimientos, elegí SKU, tipo, cantidad y motivo. Todos quedan registrados en el historial.'},
+  {k:['alerta','stock bajo','sin stock','reponer','reposicion','productos criticos','productos agotados','quedo sin stock','se agoto','producto agotado','cuando me avisa','notificacion','minimo','stock minimo','bajo de minimo'],r:'Las alertas se generan automáticamente cuando:\n• Stock = 0 → Sin stock 🔴\n• Stock ≤ mínimo configurado → Stock bajo 🟡\n\nLas ves en <strong>🔔 Alertas</strong> y también en el Dashboard. Configurá el mínimo editando cada SKU.'},
+  {k:['eliminar varios','eliminar masivo','borrar varios','seleccionar todos','checkbox','seleccion multiple','bulk','borrar productos','eliminar productos','borrar todo','eliminar todos','como borro varios','quiero borrar','eliminar seleccion'],r:'Para eliminar varios productos a la vez:\n• Andá a <strong>Inventario</strong>\n• Clic en <strong>"☑ Seleccionar todos"</strong> o tildá checkboxes individualmente\n• Aparece la barra roja → clic en <strong>"🗑 Eliminar seleccionados"</strong>\n• Confirmá la eliminación\n\nTambién podés deseleccionar con "✕ Cancelar".'},
+  {k:['exportar','csv','xlsx','descargar','backup','respaldo','guardar datos','como guardo','no perder datos','salvar datos','descargar inventario','exportar productos','sacar copia','copia de seguridad','exportar excel'],r:'Para exportar el inventario clic en <strong>"⬇ Exportar"</strong>. Se descarga un <strong>Excel (.xlsx)</strong> con 3 hojas:<br><br>📦 <strong>Inventario</strong>: todos los productos con stock, precio, canales y estado<br>↕ <strong>Movimientos</strong>: historial completo con fechas<br>🎁 <strong>Combos</strong>: todos los combos con componentes y stock disponible<br><br>Guardalo como backup en Google Drive o tu nube. También podés reimportarlo después si necesitás restaurar datos.'},
+  {k:['marketplace','mercado libre','amazon','tiendanube','shopify','canal','canales de venta','donde vendo','mis tiendas','vincular tienda','agregar canal','ml','amz','tienda nube'],r:'WeStock soporta 4 canales de venta:\n• 🟡 <strong>ML</strong> = Mercado Libre\n• 🟠 <strong>AMZ</strong> = Amazon\n• 🟣 <strong>TN</strong> = Tiendanube\n• 🟢 <strong>SH</strong> = Shopify\n\nEn la sección <strong>Marketplaces</strong> ves la distribución de SKUs y stock por canal.'},
+  {k:['dashboard','panel','inicio','kpi','resumen','pantalla principal','que muestra','que veo','pagina de inicio','vista principal','estadisticas generales','numeros generales'],r:'El Dashboard muestra en tiempo real:\n• Total de SKUs activos\n• Stock total en unidades\n• Cantidad de productos con stock bajo\n• Cantidad de productos sin stock\n• Top alertas de reposición (clickeable)\n• Distribución por marketplace con porcentajes\n• Últimos 5 movimientos registrados'},
+  {k:['reporte','estadisticas','analisis','rotacion','valor inventario','informe','cuanto vendí','entradas y salidas','grafico','ver estadisticas','resumen de ventas','historial de entradas'],r:'En <strong>Reportes</strong> encontrás:\n• Entradas totales del período\n• Salidas totales del período\n• Valor total del inventario a precio costo\n• % de rotación (SKUs que tuvieron movimiento)\n• Gráfico de barras de stock por categoría con leyenda'},
+  {k:['guardar','datos','persistir','se pierden','memoria','localStorage','guardado','sincronizar','se borra','se reinicia','perdi los datos','recargue la pagina','cerrar pagina','datos desaparecen','se guardan'],r:'Con <strong>licencia activa</strong> los datos se guardan automáticamente en Edge al cerrar y volver a abrir la app — no se pierden.<br><br>Para tener un backup adicional o transferir datos a otro equipo:<br>• Clic en <strong>"⬇ Exportar"</strong> → descarga un Excel con todo<br>• Guardalo en Google Drive o USB<br>• En el otro equipo importalo con <strong>"📤 Importar"</strong><br><br>En <strong>modo demo</strong> los datos sí se pierden al cerrar.'},
+  {k:['limpiar historial','borrar movimientos','historial','limpiar movimientos','borrar historial','vaciar historial','eliminar movimientos'],r:'En la sección <strong>Movimientos</strong> → botón "🗑 Limpiar". Se borra el historial de movimientos pero el stock de los productos <strong>no cambia</strong>.'},
+  {k:['deposito','almacen','ubicacion','donde esta','depositos disponibles','bodega','local','sucursal','donde tengo','donde guardo'],r:'WeStock tiene 3 depósitos disponibles:\n• <strong>Depósito 1</strong>\n• <strong>Depósito 2</strong>\n• <strong>Casa central</strong>\n\nAsigná el depósito al crear o editar un SKU. Podés filtrar por depósito en la vista de Inventario.'},
+  {k:['plantilla','template','formato','columnas','estructura archivo','como es el archivo','que columnas','formato csv','formato excel','como armo el archivo','hoja combos','hoja productos'],r:'La plantilla oficial de WeStock es un <strong>Excel (.xlsx)</strong> con 3 hojas:<br><br>📦 <strong>Productos</strong>: SKU (obligatorio), Nombre (obligatorio), Categoria, Deposito, Stock, Minimo, Precio, Canales<br>🎁 <strong>Combos</strong>: Combo_SKU, Combo_Nombre, Combo_Precio, Combo_Canales, Componente_SKU, Componente_Cantidad<br>📖 <strong>Instrucciones</strong>: guía completa dentro del archivo<br><br>Descargala con <strong>"📋 Plantilla"</strong>, completá y volvé a importar con <strong>"📤 Importar"</strong>.'},
+  {k:['editar','modificar','cambiar','actualizar producto','editar sku','cambiar nombre','cambiar precio','cambiar categoria','cambiar deposito','como edito','quiero modificar','actualizar datos'],r:'Para editar un producto:\n• En Inventario, clic en el ícono ✏️ de la fila\n• O clic directamente en el nombre o SKU del producto\n• Se abre el modal con todos los datos actuales\n• Modificá lo que necesités y guardá'},
+  {k:['filtrar','buscar','filtro','encontrar producto','busqueda','como busco','search','no encuentro','donde busco','buscar por nombre','buscar por sku','ver productos','listar productos'],r:'En <strong>Inventario</strong> tenés 4 filtros combinables:\n• <strong>Búsqueda</strong>: por nombre o SKU en tiempo real\n• <strong>Canal</strong>: filtrar por marketplace\n• <strong>Estado</strong>: en stock / stock bajo / sin stock\n• <strong>Depósito</strong>: filtrar por ubicación\n\nTodos los filtros se aplican juntos automáticamente.'},
+  {k:['precio','costo','valor','precio costo','cuanto cuesta','poner precio','ingresar precio','campo precio','precio del producto'],r:'El campo <strong>Precio costo</strong> se usa para calcular el valor total del inventario en Reportes. Se ingresa al crear o editar un SKU. El valor total se muestra en Reportes → "Valor inventario".'},
+  {k:['sku','codigo','codigo producto','que es sku','para que sirve sku','numero de producto','identificador'],r:'El <strong>SKU</strong> (Stock Keeping Unit) es el código único que identifica a cada producto.\n\n• Es obligatorio y no puede repetirse\n• Usá un formato consistente, por ejemplo: <strong>CAT-VARIANTE-TALLE</strong>\n• Se muestra en todos los movimientos y reportes\n• Podés buscarlo directamente en el filtro de Inventario'},
+  {k:['minimo','stock minimo','punto de reorden','cuando reponer','cuanto minimo','nivel minimo','configurar minimo','poner minimo'],r:'El <strong>stock mínimo</strong> es el umbral que dispara las alertas de reposición.\n\n• Cuando el stock llega a ese número → alerta 🟡 Stock bajo\n• Cuando llega a 0 → alerta 🔴 Sin stock\n• Lo configurás al crear o editar cada SKU\n• Recomendamos ponerlo igual a la cantidad que tardás en reponer'},
+];
+
+function tokenize(str){
+  return str.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'') // quitar tildes
+    .replace(/[^a-z0-9\s]/g,' ')
+    .split(/\s+/).filter(w=>w.length>2);
+}
+
+function similarity(a,b){
+  // Retorna true si b empieza con a o a contiene b o b contiene a
+  return b.startsWith(a)||a.startsWith(b)||a.includes(b)||b.includes(a);
+}
+
+function matchKB(q){
+  const qTokens=tokenize(q);
+  if(!qTokens.length) return null;
+
+  let bestScore=0, bestResp=null;
+
+  for(const entry of KB){
+    let score=0;
+    const allKeywords=entry.k.join(' ');
+    const kTokens=tokenize(allKeywords);
+
+    for(const qt of qTokens){
+      for(const kt of kTokens){
+        if(kt===qt) score+=3;                      // coincidencia exacta
+        else if(similarity(qt,kt)) score+=1.5;     // coincidencia parcial
+      }
+    }
+    // Bonus si alguna keyword completa está contenida en la pregunta
+    for(const kw of entry.k){
+      const kwNorm=kw.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+      const qNorm=q.normalize('NFD').replace(/[\u0300-\u036f]/g,'').toLowerCase();
+      if(qNorm.includes(kwNorm)) score+=5;
+    }
+
+    if(score>bestScore){bestScore=score;bestResp=entry.r;}
+  }
+
+  // Umbral mínimo para evitar falsos positivos
+  return bestScore>=3 ? bestResp : null;
+}
+
+// Respuestas dinámicas con datos reales del inventario
+function dynamicResponse(q){
+  const ql=q.toLowerCase();
+  if(ql.match(/cu[aá]ntos sku|cuantos producto|total producto|total sku|tengo cargado/)){
+    return`Tenés <strong>${productos.length} SKUs</strong> cargados en este momento.\n\n• Stock total: ${productos.reduce((a,p)=>a+p.stock,0).toLocaleString()} unidades\n• En stock: ${productos.filter(p=>getStatus(p)==='ok').length} productos\n• Stock bajo: ${productos.filter(p=>getStatus(p)==='low').length} productos\n• Sin stock: ${productos.filter(p=>getStatus(p)==='out').length} productos`;
+  }
+  if(ql.match(/stock bajo|bajo stock|reponer|criticos/)){
+    const low=productos.filter(p=>getStatus(p)==='low');
+    const out=productos.filter(p=>getStatus(p)==='out');
+    if(!low.length&&!out.length)return'✅ ¡Todo en orden! No hay productos con stock bajo ni agotados.';
+    let r='';
+    if(out.length)r+=`<strong>Sin stock (${out.length}):</strong>\n${out.map(p=>`• ${p.nombre} — SKU: ${p.sku}`).join('\n')}\n\n`;
+    if(low.length)r+=`<strong>Stock bajo (${low.length}):</strong>\n${low.map(p=>`• ${p.nombre} — Stock: ${p.stock} / Mín: ${p.min}`).join('\n')}`;
+    return r.trim();
+  }
+  if(ql.match(/valor|valor inventario|cuanto vale/)){
+    const val=productos.reduce((a,p)=>a+p.stock*p.precio,0);
+    return`El valor total del inventario a precio costo es <strong>$${val.toLocaleString()}</strong>.\n\nCalculado sobre ${productos.length} productos con un stock total de ${productos.reduce((a,p)=>a+p.stock,0).toLocaleString()} unidades.`;
+  }
+  if(ql.match(/movimientos|ultimos movimientos|historial/)){
+    if(!movimientos.length)return'No hay movimientos registrados aún.';
+    const ultimos=movimientos.slice(0,5);
+    return`Últimos ${ultimos.length} movimientos:\n\n${ultimos.map(m=>`• ${m.tipo==='entrada'?'📥':m.tipo==='salida'?'📤':'🔧'} <strong>${m.nombre}</strong> — ${m.tipo==='salida'?'-':'+'}${m.qty} (${m.motivo})`).join('\n')}`;
+  }
+  return null;
+}
+
+function addChatMsg(role, html){
+  const msgs=document.getElementById('chat-messages');
+  const div=document.createElement('div');
+  div.className='chat-msg'+(role==='user'?' user':'');
+  const avatar=document.createElement('div');
+  avatar.className='chat-avatar'+(role==='user'?' user':'');
+  if(role==='user'){avatar.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>';}
+  else{avatar.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';}
+  const bubble=document.createElement('div');
+  bubble.className='chat-bubble '+(role==='user'?'user':'bot');
+  bubble.innerHTML=html.replace(/\n/g,'<br>');
+  if(role==='user'){div.appendChild(bubble);div.appendChild(avatar);}
+  else{div.appendChild(avatar);div.appendChild(bubble);}
+  msgs.appendChild(div);
+  msgs.scrollTop=msgs.scrollHeight;
+  return bubble;
+}
+
+function showTyping(){
+  const msgs=document.getElementById('chat-messages');
+  const wrap=document.createElement('div');wrap.className='chat-msg';wrap.id='typing-indicator';
+  const avatar=document.createElement('div');avatar.className='chat-avatar';
+  avatar.innerHTML='<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>';
+  const typing=document.createElement('div');typing.className='chat-typing';
+  typing.innerHTML='<span></span><span></span><span></span>';
+  wrap.appendChild(avatar);wrap.appendChild(typing);
+  msgs.appendChild(wrap);msgs.scrollTop=msgs.scrollHeight;
+}
+function hideTyping(){const t=document.getElementById('typing-indicator');if(t)t.remove();}
+
+function smartFallback(q){
+  const ql=q.toLowerCase();
+
+  // Saludos
+  if(ql.match(/^(hola|holis|buenas|hey|buen[oa]s? d[ií]as?|buen[oa]s? tarde|buen[oa]s? noche)/))
+    return '👋 ¡Hola! Soy el asistente de <strong>WeStock</strong>. Puedo ayudarte con el manejo del inventario, movimientos, alertas, combos, importación y más.<br><br>¿En qué te ayudo?';
+
+  // Gracias
+  if(ql.match(/gracias|muchas gracias|genial|perfecto|excelente|ok gracias/))
+    return '¡De nada! Si tenés otra consulta sobre WeStock, acá estoy. 😊';
+
+  // Qué podés hacer
+  if(ql.match(/qu[eé] pod[eé]s|qu[eé] sab[eé]s|ayuda|para qu[eé] sirv[eé]s|funciones/))
+    return 'Puedo ayudarte con todo lo relacionado a <strong>WeStock</strong>:<br><br>• 📦 Agregar, editar o eliminar productos<br>• 📥📤 Registrar entradas y salidas de stock<br>• ⚖️ Ajustar stock con motivo<br>• 🔔 Entender las alertas de stock bajo / sin stock<br>• 📊 Ver reportes y estadísticas<br>• 🛒 Gestionar canales (ML, Amazon, Tiendanube, Shopify)<br>• 🎁 Crear combos/packs<br>• 📋 Importar y exportar CSV<br><br>Preguntame lo que necesités.';
+
+  // Buscar producto específico por nombre
+  const matchProd = productos.find(p => ql.includes(p.nombre.toLowerCase()) || ql.includes(p.sku.toLowerCase()));
+  if(matchProd){
+    const s=getStatus(matchProd);
+    const estadoTexto=s==='out'?'<span style="color:var(--danger)">❌ Sin stock</span>':s==='low'?'<span style="color:var(--warn)">⚠️ Stock bajo</span>':'<span style="color:var(--success)">✅ En stock</span>';
+    return `<strong>${matchProd.nombre}</strong> <span class="sku-code">${matchProd.sku}</span><br><br>• Stock actual: <strong>${matchProd.stock} unidades</strong><br>• Mínimo configurado: ${matchProd.min}<br>• Depósito: ${matchProd.deposito}<br>• Categoría: ${matchProd.categoria}<br>• Estado: ${estadoTexto}<br>• Canales: ${matchProd.canales.length?matchProd.canales.join(', ').toUpperCase():'Ninguno'}`;
+  }
+
+  // Buscar por categoría
+  const cats=[...new Set(productos.map(p=>p.categoria))];
+  const catMatch=cats.find(c=>ql.includes(c.toLowerCase()));
+  if(catMatch){
+    const prods=productos.filter(p=>p.categoria===catMatch);
+    return `Productos en la categoría <strong>${catMatch}</strong> (${prods.length}):<br><br>${prods.map(p=>`• ${p.nombre} — Stock: <strong>${p.stock}</strong> ${getStatus(p)!=='ok'?'⚠️':''}`).join('<br>')}`;
+  }
+
+  // Depósitos
+  if(ql.match(/dep[oó]sito|almac[eé]n|ubicaci[oó]n/)){
+    const deps=[...new Set(productos.map(p=>p.deposito))];
+    return `Tenés productos en los siguientes depósitos:<br><br>${deps.map(d=>{const cnt=productos.filter(p=>p.deposito===d).length;return`• <strong>${d}</strong>: ${cnt} SKU${cnt!==1?'s':''}`;}).join('<br>')}<br><br>Podés filtrar por depósito en la vista <strong>Inventario</strong>.`;
+  }
+
+  // Precio / valor
+  if(ql.match(/precio|costo|cuanto vale|valor/)){
+    const val=productos.reduce((a,p)=>a+p.stock*p.precio,0);
+    return`El valor total del inventario es <strong>$${val.toLocaleString()}</strong> a precio costo.<br><br>Se calcula multiplicando el stock actual × precio costo de cada SKU. Podés ver el desglose completo en <strong>📊 Reportes</strong>.`;
+  }
+
+  // No entendió
+  const temas=['agregar producto','importar CSV','registrar movimiento','ajustar stock','ver alertas','crear combo','exportar inventario','filtrar productos'];
+  const sugs=temas.sort(()=>Math.random()-0.5).slice(0,3);
+  return`No encontré una respuesta exacta para eso. Podés preguntarme sobre:<br><br>${sugs.map(t=>`• ${t}`).join('<br>')}<br><br>O andá a la sección <strong>📖 Guía de uso</strong> para ver todos los tutoriales.`;
+}
+
+function sendChat(){
+  const input=document.getElementById('chat-input');
+  const msg=input.value.trim();if(!msg)return;
+  input.value='';input.style.height='auto';
+  const sugg=document.getElementById('chat-suggestions');if(sugg)sugg.remove();
+  addChatMsg('user',msg);
+  chatHistory.push({role:'user',content:msg});
+
+  showTyping();
+  setTimeout(()=>{
+    hideTyping();
+    // 1. Datos dinámicos del inventario
+    const dynResp=dynamicResponse(msg);
+    if(dynResp){addChatMsg('bot',dynResp);chatHistory.push({role:'assistant',content:dynResp});return;}
+    // 2. Base de conocimiento (guía de uso)
+    const kbResp=matchKB(msg);
+    if(kbResp){addChatMsg('bot',kbResp);chatHistory.push({role:'assistant',content:kbResp});return;}
+    // 3. Fallback inteligente local
+    const resp=smartFallback(msg);
+    addChatMsg('bot',resp);
+    chatHistory.push({role:'assistant',content:resp});
+  }, 500);
+}
+
+function sendSuggestion(msg){
+  document.getElementById('chat-input').value=msg;
+  sendChat();
+}
+function limpiarChat(){
+  const msgs=document.getElementById('chat-messages');
+  msgs.innerHTML=`<div class="chat-msg"><div class="chat-avatar"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div class="chat-bubble bot">👋 ¡Hola! Soy el asistente de <strong>WeStock</strong>.<br><br>¿En qué puedo ayudarte?</div></div>`;
+  chatHistory=[];
+}
+
+// ══════════════════════════════════════════════════════════════
+// SISTEMA DE ACCESO — ADMIN + OPERADORES
+// ══════════════════════════════════════════════════════════════
+
+const DEFAULT_MASTER_PASS = 'adminwe2026';
+
+// Helpers de persistencia
+function getMasterPass(){ return localStorage.getItem('ws_master_pass') || DEFAULT_MASTER_PASS; }
+function getOperadores(){ return JSON.parse(localStorage.getItem('ws_operadores') || '[]'); }
+function saveOperadores(ops){ localStorage.setItem('ws_operadores', JSON.stringify(ops)); }
+
+// ── Cerrar sesión de panel (no desactiva licencia) ───────────
+let _adminSesion = false; // true = admin, false = sin sesión / operador
+let _operadorActivo = null; // {nombre, pass} o null
+
+function cerrarSesionPanel(){
+  _adminSesion = false;
+  _operadorActivo = null;
+  const ov = document.getElementById('admin-overlay');
+  if(ov) ov.remove();
+}
+
+// ── Punto de entrada: siempre muestra login de panel ─────────
+function abrirAdminPanel(){
+  _adminSesion = false;
+  _operadorActivo = null;
+  mostrarLoginPanel();
+}
+
+function mostrarLoginPanel(){
+  let ov = document.getElementById('admin-overlay');
+  if(ov) ov.remove();
+
+  ov = document.createElement('div');
+  ov.id = 'admin-overlay';
+  ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px';
+
+  const operadores = getOperadores();
+  const tieneOperadores = operadores.length > 0;
+
+  ov.innerHTML = `
+    <div style="background:var(--surface);border-radius:16px;width:100%;max-width:400px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.4)">
+      <div style="padding:20px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--accent2)">
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#fff">⚙️ Acceso al Panel</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px">Administración de WeStock</div>
+        </div>
+        <button onclick="cerrarSesionPanel()" style="background:none;border:none;color:rgba(255,255,255,0.5);font-size:22px;cursor:pointer;line-height:1">✕</button>
+      </div>
+      <div style="padding:24px">
+
+        <!-- Login admin -->
+        <div style="margin-bottom:${tieneOperadores ? '20px' : '0'}">
+          <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:10px">
+            🔐 Administrador
+          </div>
+          <div style="display:flex;gap:8px">
+            <input id="panel-pass-admin" type="password" placeholder="Contraseña de administrador"
+              style="flex:1;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);outline:none;transition:border-color 0.2s"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor=''"
+              onkeydown="if(event.key==='Enter')loginAdmin()">
+            <button onclick="loginAdmin()" style="padding:10px 20px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px;white-space:nowrap">Entrar</button>
+          </div>
+          <div id="panel-err-admin" style="font-size:12px;color:var(--danger);margin-top:6px;min-height:16px"></div>
+        </div>
+
+        <!-- Separador + operadores -->
+        ${tieneOperadores ? `
+        <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+          <div style="flex:1;height:1px;background:var(--border)"></div>
+          <span style="font-size:11px;color:var(--muted)">o ingresá como operador</span>
+          <div style="flex:1;height:1px;background:var(--border)"></div>
+        </div>
+        <div style="margin-bottom:6px">
+          <div style="font-size:10px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:10px">
+            👤 Operadores
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px">
+            ${operadores.map(op => `
+              <button onclick="seleccionarOperador('${op.nombre.replace(/'/g,"\\'")}',this)"
+                style="display:flex;align-items:center;gap:10px;padding:9px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;cursor:pointer;text-align:left;transition:all 0.2s;font-family:inherit"
+                onmouseover="this.style.borderColor='var(--accent)'" onmouseout="if(!this.classList.contains('sel'))this.style.borderColor=''">
+                <div style="width:28px;height:28px;border-radius:50%;background:var(--accent2);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#fff;flex-shrink:0">${op.nombre.charAt(0).toUpperCase()}</div>
+                <span style="font-size:13px;font-weight:600;color:var(--text)">${op.nombre}</span>
+              </button>
+            `).join('')}
+          </div>
+          <div id="op-pass-row" style="display:none;gap:8px">
+            <input id="panel-pass-op" type="password" placeholder="Contraseña del operador"
+              style="flex:1;padding:10px 14px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);outline:none;transition:border-color 0.2s"
+              onfocus="this.style.borderColor='var(--accent)'" onblur="this.style.borderColor=''"
+              onkeydown="if(event.key==='Enter')loginOperador()">
+            <button onclick="loginOperador()" style="padding:10px 20px;background:var(--accent2);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px;white-space:nowrap">Entrar</button>
+          </div>
+          <div id="panel-err-op" style="font-size:12px;color:var(--danger);margin-top:6px;min-height:16px"></div>
+        </div>` : ''}
+
+      </div>
+    </div>`;
+  document.body.appendChild(ov);
+}
+
+let _opLoginNombre = null;
+function seleccionarOperador(nombre, btn){
+  _opLoginNombre = nombre;
+  // Resaltar botón seleccionado
+  document.querySelectorAll('#admin-overlay button.sel').forEach(b=>{ b.classList.remove('sel'); b.style.borderColor=''; b.style.background='var(--surface2)'; });
+  btn.classList.add('sel');
+  btn.style.borderColor='var(--accent)';
+  btn.style.background='rgba(224,48,48,0.05)';
+  // Mostrar campo de contraseña
+  const row = document.getElementById('op-pass-row');
+  if(row){ row.style.display='flex'; document.getElementById('panel-pass-op').focus(); }
+}
+
+function loginAdmin(){
+  const val = (document.getElementById('panel-pass-admin').value || '').trim();
+  if(val === getMasterPass()){
+    _adminSesion = true;
+    _operadorActivo = null;
+    mostrarAdminPanel();
+  } else {
+    const err = document.getElementById('panel-err-admin');
+    err.textContent = '❌ Contraseña incorrecta.';
+    document.getElementById('panel-pass-admin').value = '';
+    setTimeout(()=>{ err.textContent=''; }, 3000);
+  }
+}
+
+function loginOperador(){
+  const val = (document.getElementById('panel-pass-op').value || '').trim();
+  const ops = getOperadores();
+  const op = ops.find(o => o.nombre === _opLoginNombre && o.pass === val);
+  if(op){
+    _adminSesion = false;
+    _operadorActivo = op;
+    mostrarPanelOperador();
+  } else {
+    const err = document.getElementById('panel-err-op');
+    err.textContent = '❌ Contraseña incorrecta.';
+    document.getElementById('panel-pass-op').value = '';
+    setTimeout(()=>{ err.textContent=''; }, 3000);
+  }
+}
+
+// ── PANEL ADMIN (acceso total) ───────────────────────────────
+function mostrarAdminPanel(){
+  const operadores = getOperadores();
+
+  let ov = document.getElementById('admin-overlay');
+  if(ov) ov.remove();
+  ov = document.createElement('div');
+  ov.id = 'admin-overlay';
+  ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto';
+
+  ov.innerHTML = `
+    <div style="background:var(--surface);border-radius:16px;width:100%;max-width:520px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.4);my:auto">
+      <!-- Header -->
+      <div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--accent2)">
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#fff">⚙️ Panel de Administrador</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px">Orchids Consulting · Acceso total</div>
+        </div>
+        <button onclick="cerrarSesionPanel()" style="background:none;border:none;color:rgba(255,255,255,0.5);font-size:22px;cursor:pointer;line-height:1">✕</button>
+      </div>
+
+      <div style="padding:22px 24px;display:flex;flex-direction:column;gap:22px">
+
+        <!-- Operadores -->
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:12px">👥 Operadores (${operadores.length})</div>
+          <div id="admin-op-lista" style="border:1px solid var(--border);border-radius:8px;overflow:hidden;margin-bottom:10px">
+            ${operadores.length === 0
+              ? `<div style="padding:14px 16px;font-size:13px;color:var(--muted);text-align:center">Sin operadores. Agregá uno abajo.</div>`
+              : operadores.map(op => `
+                <div style="display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid var(--border)">
+                  <div style="width:30px;height:30px;border-radius:50%;background:var(--accent2);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0">${op.nombre.charAt(0).toUpperCase()}</div>
+                  <div style="flex:1">
+                    <div style="font-size:13px;font-weight:600">${op.nombre}</div>
+                    <div style="font-size:11px;color:var(--muted)">Contraseña: ${'•'.repeat(op.pass.length)}</div>
+                  </div>
+                  <button onclick="editarOperador('${op.nombre.replace(/'/g,"\\'")}',this)"
+                    style="padding:5px 12px;background:var(--surface2);border:1px solid var(--border);border-radius:6px;font-size:11px;font-weight:600;cursor:pointer;color:var(--text)">✏️ Editar</button>
+                  <button onclick="eliminarOperador('${op.nombre.replace(/'/g,"\\'")}',this)"
+                    style="padding:5px 10px;background:rgba(220,38,38,0.08);border:1px solid rgba(220,38,38,0.2);border-radius:6px;font-size:11px;color:var(--danger);cursor:pointer;font-weight:600">✕</button>
+                </div>
+              `).join('')
+            }
+          </div>
+          <!-- Form nuevo operador -->
+          <div style="display:flex;gap:8px">
+            <input id="op-nuevo-nombre" type="text" placeholder="Nombre del operador"
+              style="flex:1;padding:9px 13px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);outline:none"
+              onkeydown="if(event.key==='Enter')document.getElementById('op-nuevo-pass').focus()">
+            <input id="op-nuevo-pass" type="password" placeholder="Contraseña"
+              style="flex:1;padding:9px 13px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);outline:none"
+              onkeydown="if(event.key==='Enter')agregarOperador()">
+            <button onclick="agregarOperador()" style="padding:9px 16px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px;white-space:nowrap">+ Agregar</button>
+          </div>
+          <div id="admin-op-msg" style="font-size:12px;margin-top:6px;min-height:16px"></div>
+        </div>
+
+        <!-- Contraseña maestra -->
+        <div style="border-top:1px solid var(--border);padding-top:20px">
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:12px">🔐 Cambiar contraseña maestra</div>
+          <div style="display:flex;gap:8px">
+            <input id="admin-nueva-pass" type="password" placeholder="Nueva contraseña de administrador"
+              style="flex:1;padding:9px 13px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);outline:none"
+              onkeydown="if(event.key==='Enter')cambiarPassAdmin()">
+            <button onclick="cambiarPassAdmin()" style="padding:9px 16px;background:var(--surface2);border:1px solid var(--border);border-radius:8px;font-weight:600;cursor:pointer;font-size:13px">Cambiar</button>
+          </div>
+          <div id="admin-pass-msg" style="font-size:12px;margin-top:6px;min-height:16px;color:var(--success)"></div>
+        </div>
+
+      </div>
+    </div>`;
+  document.body.appendChild(ov);
+}
+
+// ── PANEL OPERADOR (solo gestión de claves) ──────────────────
+function mostrarPanelOperador(){
+  let ov = document.getElementById('admin-overlay');
+  if(ov) ov.remove();
+  ov = document.createElement('div');
+  ov.id = 'admin-overlay';
+  ov.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.65);z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto';
+
+  const operadorNombre = _operadorActivo ? _operadorActivo.nombre : 'Operador';
+
+  ov.innerHTML = `
+    <div style="background:var(--surface);border-radius:16px;width:100%;max-width:520px;overflow:hidden;box-shadow:0 24px 64px rgba(0,0,0,0.4)">
+      <!-- Header -->
+      <div style="padding:18px 24px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;background:var(--accent2)">
+        <div>
+          <div style="font-size:15px;font-weight:700;color:#fff">👤 Panel de Operador</div>
+          <div style="font-size:11px;color:rgba(255,255,255,0.5);margin-top:2px">Sesión: ${operadorNombre}</div>
+        </div>
+        <button onclick="cerrarSesionPanel()" style="background:none;border:none;color:rgba(255,255,255,0.5);font-size:22px;cursor:pointer;line-height:1">✕</button>
+      </div>
+
+      <div style="padding:22px 24px">
+        <!-- Cambiar propia contraseña -->
+        <div style="background:rgba(224,48,48,0.04);border:1px solid rgba(224,48,48,0.12);border-radius:10px;padding:16px 18px;margin-bottom:20px">
+          <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:12px">🔑 Mi contraseña</div>
+          <div style="display:flex;gap:8px">
+            <input id="op-pass-actual" type="password" placeholder="Contraseña actual"
+              style="flex:1;padding:9px 13px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);outline:none"
+              onkeydown="if(event.key==='Enter')document.getElementById('op-pass-nueva').focus()">
+            <input id="op-pass-nueva" type="password" placeholder="Nueva contraseña"
+              style="flex:1;padding:9px 13px;background:var(--surface);border:1px solid var(--border);border-radius:8px;font-size:13px;color:var(--text);outline:none"
+              onkeydown="if(event.key==='Enter')cambiarPassOperador()">
+            <button onclick="cambiarPassOperador()" style="padding:9px 16px;background:var(--accent);color:#fff;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:13px">Cambiar</button>
+          </div>
+          <div id="op-pass-msg" style="font-size:12px;margin-top:6px;min-height:16px"></div>
+        </div>
+      </div>
+    </div>`;
+  document.body.appendChild(ov);
+}
+
+// ── Acciones de operadores (solo admin) ─────────────────────
+function agregarOperador(){
+  const nombre = (document.getElementById('op-nuevo-nombre').value || '').trim();
+  const pass   = (document.getElementById('op-nuevo-pass').value || '').trim();
+  const msg    = document.getElementById('admin-op-msg');
+  if(!nombre){ msg.style.color='var(--danger)'; msg.textContent='Escribí el nombre del operador.'; return; }
+  if(!pass)  { msg.style.color='var(--danger)'; msg.textContent='Escribí una contraseña.'; return; }
+  const ops = getOperadores();
+  if(ops.find(o=>o.nombre.toLowerCase()===nombre.toLowerCase())){
+    msg.style.color='var(--danger)'; msg.textContent=`Ya existe un operador con ese nombre.`; return;
+  }
+  ops.push({nombre, pass});
+  saveOperadores(ops);
+  msg.style.color='var(--success)'; msg.textContent=`✅ Operador "${nombre}" creado.`;
+  document.getElementById('op-nuevo-nombre').value='';
+  document.getElementById('op-nuevo-pass').value='';
+  setTimeout(()=>mostrarAdminPanel(), 800);
+}
+
+function eliminarOperador(nombre){
+  if(!confirm(`¿Eliminar al operador "${nombre}"?\nPerderá el acceso al panel.`))return;
+  let ops = getOperadores();
+  ops = ops.filter(o=>o.nombre !== nombre);
+  saveOperadores(ops);
+  mostrarAdminPanel();
+}
+
+function editarOperador(nombre){
+  const ops = getOperadores();
+  const op = ops.find(o=>o.nombre===nombre);
+  if(!op) return;
+  const nuevaPass = prompt(`Nueva contraseña para "${nombre}":\n(Dejá vacío para no cambiarla)`);
+  if(nuevaPass === null) return;
+  if(!nuevaPass.trim()){ alert('Escribí una contraseña válida.'); return; }
+  op.pass = nuevaPass.trim();
+  saveOperadores(ops);
+  showToast(`✅ Contraseña de "${nombre}" actualizada.`);
+  mostrarAdminPanel();
+}
+
+// ── Cambiar contraseña maestra ───────────────────────────────
+function cambiarPassAdmin(){
+  const nueva = (document.getElementById('admin-nueva-pass').value || '').trim();
+  const msg   = document.getElementById('admin-pass-msg');
+  if(!nueva){ msg.style.color='var(--danger)'; msg.textContent='Escribí la nueva contraseña.'; return; }
+  localStorage.setItem('ws_master_pass', nueva);
+  msg.style.color='var(--success)'; msg.textContent='✅ Contraseña maestra actualizada.';
+  document.getElementById('admin-nueva-pass').value='';
+  setTimeout(()=>{ msg.textContent=''; }, 3000);
+}
+
+// ── Operador cambia su propia contraseña ─────────────────────
+function cambiarPassOperador(){
+  const actual = (document.getElementById('op-pass-actual').value || '').trim();
+  const nueva  = (document.getElementById('op-pass-nueva').value || '').trim();
+  const msg    = document.getElementById('op-pass-msg');
+  if(!actual || !nueva){ msg.style.color='var(--danger)'; msg.textContent='Completá ambos campos.'; return; }
+  if(actual !== _operadorActivo.pass){ msg.style.color='var(--danger)'; msg.textContent='La contraseña actual no es correcta.'; return; }
+  const ops = getOperadores();
+  const op = ops.find(o=>o.nombre===_operadorActivo.nombre);
+  if(!op) return;
+  op.pass = nueva;
+  _operadorActivo.pass = nueva;
+  saveOperadores(ops);
+  msg.style.color='var(--success)'; msg.textContent='✅ Contraseña actualizada correctamente.';
+  document.getElementById('op-pass-actual').value='';
+  document.getElementById('op-pass-nueva').value='';
+  setTimeout(()=>{ msg.textContent=''; }, 3000);
+}
+
+function actualizarClavesEnMemoria(){
+  // Compatibilidad: esta función ya no gestiona CLAVES_VALIDAS activamente
+  // La validación HMAC no depende de este array
+}
+
+// Init
+(function(){
+  actualizarClavesEnMemoria();
+})();
+
+
+// ══════════════════════════════════════════════════════════
+// SINCRONIZACION MERCADO LIBRE
+// ══════════════════════════════════════════════════════════
+
+const ML_PROXY = 'https://thingproxy.freeboard.io/fetch/';
+let mlToken = localStorage.getItem('ws_ml_token') || '';
+let mlUserId = '';
+let mlPublicaciones = []; // [{id, sku, titulo, stock_ml}]
+let mlMatches = [];       // [{sku, ws_prod, ml_item, checked}]
+
+function mlBadge(txt, color){ 
+  const b=document.getElementById('ml-status-badge');
+  if(b){b.textContent=txt;b.style.background=color==='ok'?'rgba(34,197,94,0.12)':color==='err'?'rgba(239,68,68,0.12)':'var(--surface2)';b.style.color=color==='ok'?'var(--success)':color==='err'?'var(--danger)':'var(--muted)';}
+}
+
+function mlMostrarError(msg){
+  const el=document.getElementById('ml-token-error');
+  if(el){el.textContent=msg;el.style.display=msg?'block':'none';}
+}
+
+async function mlVerificarToken(){
+  const t = document.getElementById('ml-token-input').value.trim();
+  if(!t){ mlMostrarError('Ingresa el Access Token.'); return; }
+  mlMostrarError('');
+  mlBadge('Verificando...','');
+  try {
+    const res = await fetch(ML_PROXY+'https://api.mercadolibre.com/users/me',{headers:{'Authorization':'Bearer '+t}});
+    if(!res.ok) throw new Error('Token invalido o expirado ('+res.status+')');
+    const u = await res.json();
+    mlToken = t;
+    mlUserId = String(u.id);
+    localStorage.setItem('ws_ml_token', mlToken);
+    document.getElementById('ml-user-nombre').textContent = u.nickname || u.first_name+' '+u.last_name;
+    document.getElementById('ml-user-id').textContent = 'ID: '+u.id+' · '+u.site_id;
+    document.getElementById('ml-panel-token').style.display='none';
+    document.getElementById('ml-panel-sync').style.display='block';
+    document.getElementById('ml-btn-desconectar').style.display='inline-flex';
+    mlBadge('Conectado ✓','ok');
+    showToast('✅ Cuenta ML conectada: '+u.nickname);
+  } catch(e){
+    mlBadge('Error','err');
+    mlMostrarError('No se pudo conectar: '+e.message);
+  }
+}
+
+function mlDesconectar(){
+  mlToken=''; mlUserId=''; mlPublicaciones=[]; mlMatches=[];
+  localStorage.removeItem('ws_ml_token');
+  document.getElementById('ml-panel-token').style.display='block';
+  document.getElementById('ml-panel-sync').style.display='none';
+  document.getElementById('ml-btn-desconectar').style.display='none';
+  document.getElementById('ml-tabla-wrap').style.display='none';
+  document.getElementById('ml-no-match').style.display='none';
+  document.getElementById('ml-token-input').value='';
+  document.getElementById('ml-btn-aplicar').disabled=true;
+  mlBadge('Sin conectar','');
+  showToast('Cuenta ML desconectada.');
+}
+
+async function mlFetchTodosIds(){
+  // Trae todos los IDs de publicaciones activas paginando
+  let ids=[], offset=0, total=null;
+  while(total===null || offset<total){
+    const res=await fetch(ML_PROXY+`https://api.mercadolibre.com/users/${mlUserId}/items/search?status=active&limit=100&offset=${offset}`,{headers:{'Authorization':'Bearer '+mlToken}});
+    if(!res.ok) throw new Error('Error al traer publicaciones ('+res.status+')');
+    const d=await res.json();
+    total=d.paging.total;
+    ids.push(...d.results);
+    offset+=d.results.length;
+    if(d.results.length===0) break;
+  }
+  document.getElementById('ml-total-items').textContent=total;
+  return ids;
+}
+
+async function mlFetchDetalles(ids){
+  // Trae detalles en batches de 20 (limite ML)
+  const items=[];
+  for(let i=0;i<ids.length;i+=20){
+    const batch=ids.slice(i,i+20);
+    const res=await fetch(ML_PROXY+`https://api.mercadolibre.com/items?ids=${batch.join(',')}`,{headers:{'Authorization':'Bearer '+mlToken}});
+    if(!res.ok) throw new Error('Error al traer detalles de items ('+res.status+')');
+    const data=await res.json();
+    for(const entry of data){
+      if(entry.code===200 && entry.body){
+        const it=entry.body;
+        // El SKU puede estar en seller_sku o en attributes
+        let sku = it.seller_sku || '';
+        if(!sku && it.attributes){
+          const a=it.attributes.find(x=>x.id==='SELLER_SKU');
+          if(a) sku=a.value_name||'';
+        }
+        items.push({id:it.id, sku:sku.trim().toUpperCase(), titulo:it.title, stock_ml:it.available_quantity||0});
+      }
+    }
+  }
+  return items;
+}
+
+async function mlCargarPublicaciones(){
+  const btn=document.getElementById('ml-btn-cargar');
+  btn.textContent='Cargando...'; btn.disabled=true;
+  document.getElementById('ml-tabla-wrap').style.display='none';
+  document.getElementById('ml-no-match').style.display='none';
+  document.getElementById('ml-btn-aplicar').disabled=true;
+  try {
+    const ids = await mlFetchTodosIds();
+    if(ids.length===0){ showToast('No se encontraron publicaciones activas.'); return; }
+    mlPublicaciones = await mlFetchDetalles(ids);
+    mlCruzarSKUs();
+  } catch(e){
+    showToast('❌ Error: '+e.message);
+  } finally {
+    btn.textContent='↻ Cargar publicaciones'; btn.disabled=false;
+  }
+}
+
+function mlCruzarSKUs(){
+  mlMatches=[];
+  for(const pub of mlPublicaciones){
+    if(!pub.sku) continue;
+    const wsProd = productos.find(p=>p.sku.trim().toUpperCase()===pub.sku);
+    if(wsProd){
+      mlMatches.push({sku:pub.sku, ws_prod:wsProd, ml_item:pub, checked:true});
+    }
+  }
+  if(mlMatches.length===0){
+    document.getElementById('ml-no-match').style.display='block';
+    document.getElementById('ml-tabla-wrap').style.display='none';
+    document.getElementById('ml-btn-aplicar').disabled=true;
+    return;
+  }
+  document.getElementById('ml-no-match').style.display='none';
+  mlRenderTabla();
+  document.getElementById('ml-tabla-wrap').style.display='block';
+  document.getElementById('ml-btn-aplicar').disabled=false;
+  document.getElementById('ml-resumen-match').textContent=
+    mlMatches.length+' SKUs coincidentes de '+mlPublicaciones.length+' publicaciones en ML';
+  showToast('✅ '+mlMatches.length+' SKUs encontrados en ML');
+}
+
+function mlRenderTabla(){
+  const dir=document.getElementById('ml-dir-select').value;
+  const tbody=document.getElementById('ml-tabla-body');
+  tbody.innerHTML=mlMatches.map((m,i)=>{
+    const diff = dir==='ml_to_ws' ? m.ml_item.stock_ml - m.ws_prod.stock : m.ws_prod.stock - m.ml_item.stock_ml;
+    const diffColor = diff>0?'var(--success)':diff<0?'var(--danger)':'var(--muted)';
+    const diffTxt = diff>0?'+'+diff:String(diff);
+    return `<tr>
+      <td><input type="checkbox" ${m.checked?'checked':''} onchange="mlMatches[${i}].checked=this.checked;mlActualizarBtnAplicar()"></td>
+      <td><span class="sku-code">${m.sku}</span></td>
+      <td style="font-size:13px">${m.ws_prod.nombre}</td>
+      <td style="font-size:12px;color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${m.ml_item.titulo}">${m.ml_item.titulo}</td>
+      <td style="font-family:monospace;text-align:center">${m.ws_prod.stock}</td>
+      <td style="font-family:monospace;text-align:center">${m.ml_item.stock_ml}</td>
+      <td style="font-family:monospace;text-align:center;font-weight:600;color:${diffColor}">${diff===0?'—':diffTxt}</td>
+    </tr>`;
+  }).join('');
+}
+
+function mlToggleAll(cb){
+  mlMatches.forEach(m=>m.checked=cb.checked);
+  mlRenderTabla();
+  mlActualizarBtnAplicar();
+}
+
+function mlActualizarBtnAplicar(){
+  document.getElementById('ml-btn-aplicar').disabled=!mlMatches.some(m=>m.checked);
+}
+
+document.addEventListener('change', function(e){
+  if(e.target && e.target.id==='ml-dir-select') mlRenderTabla();
+});
+
+async function mlAplicarSincronizacion(){
+  const dir=document.getElementById('ml-dir-select').value;
+  const seleccionados=mlMatches.filter(m=>m.checked);
+  if(seleccionados.length===0){ showToast('Selecciona al menos un SKU.'); return; }
+
+  const btn=document.getElementById('ml-btn-aplicar');
+  btn.textContent='Sincronizando...'; btn.disabled=true;
+
+  let ok=0, err=0;
+  for(const m of seleccionados){
+    try {
+      if(dir==='ml_to_ws'){
+        // Traer stock de ML a WeStock
+        const nuevo=m.ml_item.stock_ml;
+        const diff=nuevo-m.ws_prod.stock;
+        if(diff===0) continue;
+        const idx=productos.findIndex(p=>p.id===m.ws_prod.id);
+        productos[idx].stock=nuevo;
+        movimientos.unshift({
+          tipo: diff>0?'entrada':'salida',
+          skuId: m.ws_prod.id, sku:m.ws_prod.sku, nombre:m.ws_prod.nombre,
+          qty:Math.abs(diff), motivo:'Sincronizacion ML → WeStock',
+          fecha:new Date()
+        });
+      } else {
+        // Enviar stock de WeStock a ML
+        const nuevo=m.ws_prod.stock;
+        if(nuevo===m.ml_item.stock_ml) continue;
+        const res=await fetch(ML_PROXY+`https://api.mercadolibre.com/items/${m.ml_item.id}`,{
+          method:'PUT',
+          headers:{'Authorization':'Bearer '+mlToken,'Content-Type':'application/json'},
+          body:JSON.stringify({available_quantity:nuevo})
+        });
+        if(!res.ok){ const e=await res.json(); throw new Error(e.message||res.status); }
+        m.ml_item.stock_ml=nuevo; // actualizar local
+        movimientos.unshift({
+          tipo:'ajuste', skuId:m.ws_prod.id, sku:m.ws_prod.sku, nombre:m.ws_prod.nombre,
+          qty:Math.abs(nuevo-m.ml_item.stock_ml),
+          motivo:'Sincronizacion WeStock → ML', fecha:new Date()
+        });
+      }
+      ok++;
+    } catch(e){ err++; console.warn('ML sync error',m.sku,e.message); }
+  }
+
+  autoSave();
+  mlRenderTabla();
+  btn.textContent='✅ Aplicar sincronizacion'; btn.disabled=false;
+  showToast('Sincronizacion completa: '+ok+' SKUs actualizados'+(err?' · '+err+' errores':''));
+}
+
+// Auto-reconectar si habia token guardado
+(function mlAutoConectar(){
+  if(!mlToken) return;
+  fetch(ML_PROXY+'https://api.mercadolibre.com/users/me',{headers:{'Authorization':'Bearer '+mlToken}})
+    .then(r=>{ if(!r.ok) throw new Error(); return r.json(); })
+    .then(u=>{
+      mlUserId=String(u.id);
+      document.getElementById('ml-user-nombre').textContent=u.nickname||'—';
+      document.getElementById('ml-user-id').textContent='ID: '+u.id+' · '+u.site_id;
+      document.getElementById('ml-panel-token').style.display='none';
+      document.getElementById('ml-panel-sync').style.display='block';
+      document.getElementById('ml-btn-desconectar').style.display='inline-flex';
+      mlBadge('Conectado ✓','ok');
+    })
+    .catch(()=>{ localStorage.removeItem('ws_ml_token'); mlToken=''; });
+})();
+
+// Init
+initAcceso();
+</script>
+</body>
+</html>
