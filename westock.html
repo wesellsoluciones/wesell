@@ -777,7 +777,7 @@
 
   // ── MODAL ──
   const MERCADOPAGO_URL = 'https://mpago.la/1EACobY';
-  const WEB3FORMS_KEY = '11c7daa5-1fa9-45aa-a0a2-473672536ad2';
+  const FORMSUBMIT_EMAIL = 'wesellsoluciones@gmail.com';
 
 
   function abrirModal() {
@@ -828,33 +828,22 @@
 
     try {
       const formData = new FormData();
-      formData.append('access_key', WEB3FORMS_KEY);
-      formData.append('subject', `🛒 Nueva compra WeStock — ${nombre} ${apellido}`);
-      formData.append('from_name', 'WeStock — Orchids Consulting');
-      formData.append('nombre_completo', `${nombre} ${apellido}`);
-      formData.append('email_comprador', email);
-      formData.append('empresa', empresa || '—');
-      formData.append('telefono', telefono || '—');
-      formData.append('producto', 'WeStock — Sistema de Gestión de Stock');
-      formData.append('monto', '$7.999 ARS (pago único)');
-      formData.append('fecha', new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' }));
-      formData.append('message',
-        `Nueva compra recibida:\n\n` +
-        `Nombre: ${nombre} ${apellido}\n` +
-        `Email: ${email}\n` +
-        `Empresa: ${empresa || '—'}\n` +
-        `Teléfono: ${telefono || '—'}\n` +
-        `Producto: WeStock — Sistema de Gestión de Stock\n` +
-        `Monto: $7.999 ARS (pago único)\n` +
-        `Fecha: ${new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' })}`
-      );
+      formData.append('_subject', `🛒 Nueva compra WeStock — ${nombre} ${apellido}`);
+      formData.append('_template', 'table');
+      formData.append('_captcha', 'false');
+      formData.append('Nombre_Completo', `${nombre} ${apellido}`);
+      formData.append('Email_Comprador', email);
+      formData.append('Empresa', empresa || '—');
+      formData.append('Telefono', telefono || '—');
+      formData.append('Producto', 'WeStock — Sistema de Gestión de Stock');
+      formData.append('Monto', '$7.999 ARS (pago único)');
+      formData.append('Fecha', new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' }));
 
-      const response = await fetch('https://api.web3forms.com/submit', {
+      const response = await fetch(`https://formsubmit.co/${FORMSUBMIT_EMAIL}`, {
         method: 'POST',
         body: formData
       });
-      const result = await response.json();
-      if (!result.success) throw new Error(result.message);
+      if (!response.ok) throw new Error('Error al enviar');
       mostrarToast('✅ ¡Todo listo! Redirigiendo al pago…');
       setTimeout(() => {
         cerrarModal();
