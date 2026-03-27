@@ -513,6 +513,65 @@
       .step-num { font-size: 52px; }
       .cta-inner::before { font-size: 120px; }
     }
+
+    /* ── ADMIN PANEL (hidden access) ── */
+    #admin-panel-overlay {
+      position: fixed; inset: 0; z-index: 9999;
+      background: #0d1117;
+      display: none; align-items: center; justify-content: center;
+      flex-direction: column;
+      padding: 20px;
+    }
+    #admin-panel-overlay.active { display: flex; }
+    .admin-home-btn {
+      position: absolute; top: 20px; left: 24px;
+      display: flex; align-items: center; gap: 8px;
+      background: none; border: 1px solid rgba(255,255,255,0.1);
+      color: #7d8590; font-family: 'DM Sans', sans-serif;
+      font-size: 12px; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 10px 20px; border-radius: 4px; cursor: pointer;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .admin-home-btn:hover { color: #e6edf3; border-color: rgba(255,255,255,0.25); }
+    .admin-login-wrap { width: 100%; max-width: 380px; }
+    .admin-logo { text-align: center; margin-bottom: 32px; }
+    .admin-logo div { font-size: 26px; font-weight: 800; letter-spacing: -1px; }
+    .admin-logo .a-we { color: #e03030; }
+    .admin-logo .a-st { color: #e6edf3; }
+    .admin-logo p { font-size: 11px; color: #7d8590; letter-spacing: 0.12em; text-transform: uppercase; margin-top: 4px; }
+    .admin-card {
+      background: #161b22; border: 1px solid rgba(255,255,255,0.08);
+      border-top: 3px solid #e03030; border-radius: 10px; padding: 32px;
+    }
+    .admin-card h2 { font-size: 17px; font-weight: 700; margin-bottom: 4px; color: #e6edf3; }
+    .admin-card .admin-sub { font-size: 12px; color: #7d8590; margin-bottom: 24px; }
+    .admin-field { margin-bottom: 14px; }
+    .admin-field label {
+      display: block; font-size: 10px; letter-spacing: 0.14em;
+      text-transform: uppercase; color: #7d8590; margin-bottom: 6px;
+    }
+    .admin-field input {
+      width: 100%; background: #0d1117;
+      border: 1px solid rgba(255,255,255,0.1); border-radius: 6px;
+      padding: 10px 12px; color: #e6edf3; font-size: 14px;
+      font-family: 'DM Sans', sans-serif;
+      outline: none; transition: border 0.2s;
+    }
+    .admin-field input:focus { border-color: #e03030; }
+    .admin-field input::placeholder { color: #484f58; }
+    .admin-btn {
+      width: 100%; background: #e03030; color: #fff;
+      border: none; border-radius: 6px; padding: 11px;
+      font-size: 14px; font-weight: 600; cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      margin-top: 8px; transition: background 0.2s, transform 0.15s;
+    }
+    .admin-btn:hover { background: #c42828; }
+    .admin-btn:active { transform: scale(0.98); }
+    .admin-err {
+      color: #f87171; font-size: 12px; text-align: center;
+      margin-top: 10px; display: none;
+    }
   </style>
 </head>
 <body>
@@ -1091,6 +1150,85 @@
     revealObserver.observe(el);
   });
 
+
+  // ── ADMIN PANEL — Triple click en logo ──
+  (function() {
+    var logo = document.querySelector('.header-logo');
+    var clickCount = 0;
+    var clickTimer = null;
+    if (logo) {
+      logo.style.cursor = 'pointer';
+      logo.addEventListener('click', function(e) {
+        e.preventDefault();
+        clickCount++;
+        if (clickTimer) clearTimeout(clickTimer);
+        if (clickCount >= 3) {
+          clickCount = 0;
+          document.getElementById('admin-panel-overlay').classList.add('active');
+          document.body.style.overflow = 'hidden';
+          setTimeout(function(){ document.getElementById('admin-usr').focus(); }, 100);
+        }
+        clickTimer = setTimeout(function() { clickCount = 0; }, 800);
+      });
+    }
+  })();
+
+  function cerrarAdminPanel() {
+    document.getElementById('admin-panel-overlay').classList.remove('active');
+    document.body.style.overflow = '';
+    document.getElementById('admin-usr').value = '';
+    document.getElementById('admin-pwd').value = '';
+    document.getElementById('admin-err').style.display = 'none';
+  }
+
+  var ADMIN_USUARIO = 'wesell';
+  var ADMIN_PASSWORD = 'adminwe2026';
+
+  function adminIngresar() {
+    var u = document.getElementById('admin-usr').value.trim();
+    var p = document.getElementById('admin-pwd').value.trim();
+    if (u === ADMIN_USUARIO && p === ADMIN_PASSWORD) {
+      document.getElementById('admin-err').style.display = 'none';
+      alert('Sesión iniciada correctamente');
+      cerrarAdminPanel();
+    } else {
+      document.getElementById('admin-err').style.display = 'block';
+    }
+  }
+
+  document.getElementById('admin-pwd').addEventListener('keydown', function(e) { if (e.key === 'Enter') adminIngresar(); });
+  document.getElementById('admin-usr').addEventListener('keydown', function(e) { if (e.key === 'Enter') adminIngresar(); });
+  ['admin-usr','admin-pwd'].forEach(function(id) {
+    document.getElementById(id).addEventListener('input', function() {
+      document.getElementById('admin-err').style.display = 'none';
+    });
+  });
+
 </script>
+
+<!-- ADMIN PANEL (acceso oculto: triple click en logo) -->
+<div id="admin-panel-overlay">
+  <button class="admin-home-btn" onclick="cerrarAdminPanel()">← Volver al inicio</button>
+  <div class="admin-login-wrap">
+    <div class="admin-logo">
+      <div><span class="a-we">We</span><span class="a-st">Stock</span></div>
+      <p>Panel de gestión · Acceso privado</p>
+    </div>
+    <div class="admin-card">
+      <h2>Iniciar sesión</h2>
+      <p class="admin-sub">Área restringida. Solo personal autorizado.</p>
+      <div class="admin-field">
+        <label>Usuario</label>
+        <input type="text" id="admin-usr" placeholder="usuario" autocomplete="off">
+      </div>
+      <div class="admin-field">
+        <label>Contraseña</label>
+        <input type="password" id="admin-pwd" placeholder="••••••••">
+      </div>
+      <button class="admin-btn" onclick="adminIngresar()">Ingresar →</button>
+      <div class="admin-err" id="admin-err">Usuario o contraseña incorrectos.</div>
+    </div>
+  </div>
+</div>
 </body>
 </html>
