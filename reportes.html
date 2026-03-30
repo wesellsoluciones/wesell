@@ -247,12 +247,71 @@
     .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.1em; color: var(--muted); }
     .footer-copy { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; }
 
+    /* ── REVEAL ── */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-left { opacity: 0; transform: translateX(-30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal-left.visible { opacity: 1; transform: translateX(0); }
+    .reveal-right { opacity: 0; transform: translateX(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal-right.visible { opacity: 1; transform: translateX(0); }
+
+    /* ── QUÉ ES DASHIFY ── */
+    #que-es { background: var(--surface); }
+    #que-es .section-wrap { max-width: 1200px; margin: 0 auto; padding: 110px 60px; }
+    .que-es-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center; }
+    .que-es-text .section-label { color: #ffffff; }
+    .que-es-text .section-title {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(40px, 5vw, 68px);
+      font-weight: 400; line-height: 1;
+      letter-spacing: 0.03em; margin-bottom: 32px;
+    }
+    .que-es-text p { font-size: 15px; color: var(--muted); line-height: 1.9; margin-bottom: 20px; }
+    .que-es-text p strong { color: var(--text); font-weight: 500; }
+
+    /* Mockup visual Dashify */
+    .dashify-mockup {
+      background: var(--surface2); border: 1px solid var(--border-gray);
+      border-radius: 8px; overflow: hidden;
+      box-shadow: 0 30px 80px rgba(0,0,0,0.5), 0 0 0 1px rgba(220,38,38,0.1);
+    }
+    .mockup-topbar {
+      background: #0d1220; border-bottom: 1px solid var(--border-gray);
+      padding: 12px 20px; display: flex; align-items: center; gap: 8px;
+    }
+    .mockup-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .mockup-title-bar { flex: 1; text-align: center; font-size: 11px; letter-spacing: 0.1em; color: var(--muted); }
+    .mockup-body { padding: 20px; }
+    .mockup-header-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .mockup-heading { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.06em; color: var(--text); }
+    .mockup-badge-red { background: rgba(224,48,48,0.15); color: var(--red); font-size: 10px; letter-spacing: 0.1em; padding: 3px 10px; border-radius: 2px; border: 1px solid rgba(224,48,48,0.3); }
+    .mockup-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 16px; }
+    .mockup-stat { background: #0d1220; border: 1px solid var(--border-gray); border-radius: 4px; padding: 12px; }
+    .mockup-stat-num { font-family: 'Bebas Neue', sans-serif; font-size: 26px; color: var(--red); display: block; line-height: 1; }
+    .mockup-stat-label { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-top: 3px; display: block; }
+    /* Fake bar chart */
+    .mockup-chart { background: #0d1220; border: 1px solid var(--border-gray); border-radius: 4px; padding: 14px 12px; }
+    .mockup-chart-label { font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); margin-bottom: 10px; display: block; }
+    .chart-bars { display: flex; align-items: flex-end; gap: 6px; height: 52px; }
+    .chart-bar { flex: 1; background: rgba(224,48,48,0.25); border-radius: 2px 2px 0 0; transition: background 0.3s; }
+    .chart-bar.active { background: var(--red); }
+    .mockup-source-row { display: flex; gap: 8px; margin-top: 12px; }
+    .mockup-source-tag {
+      font-size: 9px; letter-spacing: 0.1em; text-transform: uppercase;
+      padding: 3px 8px; border-radius: 2px; border: 1px solid var(--border-gray); color: var(--muted);
+    }
+    .mockup-source-tag.ml { border-color: rgba(255,230,0,0.25); color: #ffd700; background: rgba(255,215,0,0.06); }
+    .mockup-source-tag.tn { border-color: rgba(74,222,128,0.25); color: #4ade80; background: rgba(74,222,128,0.06); }
+    .mockup-source-tag.csv { border-color: var(--border); color: var(--red); background: rgba(224,48,48,0.06); }
+
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
       header { padding: 10px 24px; }
       .page-hero { padding: 130px 24px 60px; }
       .products-section { padding: 50px 24px 80px; }
       .products-grid { grid-template-columns: 1fr; }
+      .que-es-grid { grid-template-columns: 1fr; gap: 40px; }
+      #que-es .section-wrap { padding: 70px 24px; }
       footer { flex-direction: column; gap: 12px; text-align: center; padding: 28px 24px; }
     }
     @media (max-width: 600px) {
@@ -313,6 +372,81 @@
   <div class="marquee-track">
     <div class="marquee-item">DASHIFY <div class="marquee-dot"></div> REPORTES <div class="marquee-dot"></div> MERCADO LIBRE <div class="marquee-dot"></div> TIENDA NUBE <div class="marquee-dot"></div> EXCEL / CSV <div class="marquee-dot"></div> ANÁLISIS DE VENTAS <div class="marquee-dot"></div></div>
     <div class="marquee-item">DASHIFY <div class="marquee-dot"></div> REPORTES <div class="marquee-dot"></div> MERCADO LIBRE <div class="marquee-dot"></div> TIENDA NUBE <div class="marquee-dot"></div> EXCEL / CSV <div class="marquee-dot"></div> ANÁLISIS DE VENTAS <div class="marquee-dot"></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════
+     QUÉ ES DASHIFY
+════════════════════════════ -->
+<div id="que-es">
+  <div class="section-wrap">
+    <div class="que-es-grid">
+
+      <!-- Texto -->
+      <div class="que-es-text reveal-left">
+        <p class="section-label">Qué es Dashify</p>
+        <h2 class="section-title">Tus ventas,<br>un solo <span style="color:var(--red)">lugar</span></h2>
+        <p>
+          Dashify es una <strong>app de escritorio para analizar tus ventas</strong> de Mercado Libre, Tienda Nube y cualquier archivo Excel o CSV, todo desde una sola interfaz visual e interactiva.
+        </p>
+        <p>
+          Olvidate de abrir planillas distintas por canal. Con Dashify importás tus reportes oficiales, los cruzás y navegás los datos con gráficos, filtros por fecha, provincia, categoría y mucho más.
+        </p>
+        <p>
+          Incluye un <strong>asistente de IA integrado</strong> para hacerle preguntas a tus datos en lenguaje natural. Sin fórmulas, sin suscripciones — funciona 100% en tu computadora.
+        </p>
+      </div>
+
+      <!-- Mockup visual -->
+      <div class="reveal-right">
+        <div class="dashify-mockup">
+          <div class="mockup-topbar">
+            <div class="mockup-dot" style="background:#e03030;"></div>
+            <div class="mockup-dot" style="background:#fbbf24;"></div>
+            <div class="mockup-dot" style="background:#4ade80;"></div>
+            <span class="mockup-title-bar">Dashify v2 — Dashboard de ventas</span>
+          </div>
+          <div class="mockup-body">
+            <div class="mockup-header-row">
+              <span class="mockup-heading">Resumen de ventas</span>
+              <span class="mockup-badge-red">● Cargado</span>
+            </div>
+            <div class="mockup-stats">
+              <div class="mockup-stat">
+                <span class="mockup-stat-num">$847K</span>
+                <span class="mockup-stat-label">Total facturado</span>
+              </div>
+              <div class="mockup-stat">
+                <span class="mockup-stat-num" style="color:#4ade80;">1.243</span>
+                <span class="mockup-stat-label">Órdenes</span>
+              </div>
+              <div class="mockup-stat">
+                <span class="mockup-stat-num" style="color:#fbbf24;">3</span>
+                <span class="mockup-stat-label">Fuentes activas</span>
+              </div>
+            </div>
+            <div class="mockup-chart">
+              <span class="mockup-chart-label">Ventas por mes</span>
+              <div class="chart-bars">
+                <div class="chart-bar" style="height:35%;"></div>
+                <div class="chart-bar" style="height:50%;"></div>
+                <div class="chart-bar" style="height:42%;"></div>
+                <div class="chart-bar" style="height:65%;"></div>
+                <div class="chart-bar" style="height:58%;"></div>
+                <div class="chart-bar" style="height:80%;"></div>
+                <div class="chart-bar active" style="height:100%;"></div>
+              </div>
+            </div>
+            <div class="mockup-source-row">
+              <span class="mockup-source-tag ml">Mercado Libre</span>
+              <span class="mockup-source-tag tn">Tienda Nube</span>
+              <span class="mockup-source-tag csv">Excel / CSV</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
   </div>
 </div>
 
@@ -450,6 +584,15 @@
   document.getElementById("modal-descarga").addEventListener("click", function(e) {
     if (e.target === this) cerrarModal()
   })
+</script>
+
+<script>
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => revealObserver.observe(el));
 </script>
 
 </body>
