@@ -379,6 +379,68 @@
       .btn-buy, .btn-coming { text-align: center; justify-content: center; }
       .features-grid { grid-template-columns: 1fr; }
     }
+
+    /* ── WHATSAPP ── */
+    .whatsapp-btn {
+      position: fixed; bottom: 28px; right: 28px; z-index: 999;
+      background: #25d366; width: 60px; height: 60px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 4px 20px rgba(37,211,102,0.4);
+      transition: transform 0.3s, box-shadow 0.3s;
+      animation: waPulse 2.5s ease-in-out infinite;
+    }
+    .whatsapp-btn:hover { transform: scale(1.1); box-shadow: 0 6px 28px rgba(37,211,102,0.6); }
+    @keyframes waPulse {
+      0%,100% { box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
+      50% { box-shadow: 0 4px 30px rgba(37,211,102,0.7); }
+    }
+
+    /* ── CTA OBTENER DASHIFY ── */
+    #obtener-dashify { background: var(--bg); position: relative; overflow: hidden; }
+    #obtener-dashify .section-wrap { max-width: 1200px; margin: 0 auto; padding: 110px 60px; }
+    .cta-inner {
+      background: var(--surface);
+      border: 1px solid var(--border-gray);
+      border-top: 3px solid var(--red);
+      border-radius: 4px;
+      padding: 72px 80px;
+      display: grid; grid-template-columns: 1fr auto;
+      gap: 60px; align-items: center;
+      position: relative; overflow: hidden;
+    }
+    .cta-inner::before {
+      content: 'DASHIFY'; position: absolute;
+      font-family: 'Bebas Neue', sans-serif; font-size: 200px;
+      color: rgba(224,48,48,0.04); letter-spacing: 0.05em;
+      right: -20px; bottom: -30px; line-height: 1;
+      pointer-events: none; user-select: none;
+    }
+    .cta-label { font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--red); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .cta-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red); }
+    .cta-title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(40px, 4vw, 60px); line-height: 1; letter-spacing: 0.03em; margin-bottom: 16px; }
+    .cta-desc { font-size: 14px; color: var(--muted); line-height: 1.8; max-width: 480px; }
+    .price-box-dashify { text-align: center; flex-shrink: 0; }
+    .price-tag-dashify { font-family: 'Bebas Neue', sans-serif; font-size: 72px; color: var(--text); line-height: 1; letter-spacing: 0.02em; }
+    .price-tag-dashify span { font-size: 28px; color: var(--muted); vertical-align: super; }
+    .price-period-dashify { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px; margin-top: 4px; }
+    .price-features-dashify { list-style: none; margin-bottom: 28px; display: flex; flex-direction: column; gap: 8px; text-align: left; }
+    .price-features-dashify li { font-size: 12px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+    .price-features-dashify li::before { content: '✓'; color: var(--red); font-weight: 700; font-size: 13px; flex-shrink: 0; }
+    .btn-buy-dashify {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px; width: 100%;
+      padding: 18px 40px; background: var(--red); color: #fff;
+      border: none; font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 500; letter-spacing: 0.14em;
+      text-transform: uppercase; cursor: pointer; border-radius: 2px;
+      transition: transform 0.2s, box-shadow 0.3s, background 0.3s;
+      text-decoration: none; text-align: center;
+    }
+    .btn-buy-dashify:hover { background: var(--red-bright); transform: translateY(-2px); box-shadow: 0 16px 50px rgba(220,38,38,0.5); }
+    @media (max-width: 900px) {
+      .cta-inner { grid-template-columns: 1fr; padding: 48px 36px; }
+      .price-box-dashify { text-align: left; }
+      #obtener-dashify .section-wrap { padding: 70px 24px; }
+    }
   </style>
 </head>
 <body>
@@ -655,6 +717,40 @@
   </div>
 </section>
 
+
+<!-- ═══════════════════════
+     OBTENER DASHIFY
+════════════════════════════ -->
+<div id="obtener-dashify">
+  <div class="section-wrap">
+    <div class="cta-inner reveal">
+      <div>
+        <p class="cta-label">Obtener Dashify</p>
+        <h2 class="cta-title">Empezá a analizar<br>tus ventas <span style="color:var(--red)">hoy</span></h2>
+        <p class="cta-desc">
+          Adquirí Dashify v2 con un solo pago y tomá el control total de tus reportes. Sin suscripciones, sin la nube — 100% tuyo para siempre.
+        </p>
+      </div>
+      <div class="price-box-dashify">
+        <div class="price-tag-dashify"><span>$</span>10.000</div>
+        <p class="price-period-dashify">ARS · Pago único · Descarga inmediata</p>
+        <ul class="price-features-dashify">
+          <li>Dashboard multi-marketplace</li>
+          <li>Mercado Libre + Tienda Nube + CSV</li>
+          <li>Gráficos interactivos</li>
+          <li>Asistente IA integrado</li>
+          <li>Filtros avanzados</li>
+          <li>Windows y Mac</li>
+        </ul>
+        <a href="https://mpago.la/2TpWLPB" target="_blank" rel="noopener" class="btn-buy-dashify">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Comprar con Mercado Pago
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ═════════════════════════════════
      FOOTER
 ══════════════════════════════════════ -->
@@ -740,5 +836,9 @@
   document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => revealObserver.observe(el));
 </script>
 
+
+<a href="https://wa.me/5491135019702" target="_blank" class="whatsapp-btn" title="Chateá con nosotros">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.17 1.595 5.938L.057 23.929l6.188-1.517A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.817 9.817 0 01-5.003-1.368l-.36-.214-3.722.912.947-3.628-.235-.374A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+</a>
 </body>
 </html>
