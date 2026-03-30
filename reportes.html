@@ -49,7 +49,7 @@
       background: #ffffff; border: 1px solid rgba(220,38,38,0.15);
       border-top: 2px solid var(--red); border-radius: 0 0 4px 4px;
       box-shadow: 0 12px 40px rgba(0,0,0,0.12);
-      min-width: 180px; padding: 6px 0;
+      min-width: 200px; padding: 6px 0;
       opacity: 0; pointer-events: none; visibility: hidden;
       transition: opacity 0.2s, transform 0.2s, visibility 0.2s; z-index: 200;
     }
@@ -83,7 +83,23 @@
     .page-hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 6vw, 88px); font-weight: 400; line-height: 0.95; letter-spacing: 0.02em; margin-bottom: 20px; }
     .page-hero h1 .red { color: var(--red); }
     .page-hero h1 .outline { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.25); }
-    .page-hero p { font-size: 14px; color: var(--muted); line-height: 1.8; max-width: 520px; }
+    .page-hero p { font-size: 14px; color: var(--muted); line-height: 1.8; max-width: 520px; margin-bottom: 36px; }
+    .hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+    .btn-hero-primary {
+      padding: 16px 40px; background: var(--red); color: #fff; border: none;
+      font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
+      letter-spacing: 0.14em; text-transform: uppercase; cursor: pointer;
+      border-radius: 2px; text-decoration: none; display: inline-block;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.3s;
+    }
+    .btn-hero-primary:hover { background: var(--red-bright); transform: translateY(-2px); box-shadow: 0 14px 40px rgba(220,38,38,0.45); }
+    .btn-hero-ghost {
+      color: var(--muted); font-size: 12px; letter-spacing: 0.1em;
+      background: none; border: 1px solid var(--border-gray);
+      font-family: 'DM Sans', sans-serif; padding: 15px 28px; border-radius: 2px;
+      transition: color 0.3s, border-color 0.3s; text-decoration: none; display: inline-block;
+    }
+    .btn-hero-ghost:hover { color: var(--text); border-color: rgba(255,255,255,0.25); }
 
     /* ── MARQUEE ── */
     .marquee-wrap { overflow: hidden; border-top: 2px solid var(--red); border-bottom: 2px solid var(--red); background: #ffffff; padding: 14px 0; }
@@ -407,6 +423,10 @@
       TU NEGOCIO
     </h1>
     <p>Herramientas listas para usar. Descargalas, instalás en segundos y empezás a tomar decisiones con datos reales.</p>
+    <div class="hero-actions">
+      <a href="#comprar" class="btn-hero-primary">Obtener ahora</a>
+      <a href="#que-es" class="btn-hero-ghost">Ver más</a>
+    </div>
   </div>
 </section>
 
@@ -578,7 +598,7 @@
 <!-- ═══════════════════════
      PRODUCTS GRID
 ════════════════════════════ -->
-<section class="products-section">
+<section class="products-section" id="comprar">
   <div class="products-grid">
 
     <!-- ── CARD 1: DASHIFY (disponible) ── -->
