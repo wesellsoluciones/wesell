@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reportes — We Sell · Orchids Consulting</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg:          #0a0f1e;
+      --surface:     #131929;
+      --surface2:    #1a2235;
+      --red:         #e03030;
+      --red-bright:  #f04040;
+      --text:        #ffffff;
+      --muted:       #8899b4;
+      --border:      rgba(220,38,38,0.2);
+      --border-gray: rgba(255,255,255,0.08);
+    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body { background: var(--bg); color: var(--text); font-family: 'DM Sans', sans-serif; font-weight: 300; overflow-x: hidden; }
+
+    /* ── HEADER ── */
+    header {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      padding: 10px 60px;
+      display: flex; justify-content: space-between; align-items: center;
+      background: #ffffff;
+      border-bottom: 2px solid var(--red);
+      box-shadow: 0 2px 20px rgba(220,38,38,0.12);
+      animation: fadeDown 0.8s ease both;
+    }
+    @keyframes fadeDown { from{opacity:0;transform:translateY(-20px);} to{opacity:1;transform:translateY(0);} }
+    .header-logo { height: 56px; width: 56px; border-radius: 50%; object-fit: cover; transition: transform 0.3s; }
+    .header-logo:hover { transform: scale(1.04); }
+    nav { display: flex; gap: 32px; align-items: center; }
+    nav a { text-decoration: none; color: #222222; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; transition: color 0.3s; }
+    nav a:hover { color: var(--red); }
+    .nav-cta { border: 1px solid var(--red) !important; color: var(--red) !important; padding: 8px 20px; border-radius: 2px; transition: background 0.3s, color 0.3s !important; }
+    .nav-cta:hover { background: var(--red) !important; color: #fff !important; }
+    .nav-dropdown { position: relative; }
+    .nav-dropdown > a { display: flex; align-items: center; gap: 5px; cursor: pointer; }
+    .nav-dropdown > a::after { content: ''; display: inline-block; width: 6px; height: 6px; border-right: 1.5px solid currentColor; border-bottom: 1.5px solid currentColor; transform: rotate(45deg) translateY(-2px); transition: transform 0.25s; }
+    .nav-dropdown:hover > a::after { transform: rotate(-135deg) translateY(-2px); }
+    .nav-dropdown-menu {
+      position: absolute; top: calc(100% + 2px); left: 50%;
+      transform: translateX(-50%) translateY(6px);
+      background: #ffffff; border: 1px solid rgba(220,38,38,0.15);
+      border-top: 2px solid var(--red); border-radius: 0 0 4px 4px;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.12);
+      min-width: 180px; padding: 6px 0;
+      opacity: 0; pointer-events: none; visibility: hidden;
+      transition: opacity 0.2s, transform 0.2s, visibility 0.2s; z-index: 200;
+    }
+    .nav-dropdown-menu::before { content: ''; position: absolute; top: -10px; left: 0; width: 100%; height: 10px; }
+    .nav-dropdown:hover .nav-dropdown-menu { opacity: 1; pointer-events: auto; visibility: visible; transform: translateX(-50%) translateY(0); }
+    .nav-dropdown-menu a { display: block; padding: 9px 18px; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #222222 !important; text-decoration: none; transition: background 0.2s, color 0.2s; white-space: nowrap; }
+    .nav-dropdown-menu a:hover { background: rgba(220,38,38,0.06); color: var(--red) !important; }
+    .nav-dropdown-menu a.active-product { color: var(--red) !important; font-weight: 500; }
+    .nav-dropdown-menu .menu-divider { height: 1px; background: rgba(0,0,0,0.07); margin: 4px 0; }
+
+    /* ── PAGE HERO ── */
+    .page-hero {
+      padding: 160px 60px 80px;
+      background: var(--bg);
+      position: relative; overflow: hidden;
+    }
+    .page-hero::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(ellipse 60% 50% at 80% 50%, rgba(220,38,38,0.07) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-vline {
+      position: absolute; left: 40px; top: 100px;
+      width: 1px; height: 160px;
+      background: linear-gradient(to bottom, transparent, var(--red), transparent);
+      z-index: 2;
+    }
+    .page-hero-inner { position: relative; z-index: 2; max-width: 700px; }
+    .section-label { font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: #fff; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
+    .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red); }
+    .page-hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 6vw, 88px); font-weight: 400; line-height: 0.95; letter-spacing: 0.02em; margin-bottom: 20px; }
+    .page-hero h1 .red { color: var(--red); }
+    .page-hero h1 .outline { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.25); }
+    .page-hero p { font-size: 14px; color: var(--muted); line-height: 1.8; max-width: 520px; }
+
+    /* ── MARQUEE ── */
+    .marquee-wrap { overflow: hidden; border-top: 2px solid var(--red); border-bottom: 2px solid var(--red); background: #ffffff; padding: 14px 0; }
+    .marquee-track { display: flex; gap: 60px; width: max-content; animation: marquee 20s linear infinite; }
+    @keyframes marquee { from{transform:translateX(0);} to{transform:translateX(-50%);} }
+    .marquee-item { font-family: 'Bebas Neue', sans-serif; font-size: 18px; letter-spacing: 0.2em; color: #0a0f1e; display: flex; align-items: center; gap: 60px; white-space: nowrap; }
+    .marquee-dot { width: 5px; height: 5px; background: var(--red); border-radius: 50%; }
+
+    /* ── PRODUCTS GRID ── */
+    .products-section { padding: 80px 60px 120px; }
+    .products-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(380px, 1fr)); gap: 24px; }
+
+    /* ── PRODUCT CARD ── */
+    .product-card {
+      background: var(--surface);
+      border: 1px solid var(--border-gray);
+      border-radius: 4px;
+      overflow: hidden;
+      position: relative;
+      transition: border-color 0.3s, box-shadow 0.3s, transform 0.3s;
+      display: flex; flex-direction: column;
+    }
+    .product-card:hover {
+      border-color: var(--border);
+      box-shadow: 0 20px 60px rgba(220,38,38,0.12);
+      transform: translateY(-4px);
+    }
+    .product-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: var(--red); transform: scaleX(0); transform-origin: left;
+      transition: transform 0.4s ease;
+    }
+    .product-card:hover::before { transform: scaleX(1); }
+
+    .card-badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 4px 10px; border-radius: 2px; font-weight: 500;
+    }
+    .badge-available { background: rgba(34,197,94,0.12); color: #4ade80; }
+    .badge-soon { background: rgba(220,38,38,0.1); color: var(--red); }
+    .badge-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; animation: pulse 2s infinite; }
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
+
+    .card-header {
+      padding: 28px 28px 0;
+      display: flex; justify-content: space-between; align-items: flex-start;
+    }
+    .card-icon {
+      width: 52px; height: 52px; border-radius: 10px;
+      background: rgba(220,38,38,0.1);
+      border: 1px solid rgba(220,38,38,0.2);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+    }
+
+    .card-body { padding: 20px 28px 24px; flex: 1; }
+    .card-name { font-family: 'Bebas Neue', sans-serif; font-size: 32px; letter-spacing: 0.04em; margin-bottom: 6px; color: var(--text); }
+    .card-tagline { font-size: 12px; color: var(--red); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 14px; font-weight: 500; }
+    .card-desc { font-size: 13px; color: var(--muted); line-height: 1.75; margin-bottom: 20px; }
+
+    .card-features { list-style: none; margin-bottom: 24px; display: flex; flex-direction: column; gap: 8px; }
+    .card-features li { font-size: 12px; color: var(--muted); display: flex; align-items: flex-start; gap: 10px; line-height: 1.5; }
+    .card-features li::before { content: ''; display: block; width: 16px; height: 16px; border-radius: 50%; background: rgba(220,38,38,0.12); border: 1px solid rgba(220,38,38,0.3); flex-shrink: 0; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12'%3E%3Cpath d='M2 6l3 3 5-5' stroke='%23e03030' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: center; margin-top: 1px; }
+
+    .card-divider { height: 1px; background: var(--border-gray); margin: 0 28px; }
+
+    .card-footer { padding: 20px 28px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .card-price { display: flex; flex-direction: column; }
+    .price-amount { font-family: 'Bebas Neue', sans-serif; font-size: 40px; color: var(--text); line-height: 1; letter-spacing: 0.02em; }
+    .price-amount span { font-size: 22px; color: var(--muted); }
+    .price-desc { font-size: 10px; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; margin-top: 3px; }
+
+    /* ── CTA BUTTONS ── */
+    .btn-buy {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 14px 28px;
+      background: var(--red); color: #fff; border: none;
+      font-family: 'DM Sans', sans-serif; font-size: 12px;
+      font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+      cursor: pointer; border-radius: 2px; text-decoration: none;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.3s;
+      white-space: nowrap;
+    }
+    .btn-buy:hover { background: var(--red-bright); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(220,38,38,0.35); }
+    .btn-buy svg { flex-shrink: 0; }
+
+    .btn-coming {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 28px;
+      background: rgba(255,255,255,0.04); color: var(--muted); border: 1px solid var(--border-gray);
+      font-family: 'DM Sans', sans-serif; font-size: 12px;
+      font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase;
+      cursor: not-allowed; border-radius: 2px;
+      white-space: nowrap;
+    }
+
+    /* ── COMING SOON CARD ── */
+    .product-card.coming-soon { opacity: 0.6; }
+    .product-card.coming-soon:hover { transform: none; box-shadow: none; border-color: var(--border-gray); }
+    .product-card.coming-soon::before { display: none; }
+
+    /* ── MODAL DE DESCARGA ── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(5,8,18,0.92);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; pointer-events: none; visibility: hidden;
+      transition: opacity 0.3s, visibility 0.3s;
+      backdrop-filter: blur(6px);
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: auto; visibility: visible; }
+    .modal-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-top: 3px solid var(--red);
+      border-radius: 6px; padding: 48px 44px;
+      max-width: 460px; width: 90%;
+      text-align: center;
+      transform: scale(0.94) translateY(16px);
+      transition: transform 0.35s cubic-bezier(0.34,1.56,0.64,1);
+      position: relative;
+    }
+    .modal-overlay.active .modal-box { transform: scale(1) translateY(0); }
+    .modal-icon {
+      width: 72px; height: 72px; border-radius: 50%;
+      background: rgba(34,197,94,0.1); border: 2px solid rgba(34,197,94,0.3);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 24px; font-size: 32px;
+    }
+    .modal-title { font-family: 'Bebas Neue', sans-serif; font-size: 36px; letter-spacing: 0.03em; margin-bottom: 10px; }
+    .modal-sub { font-size: 13px; color: var(--muted); line-height: 1.7; margin-bottom: 28px; }
+    .modal-progress {
+      height: 4px; background: var(--border-gray); border-radius: 2px; overflow: hidden; margin-bottom: 20px;
+    }
+    .modal-progress-bar {
+      height: 100%; background: var(--red); border-radius: 2px;
+      animation: progressFill 2.5s ease forwards;
+    }
+    @keyframes progressFill { from{width:0%} to{width:100%} }
+    .modal-filename {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: var(--surface2); border: 1px solid var(--border-gray);
+      border-radius: 4px; padding: 10px 16px;
+      font-size: 12px; color: var(--muted); letter-spacing: 0.05em;
+      margin-bottom: 28px;
+    }
+    .modal-btn-close {
+      padding: 12px 32px; background: transparent; color: var(--muted);
+      border: 1px solid var(--border-gray); border-radius: 2px;
+      font-family: 'DM Sans', sans-serif; font-size: 12px; letter-spacing: 0.1em;
+      text-transform: uppercase; cursor: pointer; transition: color 0.2s, border-color 0.2s;
+    }
+    .modal-btn-close:hover { color: var(--text); border-color: rgba(255,255,255,0.2); }
+
+    /* ── FOOTER ── */
+    footer {
+      border-top: 1px solid var(--border-gray);
+      padding: 36px 60px;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    .footer-brand { font-family: 'Bebas Neue', sans-serif; font-size: 20px; letter-spacing: 0.1em; color: var(--muted); }
+    .footer-copy { font-size: 11px; color: var(--muted); letter-spacing: 0.1em; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      header { padding: 10px 24px; }
+      .page-hero { padding: 130px 24px 60px; }
+      .products-section { padding: 50px 24px 80px; }
+      .products-grid { grid-template-columns: 1fr; }
+      footer { flex-direction: column; gap: 12px; text-align: center; padding: 28px 24px; }
+    }
+    @media (max-width: 600px) {
+      nav { gap: 16px; }
+      nav a:not(.nav-cta) { display: none; }
+      .card-footer { flex-direction: column; align-items: stretch; }
+      .btn-buy, .btn-coming { text-align: center; justify-content: center; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════
+     HEADER (igual al de index.html)
+════════════════════════════════════ -->
+<header>
+  <a href="index.html">
+    <img src="logo.png" alt="We Sell - Orchids Consulting" class="header-logo">
+  </a>
+  <nav>
+    <a href="index.html#servicios">Servicios</a>
+    <div class="nav-dropdown">
+      <a>Productos</a>
+      <div class="nav-dropdown-menu">
+        <a href="westock.html">WeStock — Stock</a>
+        <div class="menu-divider"></div>
+        <a href="#productividad" style="opacity:0.45;pointer-events:none">
+          Productividad
+          <span style="font-size:9px;background:rgba(220,38,38,0.12);color:var(--red);padding:1px 6px;border-radius:10px;margin-left:4px">Pronto</span>
+        </a>
+        <a href="reportes.html" class="active-product">Reportes — Dashify</a>
+      </div>
+    </div>
+    <a href="index.html#equipo">Equipo</a>
+    <a href="index.html#nosotros">Nosotros</a>
+    <a href="index.html#contacto" class="nav-cta">Contacto</a>
+  </nav>
+</header>
+
+<!-- ═══════════════════════
+     PAGE HERO
+════════════════════════════ -->
+<section class="page-hero">
+  <div class="hero-vline"></div>
+  <div class="page-hero-inner">
+    <span class="section-label">Herramientas</span>
+    <h1>
+      <span class="red">REPORTES</span><br>
+      <span class="outline">PARA</span><br>
+      TU NEGOCIO
+    </h1>
+    <p>Herramientas listas para usar. Descargalas, instalás en segundos y empezás a tomar decisiones con datos reales.</p>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track">
+    <div class="marquee-item">DASHIFY <div class="marquee-dot"></div> REPORTES <div class="marquee-dot"></div> MERCADO LIBRE <div class="marquee-dot"></div> TIENDA NUBE <div class="marquee-dot"></div> EXCEL / CSV <div class="marquee-dot"></div> ANÁLISIS DE VENTAS <div class="marquee-dot"></div></div>
+    <div class="marquee-item">DASHIFY <div class="marquee-dot"></div> REPORTES <div class="marquee-dot"></div> MERCADO LIBRE <div class="marquee-dot"></div> TIENDA NUBE <div class="marquee-dot"></div> EXCEL / CSV <div class="marquee-dot"></div> ANÁLISIS DE VENTAS <div class="marquee-dot"></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════
+     PRODUCTS GRID
+════════════════════════════ -->
+<section class="products-section">
+  <div class="products-grid">
+
+    <!-- ── CARD 1: DASHIFY (disponible) ── -->
+    <div class="product-card">
+      <div class="card-header">
+        <div class="card-icon">📊</div>
+        <span class="card-badge badge-available">
+          <span class="badge-dot"></span> Disponible
+        </span>
+      </div>
+      <div class="card-body">
+        <div class="card-name">Dashify v2</div>
+        <div class="card-tagline">Dashboard multi-marketplace</div>
+        <div class="card-desc">
+          Analizá tus ventas de Mercado Libre, Tienda Nube y cualquier Excel o CSV desde una sola interfaz. Sin suscripciones, sin la nube — corre 100% en tu computadora.
+        </div>
+        <ul class="card-features">
+          <li>Compatible con Mercado Libre y Tienda Nube (reportes oficiales)</li>
+          <li>Importá cualquier Excel, CSV u ODS con detección automática</li>
+          <li>Gráficos interactivos: barras, líneas, torta, área y más</li>
+          <li>Asistente IA integrado para consultar tus datos en lenguaje natural</li>
+          <li>Filtros por fecha, estado, provincia, categoría y texto libre</li>
+          <li>Visualización extra personalizada: agrupá por cualquier columna</li>
+          <li>Sin suscripción — pago único, tuyo para siempre</li>
+        </ul>
+      </div>
+      <div class="card-divider"></div>
+      <div class="card-footer">
+        <div class="card-price">
+  
+          <div class="price-amount"><span>$</span>10.000</div>
+          <div class="price-desc">Pago único · ARS</div>
+        </div>
+
+        <a
+          class="btn-buy"
+          id="btn-dashify"
+          href="https://mpago.la/2TpWLPB"
+          target="_blank"
+          rel="noopener"
+        >
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+            <polyline points="7 10 12 15 17 10"/>
+            <line x1="12" y1="15" x2="12" y2="3"/>
+          </svg>
+          Comprar con MercadoPago
+        </a>
+      </div>
+    </div>
+
+
+
+  </div>
+</section>
+
+<!-- ═════════════════════════════════
+     FOOTER
+══════════════════════════════════════ -->
+<footer>
+  <div class="footer-brand">WE SELL · ORCHIDS CONSULTING</div>
+  <div class="footer-copy">© 2025 · Todos los derechos reservados</div>
+</footer>
+
+<!-- ═══════════════════════════════════════════════════
+     MODAL DE DESCARGA AUTOMÁTICA
+     Se activa cuando MP redirige con ?pago=ok en la URL
+════════════════════════════════════════════════════════ -->
+<div class="modal-overlay" id="modal-descarga">
+  <div class="modal-box">
+    <div class="modal-icon">✅</div>
+    <div class="modal-title">¡PAGO CONFIRMADO!</div>
+    <div class="modal-sub">
+      Tu compra fue procesada exitosamente.<br>
+      La descarga de <strong>Dashify v2</strong> comienza en segundos.
+    </div>
+    <div class="modal-progress"><div class="modal-progress-bar"></div></div>
+    <div class="modal-filename">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      dashify_v2_optimizado.zip
+    </div>
+    <button class="modal-btn-close" onclick="cerrarModal()">Cerrar</button>
+  </div>
+</div>
+
+<script>
+  const ARCHIVOS = {
+    dashify: "dashify_v2_optimizado.zip"
+  }
+
+  // ── Detectar parámetros de URL ───────────────────────────────────────
+  const params  = new URLSearchParams(window.location.search)
+  const pagoOk  = params.get("pago") === "ok"
+  const producto = params.get("producto") || "dashify"
+
+  if (pagoOk) {
+    const archivo = ARCHIVOS[producto]
+
+    // Mostrar modal
+    setTimeout(() => {
+      document.getElementById("modal-descarga").classList.add("active")
+    }, 400)
+
+    // Disparar descarga automática después de 2.5 s (cuando termina la barra)
+    if (archivo) {
+      setTimeout(() => {
+        const a = document.createElement("a")
+        a.href = archivo
+        a.download = archivo.split("/").pop()
+        document.body.appendChild(a)
+        a.click()
+        document.body.removeChild(a)
+      }, 2500)
+    }
+
+    // Limpiar la URL para que el modal no vuelva a aparecer si el usuario recarga
+    history.replaceState(null, "", window.location.pathname)
+  }
+
+  function cerrarModal() {
+    document.getElementById("modal-descarga").classList.remove("active")
+  }
+
+  // Cerrar modal con Escape
+  document.addEventListener("keydown", e => { if (e.key === "Escape") cerrarModal() })
+
+  // Cerrar al hacer clic fuera del box
+  document.getElementById("modal-descarga").addEventListener("click", function(e) {
+    if (e.target === this) cerrarModal()
+  })
+</script>
+
+</body>
+</html>
