@@ -62,7 +62,9 @@
 
     /* ── PAGE HERO ── */
     .page-hero {
-      padding: 160px 60px 80px;
+      min-height: 100vh;
+      display: flex; align-items: center; justify-content: center;
+      padding: 120px 60px 80px;
       background: var(--bg);
       position: relative; overflow: hidden;
     }
@@ -77,14 +79,16 @@
       background: linear-gradient(to bottom, transparent, var(--red), transparent);
       z-index: 2;
     }
-    .page-hero-inner { position: relative; z-index: 2; max-width: 700px; }
+    .page-hero-inner { position: relative; z-index: 2; max-width: 1100px; width: 100%; margin: 0 auto; }
     .section-label { font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: #fff; margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
     .section-label::before { content: ''; display: block; width: 24px; height: 1px; background: var(--red); }
-    .page-hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(48px, 6vw, 88px); font-weight: 400; line-height: 0.95; letter-spacing: 0.02em; margin-bottom: 20px; }
+    .page-hero h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(72px, 10vw, 140px); font-weight: 400; line-height: 0.9; letter-spacing: 0.02em; margin-bottom: 20px; opacity: 0; animation: fadeUp 0.8s 0.4s ease both; }
     .page-hero h1 .red { color: var(--red); }
     .page-hero h1 .outline { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.25); }
-    .page-hero p { font-size: 14px; color: var(--muted); line-height: 1.8; max-width: 520px; margin-bottom: 36px; }
-    .hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; }
+    .page-hero p { font-size: 15px; color: var(--muted); line-height: 1.85; max-width: 600px; margin-bottom: 48px; opacity: 0; animation: fadeUp 0.8s 0.7s ease both; }
+    .hero-actions { display: flex; gap: 16px; align-items: center; flex-wrap: wrap; opacity: 0; animation: fadeUp 0.8s 0.85s ease both; }
+    @keyframes fadeUp { from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:translateY(0);} }
+    @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
     .btn-hero-primary {
       padding: 16px 40px; background: var(--red); color: #fff; border: none;
       font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
