@@ -288,7 +288,7 @@ body.demo-mode .main{padding-top:36px;}
         </div>
         <div class="table-wrap">
           <table>
-            <thead><tr><th><input type="checkbox" class="cb-all" id="cb-header" onchange="toggleAllCB(this)"></th><th>SKU</th><th>Producto</th><th>Depósito</th><th>Stock</th><th>Mín</th><th>Estado</th><th>Canales</th><th>Acciones</th></tr></thead>
+            <thead><tr><th><input type="checkbox" class="cb-all" id="cb-header" onchange="toggleAllCB(this)"></th><th>SKU</th><th>Producto</th><th>Depósito</th><th>Stock</th><th>Mín</th><th>Precio</th><th>Estado</th><th>Canales</th><th>Acciones</th></tr></thead>
             <tbody id="tabla-body"></tbody>
           </table>
         </div>
@@ -334,6 +334,46 @@ body.demo-mode .main{padding-top:36px;}
         <div class="kpi-card"><div class="kpi-label">Shopify</div><div class="kpi-value" style="color:#5a8c1e" id="mp-sh-count">0</div><div class="kpi-sub">SKUs</div></div>
       </div>
       <div class="panel"><div class="panel-header"><span class="panel-title">Distribución por Canal</span></div><div class="table-wrap"><table><thead><tr><th>Producto</th><th>SKU</th><th>ML</th><th>Amazon</th><th>TN</th><th>Shopify</th><th>Stock</th></tr></thead><tbody id="mp-tabla"></tbody></table></div></div>
+
+      <!-- ════ PANEL PROMOCIONES Y PRECIOS ════ -->
+      <div class="panel" id="panel-promociones" style="margin-top:16px;border:2px solid rgba(255,195,0,0.4);background:linear-gradient(135deg,rgba(255,195,0,0.06),rgba(255,255,255,0))">
+        <div class="panel-header" style="background:linear-gradient(90deg,rgba(255,195,0,0.1),transparent);padding:16px 20px">
+          <div style="display:flex;align-items:center;gap:10px">
+            <span style="font-size:18px">🏷️</span>
+            <div>
+              <div class="panel-title" style="color:#6b5200;font-size:14px">Promociones Activas</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:1px">MercadoEnvío, descuentos, cuotas — con alertas antes del vencimiento</div>
+            </div>
+            <span id="promo-count-badge" style="font-size:11px;padding:3px 10px;border-radius:20px;background:rgba(255,195,0,0.25);color:#6b5200;font-weight:700;display:none;margin-left:4px"></span>
+          </div>
+          <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:6px;padding:6px 10px;background:var(--surface2);border:1px solid var(--border);border-radius:8px">
+              <span style="font-size:11px;color:var(--muted);white-space:nowrap">🔔 Notificarme</span>
+              <select id="promo-notif-dias" class="filter-select" style="padding:3px 8px;font-size:12px;border:none;background:transparent" onchange="promoGuardarConfig()">
+                <option value="1">1 día antes</option>
+                <option value="2">2 días antes</option>
+                <option value="3" selected>3 días antes</option>
+                <option value="5">5 días antes</option>
+                <option value="7">7 días antes</option>
+                <option value="14">14 días antes</option>
+              </select>
+            </div>
+            <button onclick="mlCargarPromociones(this)" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:#b8a400;color:#fff;border:none;font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s" onmouseover="this.style.opacity='.85'" onmouseout="this.style.opacity='1'">
+              🔄 Cargar desde ML
+            </button>
+            <button onclick="promoAgregarManual()" style="display:inline-flex;align-items:center;gap:6px;padding:8px 14px;border-radius:8px;background:rgba(184,164,0,0.12);color:#6b5200;border:1.5px solid rgba(184,164,0,0.4);font-family:'Space Grotesk',sans-serif;font-size:12px;font-weight:700;cursor:pointer;transition:all 0.2s">
+              ＋ Agregar manual
+            </button>
+          </div>
+        </div>
+        <div id="promo-list-body">
+          <div style="text-align:center;padding:28px 20px;color:var(--muted)">
+            <div style="font-size:32px;margin-bottom:8px">🏷️</div>
+            <div style="font-size:13px;font-weight:600;margin-bottom:4px;color:var(--text)">Sin promociones registradas</div>
+            <div style="font-size:12px">Cargá las promos activas desde ML o agregalas manualmente.<br>WeStock te avisará antes de que venzan según la antelación elegida.</div>
+          </div>
+        </div>
+      </div>
 
       <!-- PANEL GLOBAL CASCADA -->
       <div class="panel" style="margin-top:16px;border:1.5px solid rgba(224,48,48,0.15);background:linear-gradient(135deg,rgba(224,48,48,0.025),rgba(26,26,46,0.03))">
@@ -684,6 +724,10 @@ body.demo-mode .main{padding-top:36px;}
                 style="background:rgba(34,197,94,0.1);color:var(--success);border:1px solid rgba(34,197,94,0.25)">
                 ✅ Aplicar a seleccionados
               </button>
+              <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2)">
+                <input type="checkbox" id="ml-chk-sync-precio" style="width:14px;height:14px;accent-color:var(--accent);cursor:pointer">
+                <span>Sincronizar <strong>precios</strong> también</span>
+              </label>
             </div>
           </div>
 
@@ -759,12 +803,9 @@ body.demo-mode .main{padding-top:36px;}
               <table>
                 <thead><tr>
                   <th><input type="checkbox" id="ml-cb-all" onchange="mlToggleAll(this)"></th>
-                  <th>SKU</th>
-                  <th>Producto WeStock</th>
-                  <th>Titulo ML</th>
-                  <th>Stock WeStock</th>
-                  <th>Stock ML</th>
-                  <th>Diferencia</th>
+                  <th>SKU</th><th>Producto WeStock</th><th>Título ML</th>
+                  <th>Stock WS</th><th>Stock ML</th><th>Δ Stock</th>
+                  <th>Precio WS</th><th>Precio ML</th><th>Δ Precio</th>
                 </tr></thead>
                 <tbody id="ml-tabla-body"></tbody>
               </table>
@@ -789,7 +830,7 @@ body.demo-mode .main{padding-top:36px;}
           </div>
         </div>
       </div>
-    </div>
+
 
       <!-- SINCRONIZACION TIENDANUBE -->
       <div class="panel" style="margin-top:16px">
@@ -886,6 +927,10 @@ body.demo-mode .main{padding-top:36px;}
                 style="background:rgba(34,197,94,0.1);color:var(--success);border:1px solid rgba(34,197,94,0.25)">
                 ✅ Aplicar a seleccionados
               </button>
+              <label style="display:inline-flex;align-items:center;gap:6px;cursor:pointer;font-size:12px;padding:6px 10px;border-radius:8px;border:1px solid var(--border);background:var(--surface2)">
+                <input type="checkbox" id="tn-chk-sync-precio" style="width:14px;height:14px;accent-color:#6f2eff;cursor:pointer">
+                <span>Sincronizar <strong>precios</strong> también</span>
+              </label>
             </div>
           </div>
 
@@ -958,12 +1003,9 @@ body.demo-mode .main{padding-top:36px;}
               <table>
                 <thead><tr>
                   <th><input type="checkbox" id="tn-cb-all" onchange="tnToggleAll(this)"></th>
-                  <th>SKU</th>
-                  <th>Producto WeStock</th>
-                  <th>Producto Tiendanube</th>
-                  <th>Stock WS</th>
-                  <th>Stock TN</th>
-                  <th>Diferencia</th>
+                  <th>SKU</th><th>Producto WeStock</th><th>Producto Tiendanube</th>
+                  <th>Stock WS</th><th>Stock TN</th><th>Δ Stock</th>
+                  <th>Precio WS</th><th>Precio TN</th><th>Δ Precio</th>
                 </tr></thead>
                 <tbody id="tn-tabla-body"></tbody>
               </table>
@@ -1376,7 +1418,21 @@ body.demo-mode .main{padding-top:36px;}
   <div class="modal-body">
     <div class="form-row"><div class="form-group"><label class="form-label">Nombre *</label><input class="form-input" type="text" id="f-nombre" placeholder="Nombre del producto"></div><div class="form-group"><label class="form-label">SKU *</label><input class="form-input" type="text" id="f-sku" placeholder="Ej: REM-NEG-M"></div></div>
     <div class="form-row"><div class="form-group"><label class="form-label">Categoría</label><input class="form-input" type="text" id="f-cat" placeholder="Ej: Indumentaria"></div><div class="form-group"><label class="form-label">Depósito</label><select class="form-input" id="f-dep"><option>Depósito 1</option><option>Depósito 2</option><option>Casa central</option></select></div></div>
-    <div class="form-row-3"><div class="form-group"><label class="form-label">Stock</label><input class="form-input" type="number" id="f-stock" value="0" min="0"></div><div class="form-group"><label class="form-label">Mínimo</label><input class="form-input" type="number" id="f-min" value="5" min="0"></div><div class="form-group"><label class="form-label">Precio costo</label><input class="form-input" type="number" id="f-precio" value="0" min="0"></div></div>
+    <div class="form-row" style="grid-template-columns:1fr 1fr 1fr 1fr">
+      <div class="form-group"><label class="form-label">Stock</label><input class="form-input" type="number" id="f-stock" value="0" min="0"></div>
+      <div class="form-group"><label class="form-label">Mínimo</label><input class="form-input" type="number" id="f-min" value="5" min="0"></div>
+      <div class="form-group"><label class="form-label">Precio normal</label><input class="form-input" type="number" id="f-precio" value="0" min="0"></div>
+      <div class="form-group">
+        <label class="form-label" style="display:flex;align-items:center;gap:5px">
+          Precio promo
+          <span style="font-size:9px;background:rgba(22,163,74,0.12);color:var(--success);border:1px solid rgba(22,163,74,0.3);border-radius:4px;padding:1px 5px;font-weight:700">VERDE</span>
+        </label>
+        <input class="form-input" type="number" id="f-precio-promo" value="0" min="0" placeholder="0 = sin promo">
+      </div>
+    </div>
+    <div style="font-size:11px;color:var(--muted);margin-top:-8px;padding:0 2px">
+      💡 Si hay un <strong>Precio promo</strong> cargado y existe una promoción activa en la sección Marketplaces, en el inventario se tacha el precio normal y se muestra el promocional en verde.
+    </div>
     <div class="form-group"><label class="form-label">Canales</label><div class="mp-checkboxes"><div class="mp-check ml" onclick="toggleMP(this,'ml')">🟡 ML</div><div class="mp-check amz" onclick="toggleMP(this,'amz')">🟠 AMZ</div><div class="mp-check tn" onclick="toggleMP(this,'tn')">🟣 TN</div><div class="mp-check sh" onclick="toggleMP(this,'sh')">🟢 SH</div></div></div>
   </div>
   <div class="modal-footer"><button class="btn btn-ghost" onclick="closeModal()">Cancelar</button><button class="btn btn-primary" onclick="guardarSKU()">Guardar</button></div></div>
@@ -1582,10 +1638,10 @@ function entrarDemo(){
   document.getElementById('lock-overlay').remove();
   isDemo=true;
   productos=[
-    {id:1,sku:'REM-NEG-M',nombre:'Remera básica negra M',categoria:'Indumentaria',deposito:'Depósito 1',stock:45,min:10,precio:1200,canales:['ml','tn']},
-    {id:2,sku:'ZAP-DEP-42',nombre:'Zapatillas deportivas #42',categoria:'Calzado',deposito:'Depósito 2',stock:3,min:5,precio:8500,canales:['ml','amz']},
-    {id:3,sku:'MUG-BLK-01',nombre:'Taza negra premium',categoria:'Hogar',deposito:'Casa central',stock:120,min:20,precio:650,canales:['ml','amz','tn','sh']},
-    {id:4,sku:'PAN-JNS-32',nombre:'Pantalón jeans 32',categoria:'Indumentaria',deposito:'Depósito 1',stock:0,min:8,precio:3200,canales:['ml']},
+    {id:1,sku:'REM-NEG-M',nombre:'Remera básica negra M',categoria:'Indumentaria',deposito:'Depósito 1',stock:45,min:10,precio:1200,precio_promo:990,canales:['ml','tn']},
+    {id:2,sku:'ZAP-DEP-42',nombre:'Zapatillas deportivas #42',categoria:'Calzado',deposito:'Depósito 2',stock:3,min:5,precio:8500,precio_promo:0,canales:['ml','amz']},
+    {id:3,sku:'MUG-BLK-01',nombre:'Taza negra premium',categoria:'Hogar',deposito:'Casa central',stock:120,min:20,precio:650,precio_promo:520,canales:['ml','amz','tn','sh']},
+    {id:4,sku:'PAN-JNS-32',nombre:'Pantalón jeans 32',categoria:'Indumentaria',deposito:'Depósito 1',stock:0,min:8,precio:3200,precio_promo:0,canales:['ml']},
   ];
   movimientos=[
     {tipo:'entrada',skuId:1,sku:'REM-NEG-M',nombre:'Remera básica negra M',qty:30,motivo:'Reposición proveedor',fecha:new Date(Date.now()-7200000)},
@@ -1658,9 +1714,47 @@ function renderTabla(){
     if(dep&&p.deposito!==dep)return false;
     return true;
   });
-  document.getElementById('tabla-body').innerHTML=filtered.length?filtered.map(p=>`<tr><td><input type="checkbox" class="cb-row" data-id="${p.id}" onchange="updateBulkBar()"></td><td style="cursor:pointer" onclick="editSKU(${p.id})"><span class="sku-code">${p.sku}</span></td><td style="cursor:pointer" onclick="editSKU(${p.id})"><div style="font-weight:500">${p.nombre}</div><div style="font-size:11px;color:var(--muted)">${p.categoria}</div></td><td style="font-size:12px;color:var(--muted)">${p.deposito}</td><td>${stockBar(p)}</td><td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)">${p.min}</td><td>${statusBadge(p)}</td><td>${mpDots(p.canales)}</td><td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="event.stopPropagation();editSKU(${p.id})">✏️</button><button class="btn btn-ghost" style="padding:4px 10px;font-size:11px;color:var(--warn)" onclick="event.stopPropagation();abrirAjusteStock(${p.id})">⚖️</button><button class="btn btn-danger" style="padding:4px 10px;font-size:11px" onclick="event.stopPropagation();deleteSKU(${p.id})">🗑</button></div></td></tr>`).join(''):'<tr><td colspan="9"><div class="empty"><div class="empty-icon">📦</div><p>No se encontraron productos</p></div></td></tr>';
+  document.getElementById('tabla-body').innerHTML=filtered.length?filtered.map(p=>`<tr><td><input type="checkbox" class="cb-row" data-id="${p.id}" onchange="updateBulkBar()"></td><td style="cursor:pointer" onclick="editSKU(${p.id})"><span class="sku-code">${p.sku}</span></td><td style="cursor:pointer" onclick="editSKU(${p.id})"><div style="font-weight:500">${p.nombre}</div><div style="font-size:11px;color:var(--muted)">${p.categoria}</div></td><td style="font-size:12px;color:var(--muted)">${p.deposito}</td><td>${stockBar(p)}</td><td style="font-family:'JetBrains Mono',monospace;font-size:12px;color:var(--muted)">${p.min}</td><td>${renderPrecioCell(p)}</td><td>${statusBadge(p)}</td><td>${mpDots(p.canales)}</td><td><div style="display:flex;gap:6px"><button class="btn btn-ghost" style="padding:4px 10px;font-size:11px" onclick="event.stopPropagation();editSKU(${p.id})">✏️</button><button class="btn btn-ghost" style="padding:4px 10px;font-size:11px;color:var(--warn)" onclick="event.stopPropagation();abrirAjusteStock(${p.id})">⚖️</button><button class="btn btn-danger" style="padding:4px 10px;font-size:11px" onclick="event.stopPropagation();deleteSKU(${p.id})">🗑</button></div></td></tr>`).join(''):'<tr><td colspan="10"><div class="empty"><div class="empty-icon">📦</div><p>No se encontraron productos</p></div></td></tr>';
   document.getElementById('tabla-footer').textContent=`Mostrando ${filtered.length} de ${productos.length} productos`;
   updateBulkBar();
+}
+
+// Render de la celda de precio con soporte de precio promocional
+function renderPrecioCell(p){
+  const precio = p.precio||0;
+  const promo  = p.precio_promo||0;
+  const promoActiva = promo>0 && promoEsActivaParaProducto(p);
+  const fmt = n => '$'+Number(n).toLocaleString('es-AR',{minimumFractionDigits:0,maximumFractionDigits:0});
+  if(!precio && !promo) return '<span style="color:var(--muted);font-size:12px">—</span>';
+  if(promoActiva){
+    return `<div style="display:flex;flex-direction:column;gap:2px;line-height:1.2">
+      <span style="font-size:11px;color:var(--muted);text-decoration:line-through;font-family:'JetBrains Mono',monospace">${fmt(precio)}</span>
+      <span style="font-size:13px;font-weight:700;color:var(--success);font-family:'JetBrains Mono',monospace;display:flex;align-items:center;gap:4px">
+        ${fmt(promo)}<span style="font-size:9px;background:rgba(22,163,74,0.12);border:1px solid rgba(22,163,74,0.3);border-radius:4px;padding:1px 5px;font-weight:700;letter-spacing:0.04em">PROMO</span>
+      </span>
+    </div>`;
+  }
+  if(promo>0){
+    // Tiene precio promo pero la promo no está activa aún o ya venció
+    return `<div style="display:flex;flex-direction:column;gap:2px;line-height:1.2">
+      <span style="font-size:13px;font-family:'JetBrains Mono',monospace;font-weight:500">${fmt(precio)}</span>
+      <span style="font-size:10px;color:var(--muted);font-family:'JetBrains Mono',monospace">${fmt(promo)} <span style="opacity:0.6">(promo inactiva)</span></span>
+    </div>`;
+  }
+  return `<span style="font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:500">${fmt(precio)}</span>`;
+}
+
+// Determina si hay una promo activa para el producto (por canal)
+function promoEsActivaParaProducto(p){
+  if(!window.wsPromociones||!wsPromociones.length) return false;
+  const ahora = Date.now();
+  return wsPromociones.some(pr=>{
+    const finOk  = !pr.fin || new Date(pr.fin).getTime() > ahora;
+    const inicioOk = !pr.inicio || new Date(pr.inicio).getTime() <= ahora;
+    // La promo aplica si el producto está en algún canal compatible
+    const canalOk = !pr.canal || (p.canales||[]).includes(pr.canal) || pr.canal==='todos';
+    return finOk && inicioOk && canalOk;
+  });
 }
 
 function seleccionarTodos(){
@@ -1745,7 +1839,7 @@ function renderMarketplaces(){
   document.getElementById('mp-tabla').innerHTML=productos.map(p=>`<tr><td>${p.nombre}</td><td><span class="sku-code">${p.sku}</span></td><td>${p.canales.includes('ml')?'<span class="badge badge-mp">✓</span>':'<span style="color:var(--muted)">—</span>'}</td><td>${p.canales.includes('amz')?'<span class="badge badge-amz">✓</span>':'<span style="color:var(--muted)">—</span>'}</td><td>${p.canales.includes('tn')?'<span class="badge badge-tn">✓</span>':'<span style="color:var(--muted)">—</span>'}</td><td>${p.canales.includes('sh')?'<span class="badge badge-sh">✓</span>':'<span style="color:var(--muted)">—</span>'}</td><td><span style="font-family:'JetBrains Mono',monospace;font-weight:600;color:${getStatus(p)==='out'?'var(--danger)':getStatus(p)==='low'?'var(--warn)':'var(--success)'}">${p.stock}</span></td></tr>`).join('');
 }
 
-function openModal(){editId=null;document.getElementById('modal-title').textContent='Nuevo SKU';['f-nombre','f-sku','f-cat'].forEach(id=>document.getElementById(id).value='');document.getElementById('f-stock').value='0';document.getElementById('f-min').value='5';document.getElementById('f-precio').value='0';selectedMP=[];document.querySelectorAll('#modal .mp-check').forEach(el=>el.classList.remove('checked'));document.getElementById('modal').classList.add('open');}
+function openModal(){editId=null;document.getElementById('modal-title').textContent='Nuevo SKU';['f-nombre','f-sku','f-cat'].forEach(id=>document.getElementById(id).value='');document.getElementById('f-stock').value='0';document.getElementById('f-min').value='5';document.getElementById('f-precio').value='0';document.getElementById('f-precio-promo').value='0';selectedMP=[];document.querySelectorAll('#modal .mp-check').forEach(el=>el.classList.remove('checked'));document.getElementById('modal').classList.add('open');}
 function editSKU(id){
   const p=productos.find(x=>x.id===id);if(!p)return;
   editId=id;
@@ -1757,6 +1851,7 @@ function editSKU(id){
   document.getElementById('f-stock').value=p.stock;
   document.getElementById('f-min').value=p.min;
   document.getElementById('f-precio').value=p.precio;
+  document.getElementById('f-precio-promo').value=p.precio_promo||0;
   selectedMP=[...p.canales];
   document.querySelectorAll('#modal .mp-check').forEach(el=>el.classList.toggle('checked',selectedMP.includes(el.classList[1])));
   document.getElementById('modal').classList.add('open');
@@ -1767,7 +1862,7 @@ function guardarSKU(){
   const nombre=document.getElementById('f-nombre').value.trim();
   const sku=document.getElementById('f-sku').value.trim();
   if(!nombre||!sku){showToast('Nombre y SKU son obligatorios');return;}
-  const data={nombre,sku,categoria:document.getElementById('f-cat').value||'General',deposito:document.getElementById('f-dep').value,stock:parseInt(document.getElementById('f-stock').value)||0,min:parseInt(document.getElementById('f-min').value)||5,precio:parseInt(document.getElementById('f-precio').value)||0,canales:[...selectedMP]};
+  const data={nombre,sku,categoria:document.getElementById('f-cat').value||'General',deposito:document.getElementById('f-dep').value,stock:parseInt(document.getElementById('f-stock').value)||0,min:parseInt(document.getElementById('f-min').value)||5,precio:parseInt(document.getElementById('f-precio').value)||0,precio_promo:parseInt(document.getElementById('f-precio-promo').value)||0,canales:[...selectedMP]};
   if(editId){const i=productos.findIndex(x=>x.id===editId);productos[i]={...productos[i],...data};showToast('✅ SKU actualizado');}
   else{data.id=Date.now();productos.push(data);showToast('✅ SKU agregado');}
   closeModal();renderTabla();renderDashboard();autoSave();
@@ -3211,7 +3306,7 @@ async function mlFetchDetalles(ids){
           const a=it.attributes.find(x=>x.id==='SELLER_SKU');
           if(a) sku=a.value_name||'';
         }
-        items.push({id:it.id, sku:sku.trim().toUpperCase(), titulo:it.title, stock_ml:it.available_quantity||0});
+        items.push({id:it.id, sku:sku.trim().toUpperCase(), titulo:it.title, stock_ml:it.available_quantity||0, price_ml:it.price||0, original_price_ml:it.original_price||null, free_shipping:!!(it.shipping&&it.shipping.free_shipping), deal_ids:it.deal_ids||[]});
       }
     }
   }
@@ -3394,18 +3489,28 @@ async function mlImportarSinSKU(){
 function mlRenderTabla(){
   const dir=document.getElementById('ml-dir-select').value;
   const tbody=document.getElementById('ml-tabla-body');
+  const $=n=>n?'$'+Number(n).toLocaleString('es-AR',{minimumFractionDigits:0,maximumFractionDigits:0}):'—';
   tbody.innerHTML=mlMatches.map((m,i)=>{
     const diff = dir==='ml_to_ws' ? m.ml_item.stock_ml - m.ws_prod.stock : m.ws_prod.stock - m.ml_item.stock_ml;
-    const diffColor = diff>0?'var(--success)':diff<0?'var(--danger)':'var(--muted)';
-    const diffTxt = diff>0?'+'+diff:String(diff);
+    const dColor = diff>0?'var(--success)':diff<0?'var(--danger)':'var(--muted)';
+    const dTxt   = diff===0?'—':(diff>0?'+':'')+diff;
+    const pWS = m.ws_prod.precio||0;
+    const pML = m.ml_item.price_ml||0;
+    const pDiff = dir==='ml_to_ws' ? pML-pWS : pWS-pML;
+    const pColor = pDiff>0?'var(--success)':pDiff<0?'var(--danger)':'var(--muted)';
+    const pTxt  = pDiff===0?'—':(pDiff>0?'+':'')+Math.abs(pDiff).toLocaleString('es-AR');
+    const pMLtxt = pML ? $(pML)+(m.ml_item.original_price_ml&&m.ml_item.original_price_ml!==pML?` <small style="text-decoration:line-through;color:var(--muted)">${$(m.ml_item.original_price_ml)}</small>`:'') : '—';
     return `<tr>
       <td><input type="checkbox" ${m.checked?'checked':''} onchange="mlMatches[${i}].checked=this.checked;mlActualizarBtnAplicar()"></td>
       <td><span class="sku-code">${m.sku}</span></td>
       <td style="font-size:13px">${m.ws_prod.nombre}</td>
-      <td style="font-size:12px;color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${m.ml_item.titulo}">${m.ml_item.titulo}</td>
+      <td style="font-size:12px;color:var(--muted);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${m.ml_item.titulo}">${m.ml_item.titulo}</td>
       <td style="font-family:monospace;text-align:center">${m.ws_prod.stock}</td>
       <td style="font-family:monospace;text-align:center">${m.ml_item.stock_ml}</td>
-      <td style="font-family:monospace;text-align:center;font-weight:600;color:${diffColor}">${diff===0?'—':diffTxt}</td>
+      <td style="font-family:monospace;text-align:center;font-weight:600;color:${dColor}">${dTxt}</td>
+      <td style="font-family:monospace;text-align:right;font-size:12px">${$(pWS)}</td>
+      <td style="font-family:monospace;text-align:right;font-size:12px">${pMLtxt}</td>
+      <td style="font-family:monospace;text-align:right;font-weight:600;font-size:12px;color:${pColor}">${pTxt}</td>
     </tr>`;
   }).join('');
 }
@@ -3426,55 +3531,50 @@ document.addEventListener('change', function(e){
 
 async function mlAplicarSincronizacion(){
   const dir=document.getElementById('ml-dir-select').value;
+  const syncPrecio=document.getElementById('ml-chk-sync-precio')?.checked;
   const seleccionados=mlMatches.filter(m=>m.checked);
-  if(seleccionados.length===0){ showToast('Selecciona al menos un SKU.'); return; }
-
+  if(!seleccionados.length){ showToast('Seleccioná al menos un SKU.'); return; }
   const btn=document.getElementById('ml-btn-aplicar');
   btn.textContent='Sincronizando...'; btn.disabled=true;
-
-  let ok=0, err=0;
+  let okStock=0, okPrecio=0, err=0;
   for(const m of seleccionados){
     try {
       if(dir==='ml_to_ws'){
-        // Traer stock de ML a WeStock
-        const nuevo=m.ml_item.stock_ml;
-        const diff=nuevo-m.ws_prod.stock;
-        if(diff===0) continue;
-        const idx=productos.findIndex(p=>p.id===m.ws_prod.id);
-        productos[idx].stock=nuevo;
-        movimientos.unshift({
-          tipo: diff>0?'entrada':'salida',
-          skuId: m.ws_prod.id, sku:m.ws_prod.sku, nombre:m.ws_prod.nombre,
-          qty:Math.abs(diff), motivo:'Sincronizacion ML → WeStock',
-          fecha:new Date()
-        });
+        const nuevo=m.ml_item.stock_ml, diff=nuevo-m.ws_prod.stock;
+        if(diff!==0){
+          const idx=productos.findIndex(p=>p.id===m.ws_prod.id);
+          if(idx>=0){ productos[idx].stock=nuevo; okStock++;
+            movimientos.unshift({tipo:diff>0?'entrada':'salida',skuId:m.ws_prod.id,sku:m.ws_prod.sku,nombre:m.ws_prod.nombre,qty:Math.abs(diff),motivo:'Sincronizacion ML → WeStock',fecha:new Date()});
+          }
+        }
+        if(syncPrecio&&m.ml_item.price_ml>0){
+          const idx=productos.findIndex(p=>p.id===m.ws_prod.id);
+          if(idx>=0){
+            // Si ML tiene precio original distinto (descuento activo), guardar como precio_promo
+            if(m.ml_item.original_price_ml && m.ml_item.original_price_ml!==m.ml_item.price_ml){
+              if(productos[idx].precio!==m.ml_item.original_price_ml) productos[idx].precio=m.ml_item.original_price_ml;
+              if(productos[idx].precio_promo!==m.ml_item.price_ml){ productos[idx].precio_promo=m.ml_item.price_ml; okPrecio++; }
+            } else if(productos[idx].precio!==m.ml_item.price_ml){
+              productos[idx].precio=m.ml_item.price_ml; okPrecio++;
+            }
+          }
+        }
       } else {
-        // Enviar stock de WeStock a ML
-        const nuevo=m.ws_prod.stock;
-        if(nuevo===m.ml_item.stock_ml) continue;
-        const res=await mlFetch(`https://api.mercadolibre.com/items/${m.ml_item.id}`,{
-          method:'PUT',
-          headers:{'Authorization':'Bearer '+mlToken,'Content-Type':'application/json'},
-          body:JSON.stringify({available_quantity:nuevo})
-        });
-        if(!res.ok){ const e=await res.json(); throw new Error(e.message||res.status); }
-        m.ml_item.stock_ml=nuevo; // actualizar local
-        movimientos.unshift({
-          tipo:'ajuste', skuId:m.ws_prod.id, sku:m.ws_prod.sku, nombre:m.ws_prod.nombre,
-          qty:Math.abs(nuevo-m.ml_item.stock_ml),
-          motivo:'Sincronizacion WeStock → ML', fecha:new Date()
-        });
+        const body={available_quantity:m.ws_prod.stock};
+        if(syncPrecio&&m.ws_prod.precio>0&&m.ws_prod.precio!==m.ml_item.price_ml) body.price=m.ws_prod.precio;
+        if(body.available_quantity===m.ml_item.stock_ml&&!body.price) continue;
+        const res=await mlFetch(`https://api.mercadolibre.com/items/${m.ml_item.id}`,{method:'PUT',headers:{'Authorization':'Bearer '+mlToken,'Content-Type':'application/json'},body:JSON.stringify(body)});
+        if(!res.ok){const e=await res.json();throw new Error(e.message||res.status);}
+        if(body.available_quantity!==m.ml_item.stock_ml){m.ml_item.stock_ml=body.available_quantity;okStock++;}
+        if(body.price){m.ml_item.price_ml=body.price;okPrecio++;}
+        movimientos.unshift({tipo:'ajuste',skuId:m.ws_prod.id,sku:m.ws_prod.sku,nombre:m.ws_prod.nombre,qty:0,motivo:'Sincronizacion WeStock → ML',fecha:new Date()});
       }
-      ok++;
-    } catch(e){ err++; console.warn('ML sync error',m.sku,e.message); }
+    } catch(e){err++;console.warn('ML sync error',m.sku,e.message);}
   }
-
-  autoSave();
-  mlRenderTabla();
+  autoSave(); mlRenderTabla();
   btn.textContent='✅ Aplicar sincronizacion'; btn.disabled=false;
-  showToast('Sincronizacion completa: '+ok+' SKUs actualizados'+(err?' · '+err+' errores':''));
-  // CASCADE: si ML actualizó WeStock manualmente → propagar a los demás
-  if(ok > 0 && dir === 'ml_to_ws') wsCascadeSyncHacia('ml','tn','amz','sh');
+  showToast(`Sync ML: ${okStock} stock${okPrecio?', '+okPrecio+' precios':''}${err?' · '+err+' errores':''}`);
+  if(okStock>0&&dir==='ml_to_ws') wsCascadeSyncHacia('ml','tn','amz','sh');
 }
 
 // ── Setup credenciales OAuth ──────────────────────────────
@@ -4086,7 +4186,7 @@ async function tnFetchTodosProductos(){
   let all = [], page = 1;
   while(true){
     const res = await tnFetch(
-      `https://api.tiendanube.com/v1/${tnUserId}/products?page=${page}&per_page=200&fields=id,name,variants`
+      `https://api.tiendanube.com/v1/${tnUserId}/products?page=${page}&per_page=200&fields=id,name,variants,price`
     );
     if(!res.ok) throw new Error('Error al traer productos TN ('+res.status+')');
     const data = await res.json();
@@ -4115,7 +4215,8 @@ function tnProcesarProductos(raw){
           sku:        sku,
           titulo:     nombreBase + (prod.variants.length > 1 ? ` (${[v.values?.map(x=>x.es||x.pt||'')].flat().join(' / ')})` : ''),
           stock_tn:   stock,
-          ilimitado:  ilimitado
+          ilimitado:  ilimitado,
+          price_tn:   parseFloat(v.price||prod.price||0)||0
         });
       }
     } else {
@@ -4281,19 +4382,26 @@ async function tnImportarSinSKU(){
 function tnRenderTabla(){
   const dir = document.getElementById('tn-dir-select').value;
   const tbody = document.getElementById('tn-tabla-body');
+  const $=n=>n?'$'+Number(n).toLocaleString('es-AR',{minimumFractionDigits:0,maximumFractionDigits:0}):'—';
   tbody.innerHTML = tnMatches.map((m,i) => {
     const diff = dir==='tn_to_ws' ? m.tn_prod.stock_tn - m.ws_prod.stock : m.ws_prod.stock - m.tn_prod.stock_tn;
-    const diffColor = diff>0?'var(--success)':diff<0?'var(--danger)':'var(--muted)';
-    const diffTxt   = diff>0?'+'+diff:String(diff);
-    const stockTN   = m.tn_prod.ilimitado ? '∞' : m.tn_prod.stock_tn;
+    const dColor = diff>0?'var(--success)':diff<0?'var(--danger)':'var(--muted)';
+    const stockTN = m.tn_prod.ilimitado ? '∞' : m.tn_prod.stock_tn;
+    const pWS = m.ws_prod.precio||0, pTN = m.tn_prod.price_tn||0;
+    const pDiff = dir==='tn_to_ws' ? pTN-pWS : pWS-pTN;
+    const pColor = pDiff>0?'var(--success)':pDiff<0?'var(--danger)':'var(--muted)';
+    const pTxt = pDiff===0?'—':(pDiff>0?'+':'')+Math.abs(pDiff).toLocaleString('es-AR');
     return `<tr>
       <td><input type="checkbox" ${m.checked?'checked':''} onchange="tnMatches[${i}].checked=this.checked;tnActualizarBtnAplicar()"></td>
       <td><span class="sku-code">${m.sku}</span></td>
       <td style="font-size:13px">${m.ws_prod.nombre}</td>
-      <td style="font-size:12px;color:var(--muted);max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${m.tn_prod.titulo}">${m.tn_prod.titulo}</td>
+      <td style="font-size:12px;color:var(--muted);max-width:160px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap" title="${m.tn_prod.titulo}">${m.tn_prod.titulo}</td>
       <td style="font-family:monospace;text-align:center">${m.ws_prod.stock}</td>
       <td style="font-family:monospace;text-align:center">${stockTN}</td>
-      <td style="font-family:monospace;text-align:center;font-weight:600;color:${diffColor}">${diff===0?'—':diffTxt}</td>
+      <td style="font-family:monospace;text-align:center;font-weight:600;color:${dColor}">${diff===0?'—':(diff>0?'+':'')+diff}</td>
+      <td style="font-family:monospace;text-align:right;font-size:12px">${$(pWS)}</td>
+      <td style="font-family:monospace;text-align:right;font-size:12px">${$(pTN)}</td>
+      <td style="font-family:monospace;text-align:right;font-weight:600;font-size:12px;color:${pColor}">${pTxt}</td>
     </tr>`;
   }).join('');
 }
@@ -4310,57 +4418,46 @@ function tnActualizarBtnAplicar(){
 
 async function tnAplicarSincronizacion(){
   const dir = document.getElementById('tn-dir-select').value;
+  const syncPrecio = document.getElementById('tn-chk-sync-precio')?.checked;
   const seleccionados = tnMatches.filter(m=>m.checked);
   if(!seleccionados.length){ showToast('Seleccioná al menos un SKU.'); return; }
-
   const btn = document.getElementById('tn-btn-aplicar');
   btn.textContent='Sincronizando...'; btn.disabled=true;
-
-  let ok=0, err=0;
+  let okStock=0, okPrecio=0, err=0;
   for(const m of seleccionados){
     try {
       if(dir==='tn_to_ws'){
-        // TN → WeStock
-        if(m.tn_prod.ilimitado) continue; // stock ilimitado, ignorar
-        const nuevo = m.tn_prod.stock_tn;
-        const diff  = nuevo - m.ws_prod.stock;
-        if(diff===0) continue;
-        const idx = productos.findIndex(p=>p.id===m.ws_prod.id);
-        if(idx<0) continue;
-        productos[idx].stock = nuevo;
-        movimientos.unshift({
-          tipo: diff>0?'entrada':'salida',
-          skuId:m.ws_prod.id, sku:m.ws_prod.sku, nombre:m.ws_prod.nombre,
-          qty:Math.abs(diff), motivo:'Sincronización TN → WeStock', fecha:new Date()
-        });
-      } else {
-        // WeStock → TN
-        const nuevo = m.ws_prod.stock;
-        if(nuevo===m.tn_prod.stock_tn) continue;
-        if(!m.tn_prod.variant_id) continue; // necesitamos variant_id para actualizar
-        const res = await tnFetch(
-          `https://api.tiendanube.com/v1/${tnUserId}/products/${m.tn_prod.prod_id}/variants/${m.tn_prod.variant_id}`,
-          { method:'PUT', body: JSON.stringify({stock: nuevo}) }
-        );
-        if(!res.ok){
-          const e = await res.json().catch(()=>({}));
-          throw new Error(e.description || e.message || 'Error '+res.status);
+        if(!m.tn_prod.ilimitado){
+          const nuevo=m.tn_prod.stock_tn, diff=nuevo-m.ws_prod.stock;
+          if(diff!==0){
+            const idx=productos.findIndex(p=>p.id===m.ws_prod.id);
+            if(idx>=0){ productos[idx].stock=nuevo; okStock++;
+              movimientos.unshift({tipo:diff>0?'entrada':'salida',skuId:m.ws_prod.id,sku:m.ws_prod.sku,nombre:m.ws_prod.nombre,qty:Math.abs(diff),motivo:'Sincronización TN → WeStock',fecha:new Date()});
+            }
+          }
         }
-        m.tn_prod.stock_tn = nuevo;
-        movimientos.unshift({
-          tipo:'ajuste', skuId:m.ws_prod.id, sku:m.ws_prod.sku, nombre:m.ws_prod.nombre,
-          qty:0, motivo:'Sincronización WeStock → TN', fecha:new Date()
-        });
+        if(syncPrecio&&m.tn_prod.price_tn>0){
+          const idx=productos.findIndex(p=>p.id===m.ws_prod.id);
+          if(idx>=0&&productos[idx].precio!==m.tn_prod.price_tn){ productos[idx].precio=m.tn_prod.price_tn; okPrecio++; }
+        }
+      } else {
+        if(!m.tn_prod.variant_id) continue;
+        const body={};
+        if(m.ws_prod.stock!==m.tn_prod.stock_tn) body.stock=m.ws_prod.stock;
+        if(syncPrecio&&m.ws_prod.precio>0&&m.ws_prod.precio!==m.tn_prod.price_tn) body.price=String(m.ws_prod.precio);
+        if(!Object.keys(body).length) continue;
+        const res=await tnFetch(`https://api.tiendanube.com/v1/${tnUserId}/products/${m.tn_prod.prod_id}/variants/${m.tn_prod.variant_id}`,{method:'PUT',body:JSON.stringify(body)});
+        if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.description||e.message||'Error '+res.status);}
+        if(body.stock!==undefined){m.tn_prod.stock_tn=body.stock;okStock++;}
+        if(body.price!==undefined){m.tn_prod.price_tn=m.ws_prod.precio;okPrecio++;}
+        movimientos.unshift({tipo:'ajuste',skuId:m.ws_prod.id,sku:m.ws_prod.sku,nombre:m.ws_prod.nombre,qty:0,motivo:'Sincronización WeStock → TN',fecha:new Date()});
       }
-      ok++;
-    } catch(e){ err++; console.warn('TN sync error', m.sku, e.message); }
+    } catch(e){ err++; console.warn('TN sync error',m.sku,e.message); }
   }
-
   autoSave(); tnRenderTabla();
   btn.textContent='✅ Aplicar a seleccionados'; btn.disabled=false;
-  showToast('Sincronización TN completa: '+ok+' SKUs actualizados'+(err?' · '+err+' errores':''));
-  // CASCADE: si TN actualizó WeStock manualmente → propagar a los demás
-  if(ok > 0 && dir === 'tn_to_ws') wsCascadeSyncHacia('tn','ml','amz','sh');
+  showToast(`Sync TN: ${okStock} stock${okPrecio?', '+okPrecio+' precios':''}${err?' · '+err+' errores':''}`);
+  if(okStock>0&&dir==='tn_to_ws') wsCascadeSyncHacia('tn','ml','amz','sh');
 }
 
 // ── Modo de sync (radio custom) ────────────────────────
@@ -5760,6 +5857,265 @@ setInterval(wsCascadeActualizarUI, 5000);
 initAcceso();
 // Actualizar status ML cada segundo
 setInterval(()=>{ if(mlLastSync||mlAutoSyncEnabled) mlActualizarStatusUI(); }, 1000);
+
+// ══════════════════════════════════════════════════════════════
+// SISTEMA DE PROMOCIONES — WESTOCK
+// ══════════════════════════════════════════════════════════════
+let wsPromociones    = JSON.parse(localStorage.getItem('ws_promociones') || '[]');
+// Demo: si no hay promos guardadas, agregar una de ejemplo activa
+if(!wsPromociones.length && !localStorage.getItem('ws_promociones')){
+  const fin = new Date(); fin.setDate(fin.getDate()+12);
+  wsPromociones = [{
+    id:'demo-mercadoenvio',
+    nombre:'MercadoEnvío — Campaña de verano',
+    tipo:'mercadoenvio',
+    items_count:3,
+    inicio: new Date().toISOString(),
+    fin: fin.toISOString(),
+    origen:'demo',
+    canal:'ml'
+  }];
+}
+let promoNotifDias   = parseInt(localStorage.getItem('ws_promo_notif_dias') || '3');
+let promoNotifShown  = JSON.parse(localStorage.getItem('ws_promo_notif_shown') || '{}');
+
+function promoGuardarConfig(){
+  const sel = document.getElementById('promo-notif-dias');
+  if(sel){ promoNotifDias = parseInt(sel.value); localStorage.setItem('ws_promo_notif_dias', promoNotifDias); }
+}
+function promoGuardar(){ localStorage.setItem('ws_promociones', JSON.stringify(wsPromociones)); }
+
+function promoFmtFecha(iso){
+  if(!iso) return '—';
+  return new Date(iso).toLocaleDateString('es-AR',{day:'2-digit',month:'short',year:'numeric',hour:'2-digit',minute:'2-digit'});
+}
+function promoDiasRestantes(iso){ if(!iso) return null; return Math.ceil((new Date(iso)-Date.now())/(864e5)); }
+function promoColorDias(d){ return d===null?'var(--muted)':d<=0?'var(--danger)':d<=promoNotifDias?'var(--warn)':'var(--success)'; }
+
+function promoRenderList(){
+  const body  = document.getElementById('promo-list-body');
+  const badge = document.getElementById('promo-count-badge');
+  if(!body) return;
+
+  if(!wsPromociones.length){
+    body.innerHTML=`<div style="text-align:center;padding:28px 20px;color:var(--muted)">
+      <div style="font-size:32px;margin-bottom:8px">🏷️</div>
+      <div style="font-size:13px;font-weight:600;margin-bottom:4px;color:var(--text)">Sin promociones registradas</div>
+      <div style="font-size:12px">Cargá las promos activas desde ML o agregalas manualmente.<br>WeStock te avisará antes de que venzan según la antelación elegida.</div>
+    </div>`;
+    if(badge) badge.style.display='none';
+    return;
+  }
+  if(badge){ badge.textContent=wsPromociones.length+' activa'+(wsPromociones.length!==1?'s':''); badge.style.display='inline'; }
+
+  const sorted=[...wsPromociones].sort((a,b)=>{ if(!a.fin)return 1; if(!b.fin)return -1; return new Date(a.fin)-new Date(b.fin); });
+  const tipoIcon={mercadoenvio:'🚚',descuento:'💰',cuotas:'💳',otro:'🏷️'};
+  const tipoLabel={mercadoenvio:'MercadoEnvío — Envío gratis',descuento:'Descuento en precio',cuotas:'Cuotas sin interés',otro:'Otra promoción'};
+
+  body.innerHTML = sorted.map((p,i)=>{
+    const dias=promoDiasRestantes(p.fin);
+    const color=promoColorDias(dias);
+    const diasTxt = dias===null?'Sin fecha de fin':dias<=0?'❌ Vencida':dias===1?'⚠️ Vence mañana':dias<=promoNotifDias?`⚠️ Vence en ${dias} días`:`⏱ ${dias} días`;
+    const baraPct = p.inicio&&p.fin ? Math.max(0,Math.min(100,100-(new Date(p.fin)-Date.now())/(new Date(p.fin)-new Date(p.inicio))*100)) : null;
+    return `<div style="display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid var(--border);transition:background 0.15s;cursor:default" onmouseover="this.style.background='var(--surface2)'" onmouseout="this.style.background=''">
+      <div style="width:40px;height:40px;border-radius:10px;background:rgba(184,164,0,0.12);display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0">${tipoIcon[p.tipo]||'🏷️'}</div>
+      <div style="flex:1;min-width:0">
+        <div style="font-size:13px;font-weight:600;color:var(--text)">${p.nombre||'Promoción sin nombre'}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:2px">${tipoLabel[p.tipo]||'Promoción'}${p.items_count?' · '+p.items_count+' publicaciones':''}</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:3px">
+          ${p.inicio?'Inicio: '+promoFmtFecha(p.inicio)+' &nbsp;·&nbsp; ':''}<strong>Fin: ${promoFmtFecha(p.fin)}</strong>
+        </div>
+        ${baraPct!==null?`<div style="margin-top:6px;height:3px;background:var(--surface3);border-radius:2px;overflow:hidden"><div style="height:100%;width:${baraPct}%;background:${color};border-radius:2px;transition:width 1s"></div></div>`:''}
+      </div>
+      <div style="text-align:right;flex-shrink:0;min-width:110px">
+        <div style="font-size:13px;font-weight:700;color:${color}">${diasTxt}</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:2px">${dias!==null&&dias>0?'hasta el vencimiento':''}</div>
+      </div>
+      <button onclick="promoEliminar('${p.id}')" title="Eliminar" style="background:none;border:none;color:var(--muted);font-size:18px;cursor:pointer;padding:6px;border-radius:6px;line-height:1;transition:color 0.2s;flex-shrink:0" onmouseover="this.style.color='var(--danger)'" onmouseout="this.style.color='var(--muted)'">🗑</button>
+    </div>`;
+  }).join('');
+}
+
+function promoEliminar(id){
+  wsPromociones=wsPromociones.filter(p=>p.id!==id);
+  promoGuardar(); promoRenderList();
+  showToast('Promoción eliminada.');
+}
+
+function promoAgregarManual(){
+  const old=document.getElementById('promo-modal-ov');
+  if(old) old.remove();
+  const ov=document.createElement('div');
+  ov.id='promo-modal-ov'; ov.className='modal-overlay open';
+  const now=new Date(); now.setSeconds(0,0);
+  ov.innerHTML=`<div class="modal" style="max-width:490px">
+    <div class="modal-header">
+      <span class="modal-title">🏷️ Agregar Promoción</span>
+      <button class="modal-close" onclick="document.getElementById('promo-modal-ov').remove()">×</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Nombre *</label>
+        <input class="form-input" type="text" id="pnm-nombre" placeholder="Ej: MercadoEnvío Verano 2025" autofocus>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Tipo</label>
+          <select class="form-input" id="pnm-tipo">
+            <option value="mercadoenvio">🚚 MercadoEnvío (envío gratis)</option>
+            <option value="descuento">💰 Descuento en precio</option>
+            <option value="cuotas">💳 Cuotas sin interés</option>
+            <option value="otro">🏷️ Otra</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Publicaciones afectadas</label>
+          <input class="form-input" type="number" id="pnm-items" placeholder="Cantidad (opcional)" min="0">
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Fecha de inicio</label>
+          <input class="form-input" type="datetime-local" id="pnm-inicio" value="${now.toISOString().slice(0,16)}">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Fecha de vencimiento *</label>
+          <input class="form-input" type="datetime-local" id="pnm-fin">
+        </div>
+      </div>
+      <div id="pnm-error" style="font-size:12px;color:var(--danger);display:none;padding:6px 10px;background:rgba(220,38,38,0.06);border-radius:6px;border:1px solid rgba(220,38,38,0.2)"></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="document.getElementById('promo-modal-ov').remove()">Cancelar</button>
+      <button class="btn btn-primary" onclick="promoGuardarManual()">💾 Guardar promoción</button>
+    </div>
+  </div>`;
+  document.body.appendChild(ov);
+}
+
+function promoGuardarManual(){
+  const nombre=document.getElementById('pnm-nombre').value.trim();
+  const tipo=document.getElementById('pnm-tipo').value;
+  const items=parseInt(document.getElementById('pnm-items').value)||null;
+  const inicio=document.getElementById('pnm-inicio').value;
+  const fin=document.getElementById('pnm-fin').value;
+  const err=document.getElementById('pnm-error');
+  if(!nombre){err.style.display='block';err.textContent='El nombre es obligatorio.';return;}
+  if(!fin){err.style.display='block';err.textContent='La fecha de vencimiento es obligatoria.';return;}
+  if(inicio&&fin&&new Date(fin)<=new Date(inicio)){err.style.display='block';err.textContent='El vencimiento debe ser posterior al inicio.';return;}
+  wsPromociones.push({
+    id:Date.now()+'_'+Math.random().toString(36).slice(2,7),
+    nombre, tipo, items_count:items,
+    inicio:inicio?new Date(inicio).toISOString():null,
+    fin:new Date(fin).toISOString(),
+    origen:'manual'
+  });
+  promoGuardar(); promoRenderList();
+  document.getElementById('promo-modal-ov').remove();
+  showToast('✅ Promoción guardada.');
+  promoChequearVencimientos();
+}
+
+// ── Cargar promociones desde ML API ──────────────────────────
+async function mlCargarPromociones(btn){
+  if(!mlToken){ showToast('Conectá tu cuenta de ML primero.'); return; }
+  if(btn){btn.textContent='⏳ Cargando...';btn.disabled=true;}
+  let promos=[];
+  try {
+    // Intentar API de promociones de ML
+    const res=await mlFetch(`https://api.mercadolibre.com/promotions/users/${mlUserId}?status=started`,{headers:{'Authorization':'Bearer '+mlToken}});
+    if(res.ok){
+      const data=await res.json();
+      const lista=Array.isArray(data)?data:(data.results||data.promotions||[]);
+      for(const pr of lista){
+        if(wsPromociones.find(p=>p.id===String(pr.id||pr.promotion_id))) continue;
+        const tipo=pr.type?.toLowerCase().includes('shipping')?'mercadoenvio':pr.type?.toLowerCase().includes('discount')?'descuento':pr.type?.toLowerCase().includes('installment')?'cuotas':'otro';
+        promos.push({id:String(pr.id||pr.promotion_id||Date.now()),nombre:pr.name||pr.title||'Promoción ML',tipo,items_count:pr.items_count||null,inicio:pr.start_date||pr.start_time||null,fin:pr.finish_date||pr.finish_time||pr.end_date||null,origen:'ml_api'});
+      }
+    }
+    // Fallback: detectar envío gratis en publicaciones ya cargadas
+    if(!promos.length&&mlPublicaciones.length){
+      const conEnvio=mlPublicaciones.filter(p=>p.free_shipping);
+      if(conEnvio.length&&!wsPromociones.find(p=>p.id==='ml-envio-gratis')){
+        promos.push({id:'ml-envio-gratis',nombre:'MercadoEnvío — Envío gratis activo',tipo:'mercadoenvio',items_count:conEnvio.length,inicio:null,fin:null,origen:'ml_detectado'});
+        showToast('⚠️ Detectamos '+conEnvio.length+' publicaciones con envío gratis. ¡Completá la fecha de fin haciendo clic en editar!');
+      }
+    }
+    if(promos.length){ wsPromociones.push(...promos); promoGuardar(); promoRenderList(); showToast('✅ '+promos.length+' promoción'+(promos.length!==1?'es importadas':' importada')+' desde ML'); }
+    else showToast('Sin promociones nuevas en ML. Podés agregarlas manualmente.');
+  } catch(e){
+    showToast('⚠️ Sin acceso a la API de promociones de ML. Usá "Agregar manual".');
+  } finally {
+    if(btn){btn.textContent='🔄 Cargar desde ML';btn.disabled=false;}
+  }
+}
+
+// ── Chequeo periódico de vencimientos ────────────────────────
+function promoChequearVencimientos(){
+  if(!wsPromociones.length) return;
+  const umbralMs=promoNotifDias*864e5;
+  for(const p of wsPromociones){
+    if(!p.fin) continue;
+    const fin=new Date(p.fin).getTime();
+    const diff=fin-Date.now();
+    const dias=Math.ceil(diff/864e5);
+    const key=p.id+(dias<=0?'_vencida':'_d'+dias);
+    if(promoNotifShown[key]) continue;
+    if(diff<=0||diff<=umbralMs){
+      promoMostrarAlerta(p,dias);
+      promoNotifShown[key]=true;
+      localStorage.setItem('ws_promo_notif_shown',JSON.stringify(promoNotifShown));
+    }
+  }
+}
+
+function promoMostrarAlerta(promo, dias){
+  const icon={mercadoenvio:'🚚',descuento:'💰',cuotas:'💳',otro:'🏷️'}[promo.tipo]||'🏷️';
+  const label={mercadoenvio:'MercadoEnvío',descuento:'Descuento',cuotas:'Cuotas',otro:'Promoción'}[promo.tipo]||'Promoción';
+  const vencida=dias<=0;
+  const msg=vencida?`❌ ${icon} ${label} vencida: "${promo.nombre}"`:dias===0?`⚠️ ${icon} ${label} vence HOY: "${promo.nombre}"`:`⚠️ ${icon} ${label} vence en ${dias} día${dias!==1?'s':''}: "${promo.nombre}"`;
+  showToast(msg, 7000);
+  // Banner flotante
+  const bid='pb-'+promo.id.replace(/[^a-z0-9]/gi,'');
+  const old=document.getElementById(bid); if(old) old.remove();
+  const b=document.createElement('div');
+  b.id=bid;
+  b.style.cssText=`position:fixed;bottom:80px;right:24px;z-index:9990;max-width:340px;background:${vencida?'#dc2626':'#d97706'};border-radius:14px;padding:16px 18px;box-shadow:0 8px 30px rgba(0,0,0,0.25);animation:wsPromoSlide 0.35s ease`;
+  b.innerHTML=`<div style="display:flex;gap:10px;align-items:flex-start">
+    <span style="font-size:22px;flex-shrink:0">${vencida?'❌':'⚠️'}</span>
+    <div style="flex:1">
+      <div style="font-size:13px;font-weight:700;color:#fff;margin-bottom:4px">${vencida?'Promoción vencida':'Promoción por vencer'}</div>
+      <div style="font-size:12px;color:rgba(255,255,255,0.9);line-height:1.5">${icon} ${label} — <strong>${promo.nombre}</strong></div>
+      <div style="font-size:11px;color:rgba(255,255,255,0.75);margin-top:4px">${vencida?'Venció el':'Vence el'} ${promoFmtFecha(promo.fin)}</div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button onclick="showView('marketplaces');document.getElementById('${bid}').remove()" style="padding:5px 11px;border-radius:7px;background:rgba(255,255,255,0.25);color:#fff;border:1px solid rgba(255,255,255,0.35);font-size:11px;font-weight:700;cursor:pointer;font-family:'Space Grotesk',sans-serif">Ver promociones</button>
+        <button onclick="document.getElementById('${bid}').remove()" style="padding:5px 11px;border-radius:7px;background:rgba(255,255,255,0.12);color:#fff;border:1px solid rgba(255,255,255,0.2);font-size:11px;cursor:pointer;font-family:'Space Grotesk',sans-serif">Cerrar</button>
+      </div>
+    </div>
+  </div>`;
+  document.body.appendChild(b);
+  setTimeout(()=>{if(b.parentNode)b.remove();},15000);
+  // Notif del navegador
+  if('Notification'in window&&Notification.permission==='granted') new Notification('WeStock — Alerta de Promoción',{body:msg.replace(/[^\u0000-\u00FF]/g,'').trim()});
+  else if('Notification'in window&&Notification.permission==='default') Notification.requestPermission();
+}
+
+// ── Init promociones ─────────────────────────────────────────
+(function(){
+  // Estilo animación
+  const s=document.createElement('style');
+  s.textContent=`@keyframes wsPromoSlide{from{opacity:0;transform:translateX(30px)}to{opacity:1;transform:translateX(0)}}`;
+  document.head.appendChild(s);
+  // Restaurar selector
+  setTimeout(()=>{
+    const sel=document.getElementById('promo-notif-dias');
+    if(sel){ sel.value=String(promoNotifDias); if(!sel.value)sel.value='3'; }
+    promoRenderList();
+    promoChequearVencimientos();
+  }, 600);
+  // Chequear cada 5 minutos
+  setInterval(promoChequearVencimientos, 5*60*1000);
+})();
 </script>
 </body>
 </html>
