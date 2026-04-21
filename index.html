@@ -720,6 +720,7 @@
     </div>
     <a href="#equipo">Equipo</a>
     <a href="#nosotros">Nosotros</a>
+    <a href="#metodologia">Metodología</a>
     <a href="#contacto" class="nav-cta">Contacto</a>
   </nav>
 </header>
@@ -776,10 +777,10 @@
 </div>
 
 <div class="stats-bar">
-  <div class="stat reveal"><span class="stat-num" data-target="120" data-prefix="+">0</span><span class="stat-label">Clientes activos</span></div>
-  <div class="stat reveal" style="transition-delay:0.1s"><span class="stat-num" data-target="8" data-suffix="x">0</span><span class="stat-label">ROI promedio</span></div>
-  <div class="stat reveal" style="transition-delay:0.2s"><span class="stat-num" data-target="5">0</span><span class="stat-label">Años de experiencia</span></div>
-  <div class="stat reveal" style="transition-delay:0.3s"><span class="stat-num" data-target="98" data-suffix="%">0</span><span class="stat-label">Satisfacción</span></div>
+  <div class="stat reveal"><span class="stat-num" data-target="10" data-prefix="+">0</span><span class="stat-label">Años de experiencia</span></div>
+  <div class="stat reveal" style="transition-delay:0.1s"><span class="stat-num" data-target="30" data-prefix="+">0</span><span class="stat-label">Cuentas auditadas</span></div>
+  <div class="stat reveal" style="transition-delay:0.2s"><span class="stat-num" data-target="2">0</span><span class="stat-label">Consultores senior</span></div>
+  <div class="stat reveal" style="transition-delay:0.3s"><span class="stat-num" style="font-size:52px;">Máx. 5</span><span class="stat-label">Clientes activos</span></div>
 </div>
 
 <section id="servicios" class="section">
@@ -863,6 +864,57 @@
     <div class="red-line"></div>
     <p>Somos un equipo de estrategas, tecnólogos y creativos con una obsesión en común: hacer crecer negocios de manera sostenible y medible.</p>
     <p>No vendemos soluciones genéricas. Cada cliente recibe una estrategia construida desde cero, basada en sus datos, su mercado y sus metas.</p>
+  </div>
+</section>
+
+<style>
+  .metodologia-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:24px; }
+  .metodo-card { background:var(--bg); border:1px solid var(--border-gray); border-radius:6px; padding:36px 28px; position:relative; transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s; }
+  .metodo-card:nth-child(1) { grid-column:1/3; }
+  .metodo-card:nth-child(2) { grid-column:3/5; }
+  .metodo-card:nth-child(3) { grid-column:5/7; }
+  .metodo-card:nth-child(4) { grid-column:2/4; }
+  .metodo-card:nth-child(5) { grid-column:4/6; }
+  .metodo-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--red); border-radius:6px 6px 0 0; transform:scaleX(0); transform-origin:left; transition:transform 0.4s ease; }
+  .metodo-card:hover { border-color:rgba(220,38,38,0.3); transform:translateY(-4px); box-shadow:0 16px 40px rgba(0,0,0,0.2); }
+  .metodo-card:hover::before { transform:scaleX(1); }
+  .metodo-step { display:inline-block; font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--red); font-weight:500; margin-bottom:14px; }
+  .metodo-title { font-family:'Bebas Neue',sans-serif; font-size:24px; font-weight:400; letter-spacing:0.04em; color:var(--text); margin-bottom:14px; line-height:1.1; }
+  .metodo-desc { font-size:14px; color:var(--muted); line-height:1.8; }
+  @media(max-width:900px){ .metodologia-grid{grid-template-columns:1fr;} .metodo-card:nth-child(n){grid-column:auto;} }
+  @media(max-width:560px){ .metodo-title{font-size:20px;} }
+</style>
+
+<section id="metodologia" class="section" style="background:var(--surface);">
+  <span class="section-label reveal">Cómo trabajamos</span>
+  <h2 class="section-title reveal">Nuestra Metodología</h2>
+  <p class="reveal" style="font-size:15px;color:var(--muted);max-width:640px;margin-bottom:56px;line-height:1.85;">Primero entendemos. Luego diagnosticamos. Recién ahí ejecutamos con precisión.</p>
+  <div class="metodologia-grid reveal">
+    <div class="metodo-card">
+      <span class="metodo-step">PASO 1</span>
+      <h3 class="metodo-title">Entrevista con el Seller</h3>
+      <p class="metodo-desc">Sesión privada con el dueño o responsable del negocio para entender su situación actual, objetivos, desafíos y visión de crecimiento.</p>
+    </div>
+    <div class="metodo-card" style="transition-delay:0.1s">
+      <span class="metodo-step">PASO 2</span>
+      <h3 class="metodo-title">Diagnóstico del Negocio</h3>
+      <p class="metodo-desc">Análisis integral de canales, márgenes, operaciones y procesos internos para identificar oportunidades reales de mejora y escala.</p>
+    </div>
+    <div class="metodo-card" style="transition-delay:0.2s">
+      <span class="metodo-step">PASO 3</span>
+      <h3 class="metodo-title">Análisis de Entorno</h3>
+      <p class="metodo-desc">Relevamiento profundo de la competencia y el mercado para posicionar la propuesta de valor con ventaja diferencial sostenible.</p>
+    </div>
+    <div class="metodo-card" style="transition-delay:0.3s">
+      <span class="metodo-step">PASO 4</span>
+      <h3 class="metodo-title">Estrategia de Comunicación y Comercial</h3>
+      <p class="metodo-desc">Definimos el mensaje, los canales y el modelo comercial que conecta con el cliente ideal y maximiza la conversión.</p>
+    </div>
+    <div class="metodo-card" style="transition-delay:0.4s">
+      <span class="metodo-step">PASO 5</span>
+      <h3 class="metodo-title">Plan de Acción y Ejecución</h3>
+      <p class="metodo-desc">Implementamos, medimos y ajustamos en tiempo real con métricas claras para sostener el crecimiento en el tiempo.</p>
+    </div>
   </div>
 </section>
 
