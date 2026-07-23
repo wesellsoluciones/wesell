@@ -1168,12 +1168,17 @@ function renderCheckoutSummary(){
   document.getElementById('coDiscount').textContent = discountAmt>0 ? '-'+fmt(discountAmt) : fmt(0);
   document.getElementById('coTotal').textContent = fmt(total);
 }
-function confirmOrder(){
+async function confirmOrder(){
   const name = document.getElementById('coName').value.trim();
   const email = document.getElementById('coEmail').value.trim();
   const phone = document.getElementById('coPhone').value.trim();
   const address = document.getElementById('coAddress').value.trim();
   if(!name || !email || !phone || !address){ showToast('Completá los datos obligatorios'); return; }
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(!emailRegex.test(email)){ showToast('Ingresá un email válido'); return; }
+
+  const btn = document.querySelector('.btn-confirm');
+  btn.disabled = true;
 
   const orderNum = Math.floor(100000+Math.random()*900000);
   const total = cartSubtotal() - Math.round(cartSubtotal()*couponDiscount);
@@ -1181,6 +1186,7 @@ function confirmOrder(){
     const p = PRODUCTS.find(x=>x.id===i.pid);
     return `${p.name} x${i.qty} — ${fmt(p.price*i.qty)}`;
   }).join('\n');
+  const fechaHora = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
 
   // Guardamos el pedido localmente para tener un respaldo del seguimiento
   // (el link de pago fijo de Mercado Pago no devuelve esta info automáticamente).
@@ -1188,27 +1194,61 @@ function confirmOrder(){
   pendingOrders.push({ orderNum, name, email, phone, address, itemsText, total, date: new Date().toISOString() });
   localStorage.setItem('tienda_pending_orders', JSON.stringify(pendingOrders));
 
-  // Mail a wesellsoluciones@gmail.com con los datos cargados por el cliente
-  // y el detalle del pedido, vía EmailJS. Ver configuración en EMAILJS_* arriba.
-  if(typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY !== 'TU_PUBLIC_KEY'){
-    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
-      to_email: 'wesellsoluciones@gmail.com',
-      order_num: orderNum,
-      customer_name: name,
-      customer_email: email,
-      customer_phone: phone,
-      customer_address: address,
-      order_items: itemsText,
-      order_total: fmt(total),
-    }).catch(err => console.error('EmailJS error:', err));
+  try {
+    // ── Mail a wesellsoluciones@gmail.com: datos del pedido, pago pendiente ──
+    const formAdmin = new FormData();
+    formAdmin.append('access_key', WEB3FORMS_KEY);
+    formAdmin.append('subject', `⏳ Pedido #${orderNum} · Tienda · Pago pendiente — ${name}`);
+    formAdmin.append('from_name', 'We Sell Soluciones — Tienda');
+    formAdmin.append('message',
+      `⏳ PAGO PENDIENTE — DATOS DEL PEDIDO\n\n` +
+      `El cliente completó el checkout y fue redirigido a Mercado Pago.\n` +
+      `El pago aún NO fue confirmado.\n\n` +
+      `▸ Pedido      #${orderNum}\n` +
+      `▸ Nombre      ${name}\n` +
+      `▸ Email       ${email}\n` +
+      `▸ Teléfono    ${phone}\n` +
+      `▸ Dirección   ${address}\n\n` +
+      `─────────────────────────\n` +
+      `PRODUCTOS\n${itemsText}\n\n` +
+      `▸ Total       ${fmt(total)}\n` +
+      `▸ Fecha       ${fechaHora}\n` +
+      `─────────────────────────\n\n` +
+      `Verificá en tu cuenta de Mercado Pago si este pago se acreditó\n` +
+      `antes de despachar el pedido.\n\n` +
+      `WE SELL SOLUCIONES`
+    );
+    await fetch('https://api.web3forms.com/submit', { method:'POST', body: formAdmin });
+
+    // ── Mail al comprador: confirmación de datos recibidos ──
+    const formComprador = new FormData();
+    formComprador.append('access_key', WEB3FORMS_KEY);
+    formComprador.append('to', email);
+    formComprador.append('subject', `Tu pedido #${orderNum} — We Sell Soluciones`);
+    formComprador.append('from_name', 'We Sell Soluciones');
+    formComprador.append('message',
+      `Hola ${name}!\n\n` +
+      `Recibimos tu pedido #${orderNum} correctamente.\n\n` +
+      `─────────────────────────\n` +
+      `PRODUCTOS\n${itemsText}\n\n` +
+      `▸ Total       ${fmt(total)}\n` +
+      `─────────────────────────\n\n` +
+      `Ahora vas a completar el pago desde Mercado Pago. En cuanto se\n` +
+      `acredite, coordinamos el envío con vos a este mismo correo o por WhatsApp.\n\n` +
+      `Cualquier consulta escribinos a wesellsoluciones@gmail.com\n\n` +
+      `Equipo de We Sell Soluciones`
+    );
+    await fetch('https://api.web3forms.com/submit', { method:'POST', body: formComprador });
+  } catch(err) {
+    console.error('Web3Forms error:', err);
   }
 
   cart = []; couponDiscount = 0; saveState(); updateBadges();
-  showToast('Redirigiendo a Mercado Pago...');
+  showToast('¡Listo! Redirigiendo a Mercado Pago...');
 
   // Redirige al link de pago fijo de Mercado Pago para que el cliente
   // complete el pago desde su propia cuenta.
-  setTimeout(()=>{ window.location.href = MERCADOPAGO_LINK; }, 700);
+  setTimeout(()=>{ window.location.href = MERCADOPAGO_LINK; }, 1000);
 }
 
 /* ══════════════════════════════════════════
