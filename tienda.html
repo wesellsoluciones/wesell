@@ -1255,12 +1255,15 @@ async function confirmOrder(){
     return `${p.name} x${i.qty} — ${fmt(p.price*i.qty)}`;
   }).join('\n');
   const fechaHora = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
-  const shipLabel = selectedShipMethod === 'domicilio' ? 'Envío a domicilio — Correo Argentino (a coordinar)' : 'Retiro en sucursal — Correo Argentino (a coordinar)';
+  const isFreeZone = selectedShipMethod==='domicilio' && FREE_ZONE_BARRIOS[selectedBarrio];
+  const shipLabel = selectedShipMethod === 'domicilio'
+    ? (isFreeZone ? `Envío a domicilio — Correo Argentino — GRATIS (${FREE_ZONE_BARRIOS[selectedBarrio]})` : 'Envío a domicilio — Correo Argentino (a coordinar)')
+    : 'Retiro en sucursal — Correo Argentino (a coordinar)';
 
   // Guardamos el pedido localmente para tener un respaldo del seguimiento
   // (el link de pago fijo de Mercado Pago no devuelve esta info automáticamente).
   const pendingOrders = JSON.parse(localStorage.getItem('tienda_pending_orders')||'[]');
-  pendingOrders.push({ orderNum, name, email, phone, address, shipMethod: selectedShipMethod, itemsText, total, date: new Date().toISOString() });
+  pendingOrders.push({ orderNum, name, email, phone, address, shipMethod: selectedShipMethod, barrio: selectedBarrio, itemsText, total, date: new Date().toISOString() });
   localStorage.setItem('tienda_pending_orders', JSON.stringify(pendingOrders));
 
   try {
