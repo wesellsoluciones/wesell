@@ -601,14 +601,8 @@
 
   <div class="co-step">
     <div class="co-step-title"><div class="co-step-num">4</div>Método de pago</div>
-    <label class="co-option active" onclick="selectPay(this)">
-      <div class="co-option-left"><input type="radio" name="pay" checked><div><div class="co-option-name">Mercado Pago</div><div class="co-option-desc">Tarjeta, cuotas o dinero en cuenta</div></div></div>
-    </label>
-    <label class="co-option" onclick="selectPay(this)">
-      <div class="co-option-left"><input type="radio" name="pay"><div><div class="co-option-name">Transferencia bancaria</div><div class="co-option-desc">Te pasamos el CBU por WhatsApp</div></div></div>
-    </label>
-    <label class="co-option" onclick="selectPay(this)">
-      <div class="co-option-left"><input type="radio" name="pay"><div><div class="co-option-name">Pago contra entrega</div><div class="co-option-desc">Solo zona CABA / GBA</div></div></div>
+    <label class="co-option active">
+      <div class="co-option-left"><input type="radio" name="pay" checked disabled><div><div class="co-option-name">Mercado Pago</div><div class="co-option-desc">Tarjeta, cuotas o dinero en cuenta — pagás desde tu cuenta de Mercado Pago</div></div></div>
     </label>
   </div>
 
@@ -619,7 +613,7 @@
     <div class="co-summary-item"><span>Descuento</span><b id="coDiscount">$0</b></div>
     <div class="co-summary-item"><span>Envío</span><b id="coShipCost">$4.500</b></div>
     <div class="co-summary-item" style="border-bottom:none;padding-top:14px"><span style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--text)">Total</span><b style="font-family:'Bebas Neue',sans-serif;font-size:24px" id="coTotal">$0</b></div>
-    <button class="btn-confirm" onclick="confirmOrder()">Confirmar compra</button>
+    <button class="btn-confirm" onclick="confirmOrder()">Pagar con Mercado Pago</button>
   </div>
 </div>
 
