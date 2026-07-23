@@ -588,17 +588,28 @@
   </div>
 
   <div class="co-step">
-    <div class="co-step-title"><div class="co-step-num">3</div>Método de pago</div>
+    <div class="co-step-title"><div class="co-step-num">3</div>Método de envío</div>
+    <label class="co-option active" onclick="selectShip(this,'sucursal')">
+      <div class="co-option-left"><input type="radio" name="ship" checked><div><div class="co-option-name">Retiro en sucursal — Correo Argentino</div><div class="co-option-desc">El costo se coordina por WhatsApp una vez confirmado el pago, según tu ubicación</div></div></div>
+    </label>
+    <label class="co-option" onclick="selectShip(this,'domicilio')">
+      <div class="co-option-left"><input type="radio" name="ship"><div><div class="co-option-name">Envío a domicilio — Correo Argentino</div><div class="co-option-desc">El costo se coordina por WhatsApp una vez confirmado el pago, según tu ubicación</div></div></div>
+    </label>
+  </div>
+
+  <div class="co-step">
+    <div class="co-step-title"><div class="co-step-num">4</div>Método de pago</div>
     <label class="co-option active">
       <div class="co-option-left"><input type="radio" name="pay" checked disabled><div><div class="co-option-name">Mercado Pago</div><div class="co-option-desc">Tarjeta, cuotas o dinero en cuenta — pagás desde tu cuenta de Mercado Pago</div></div></div>
     </label>
   </div>
 
   <div class="co-step">
-    <div class="co-step-title"><div class="co-step-num">4</div>Resumen del pedido</div>
+    <div class="co-step-title"><div class="co-step-num">5</div>Resumen del pedido</div>
     <div id="coSummaryItems"></div>
     <div class="co-summary-item"><span>Subtotal</span><b id="coSubtotal">$0</b></div>
     <div class="co-summary-item"><span>Descuento</span><b id="coDiscount">$0</b></div>
+    <div class="co-summary-item"><span>Envío</span><b id="coShipCost">A coordinar</b></div>
     <div class="co-summary-item" style="border-bottom:none;padding-top:14px"><span style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--text)">Total</span><b style="font-family:'Bebas Neue',sans-serif;font-size:24px" id="coTotal">$0</b></div>
     <button class="btn-confirm" onclick="confirmOrder()">Pagar con Mercado Pago</button>
   </div>
@@ -709,6 +720,7 @@ let activeFilters = { categories:[], brands:[], priceMin:null, priceMax:null, mi
 let currentSort = 'relevancia';
 let currentSearch = '';
 let couponDiscount = 0;
+let selectedShipMethod = 'sucursal'; // 'sucursal' | 'domicilio'
 let currentModalProduct = null;
 let currentVariant = {};
 let currentQty = 1;
@@ -1156,6 +1168,11 @@ function selectPay(el){
   el.closest('.co-step').querySelectorAll('.co-option').forEach(o=>o.classList.remove('active'));
   el.classList.add('active');
 }
+function selectShip(el, method){
+  el.closest('.co-step').querySelectorAll('.co-option').forEach(o=>o.classList.remove('active'));
+  el.classList.add('active');
+  selectedShipMethod = method;
+}
 function renderCheckoutSummary(){
   const subtotal = cartSubtotal();
   const discountAmt = Math.round(subtotal*couponDiscount);
@@ -1187,11 +1204,12 @@ async function confirmOrder(){
     return `${p.name} x${i.qty} — ${fmt(p.price*i.qty)}`;
   }).join('\n');
   const fechaHora = new Date().toLocaleString('es-AR', { timeZone: 'America/Argentina/Buenos_Aires' });
+  const shipLabel = selectedShipMethod === 'domicilio' ? 'Envío a domicilio — Correo Argentino (a coordinar)' : 'Retiro en sucursal — Correo Argentino (a coordinar)';
 
   // Guardamos el pedido localmente para tener un respaldo del seguimiento
   // (el link de pago fijo de Mercado Pago no devuelve esta info automáticamente).
   const pendingOrders = JSON.parse(localStorage.getItem('tienda_pending_orders')||'[]');
-  pendingOrders.push({ orderNum, name, email, phone, address, itemsText, total, date: new Date().toISOString() });
+  pendingOrders.push({ orderNum, name, email, phone, address, shipMethod: selectedShipMethod, itemsText, total, date: new Date().toISOString() });
   localStorage.setItem('tienda_pending_orders', JSON.stringify(pendingOrders));
 
   try {
@@ -1208,7 +1226,8 @@ async function confirmOrder(){
       `▸ Nombre      ${name}\n` +
       `▸ Email       ${email}\n` +
       `▸ Teléfono    ${phone}\n` +
-      `▸ Dirección   ${address}\n\n` +
+      `▸ Dirección   ${address}\n` +
+      `▸ Envío       ${shipLabel}\n\n` +
       `─────────────────────────\n` +
       `PRODUCTOS\n${itemsText}\n\n` +
       `▸ Total       ${fmt(total)}\n` +
