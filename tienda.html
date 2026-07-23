@@ -692,6 +692,10 @@ const PRODUCTS = [
 
 const MERCADOPAGO_LINK = 'https://mpago.li/2u5m1cH';
 
+// Web3Forms — misma clave que ya usás en westock.html, manda el mail
+// directo a la casilla configurada en tu cuenta de Web3Forms.
+const WEB3FORMS_KEY = '11c7daa5-1fa9-45aa-a0a2-473672536ad2';
+
 const fmt = n => '$' + n.toLocaleString('es-AR');
 const brands = [...new Set(PRODUCTS.map(p=>p.brand))];
 
@@ -704,7 +708,6 @@ let compareList = JSON.parse(localStorage.getItem('tienda_compare')||'[]');
 let activeFilters = { categories:[], brands:[], priceMin:null, priceMax:null, minRating:null };
 let currentSort = 'relevancia';
 let currentSearch = '';
-let selectedShipCost = 4500;
 let couponDiscount = 0;
 let currentModalProduct = null;
 let currentVariant = {};
