@@ -8,18 +8,18 @@
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --bg:          #0a0f1e;
-    --surface:     #131929;
-    --surface2:    #1a2235;
-    --surface3:    #212a42;
+    --bg:          #ffffff;
+    --surface:     #f4f5f7;
+    --surface2:    #eaecf0;
+    --surface3:    #dfe2e8;
     --red:         #e03030;
-    --red-bright:  #f04040;
-    --amber:       #e0a530;
-    --green:       #2ecc71;
-    --text:        #ffffff;
-    --muted:       #8899b4;
-    --border:      rgba(220,38,38,0.2);
-    --border-gray: rgba(255,255,255,0.08);
+    --red-bright:  #d21f1f;
+    --amber:       #c9860f;
+    --green:       #1e9e56;
+    --text:        #14161c;
+    --muted:       #667085;
+    --border:      rgba(224,48,48,0.22);
+    --border-gray: rgba(20,22,28,0.1);
     --mono: 'JetBrains Mono', monospace;
   }
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -29,7 +29,7 @@
   ::selection { background: var(--red); color: #fff; }
   ::-webkit-scrollbar { width: 8px; height: 8px; }
   ::-webkit-scrollbar-track { background: var(--surface); }
-  ::-webkit-scrollbar-thumb { background: var(--surface3); border-radius: 4px; }
+  ::-webkit-scrollbar-thumb { background: #c3c8d1; border-radius: 4px; }
 
   /* ── HEADER (igual al de index.html) ── */
   header {
@@ -81,9 +81,9 @@
   .tienda-hero {
     padding: 150px 60px 60px; position: relative; overflow: hidden;
     background:
-      linear-gradient(180deg, rgba(10,15,30,0) 0%, var(--bg) 92%),
-      repeating-linear-gradient(0deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 42px),
-      repeating-linear-gradient(90deg, rgba(255,255,255,0.025) 0px, rgba(255,255,255,0.025) 1px, transparent 1px, transparent 42px);
+      linear-gradient(180deg, rgba(20,22,28,0) 0%, var(--bg) 92%),
+      repeating-linear-gradient(0deg, rgba(20,22,28,0.035) 0px, rgba(20,22,28,0.035) 1px, transparent 1px, transparent 42px),
+      repeating-linear-gradient(90deg, rgba(20,22,28,0.035) 0px, rgba(20,22,28,0.035) 1px, transparent 1px, transparent 42px);
   }
   .hero-eyebrow { font-family: var(--mono); font-size: 11px; letter-spacing: 0.22em; color: var(--red-bright); text-transform: uppercase; display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
   .hero-eyebrow::before { content: ''; width: 26px; height: 1px; background: var(--red-bright); }
@@ -176,7 +176,7 @@
   }
   .p-badge.oferta { background: var(--red); color: #fff; }
   .p-badge.nuevo { background: var(--amber); color: #1a1200; }
-  .p-badge.sinstock { background: #3a4260; color: var(--muted); }
+  .p-badge.sinstock { background: #3a4260; color: #b8c0cc; }
   .p-quick-actions { position: absolute; top: 10px; right: 10px; display: flex; flex-direction: column; gap: 7px; z-index: 2; opacity: 0; transform: translateX(6px); transition: opacity 0.2s, transform 0.2s; }
   .p-card:hover .p-quick-actions { opacity: 1; transform: translateX(0); }
   .p-qa-btn {
@@ -220,7 +220,7 @@
   /* ── MARQUEE TRUST STRIP ── */
   .marquee-strip { background: var(--red); overflow: hidden; padding: 13px 0; white-space: nowrap; }
   .marquee-track { display: inline-flex; gap: 60px; animation: marquee 24s linear infinite; }
-  .marquee-item { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.16em; display: flex; align-items: center; gap: 60px; }
+  .marquee-item { font-family: 'Bebas Neue', sans-serif; font-size: 16px; letter-spacing: 0.16em; display: flex; align-items: center; gap: 60px; color: #ffffff; }
   @keyframes marquee { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
   /* ── PRODUCT MODAL ── */
