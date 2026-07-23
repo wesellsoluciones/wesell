@@ -95,7 +95,7 @@
   .hero-stat-label { font-family: var(--mono); font-size: 10px; letter-spacing: 0.12em; color: var(--muted); text-transform: uppercase; margin-top: 6px; }
 
   /* ── CATEGORY STRIP ── */
-  .cat-strip-wrap { padding: 0 60px 30px; }
+  .cat-strip-wrap { padding: 28px 60px 30px; }
   .cat-strip { display: flex; gap: 12px; overflow-x: auto; padding-bottom: 4px; }
   .cat-strip::-webkit-scrollbar { height: 5px; }
   .cat-chip {
@@ -685,16 +685,28 @@
    o conectalo a Supabase más adelante.
 ═══════════════════════════════════════════ */
 const CATEGORIES = [
-  { id:'seguridad',   name:'Seguridad',    icon:'M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z' },
-  { id:'iluminacion', name:'Iluminación',  icon:'M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z' },
-  { id:'proteccion',  name:'Protección',   icon:'M12 22s7-3.5 7-10V5l-7-3-7 3v7c0 6.5 7 10 7 10z' },
-  { id:'electronica', name:'Electrónica',  icon:'M4 4h16v12H4zM8 20h8M12 16v4' },
-  { id:'confort',     name:'Confort',      icon:'M4 17h16M6 17V9a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8M4 20a1 1 0 0 0 1-1h14a1 1 0 0 0 1 1' },
+  { id:'seguridad',     name:'Seguridad',      icon:'M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z' },
+  { id:'iluminacion',   name:'Iluminación',    icon:'M9 18h6M10 21h4M12 3a6 6 0 0 0-3.5 10.9c.6.5 1 1.2 1 2.1h5c0-.9.4-1.6 1-2.1A6 6 0 0 0 12 3z' },
+  { id:'proteccion',    name:'Protección',     icon:'M12 22s7-3.5 7-10V5l-7-3-7 3v7c0 6.5 7 10 7 10z' },
+  { id:'electronica',   name:'Electrónica',    icon:'M4 4h16v12H4zM8 20h8M12 16v4' },
+  { id:'confort',       name:'Confort',        icon:'M4 17h16M6 17V9a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v8M4 20a1 1 0 0 0 1-1h14a1 1 0 0 0 1 1' },
+  { id:'aromatizacion', name:'Aromatización',  icon:'M9 2c2 3 2 5 0 7s-2 4 0 7M15 2c2 3 2 5 0 7s-2 4 0 7M4 20h16' },
 ];
 
 const PRODUCTS = [
-  /* Catálogo vacío por ahora — vamos agregando productos reales
-     a medida que Santi mande fotos y datos de cada uno. */
+  { id:1, name:'Difusor de Aroma Inteligente para Auto', category:'aromatizacion', brand:'We Sell', price:45000, oldPrice:null, rating:5, reviews:0, stock:2, sold:0, sku:'ARO-001', createdDaysAgo:0,
+    images:[
+      'Productos/aromatizador/D_NQ_NP_2X_613411-MLA112734795022_062026-F.jpg',
+      'Productos/aromatizador/D_NQ_NP_2X_635587-MLA112734824870_062026-F.jpg',
+      'Productos/aromatizador/D_NQ_NP_2X_795724-MLA113924254973_062026-F.jpg',
+      'Productos/aromatizador/D_NQ_NP_2X_812524-MLA112734529786_062026-F.jpg',
+      'Productos/aromatizador/D_NQ_NP_2X_985485-MLA112734529784_062026-F.jpg',
+      'Productos/aromatizador/D_NQ_NP_2X_781680-MLA108742191518_032026-F.jpg',
+      'Productos/aromatizador/D_NQ_NP_2X_782504-MLA85583623734_062025-F.jpg'
+    ],
+    variants:{},
+    description:'Difusor de aroma inteligente para auto con atomización ultrasónica. Se enciende solo al detectar movimiento y se apaga automáticamente a los 7 minutos si no detecta actividad, cuidando la batería y el cartucho. Cartucho de fragancia reemplazable y reutilizable miles de veces. Carga por USB y luz LED ambiental en 4 modos de intensidad.',
+    specs:{ 'Encendido':'Automático por sensor de movimiento', 'Apagado':'Automático a los 7 min sin detección', 'Modos de intensidad':'Light, Brain Power, Strong, Home', 'Cartucho':'Reemplazable y reutilizable', 'Carga':'USB', 'Iluminación':'LED ambiental' } },
 ];
 
 const fmt = n => '$' + n.toLocaleString('es-AR');
