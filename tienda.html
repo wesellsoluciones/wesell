@@ -588,30 +588,17 @@
   </div>
 
   <div class="co-step">
-    <div class="co-step-title"><div class="co-step-num">3</div>Método de envío</div>
-    <label class="co-option active" onclick="selectShip(this,0)">
-      <div class="co-option-left"><input type="radio" name="ship" checked><div><div class="co-option-name">Envío a domicilio</div><div class="co-option-desc">Llega en 24–72hs hábiles</div></div></div>
-      <div class="co-option-price" id="shipPrice0">$4.500</div>
-    </label>
-    <label class="co-option" onclick="selectShip(this,1)">
-      <div class="co-option-left"><input type="radio" name="ship"><div><div class="co-option-name">Retiro en punto de encuentro (CABA)</div><div class="co-option-desc">Coordinamos horario por WhatsApp</div></div></div>
-      <div class="co-option-price">Gratis</div>
-    </label>
-  </div>
-
-  <div class="co-step">
-    <div class="co-step-title"><div class="co-step-num">4</div>Método de pago</div>
+    <div class="co-step-title"><div class="co-step-num">3</div>Método de pago</div>
     <label class="co-option active">
       <div class="co-option-left"><input type="radio" name="pay" checked disabled><div><div class="co-option-name">Mercado Pago</div><div class="co-option-desc">Tarjeta, cuotas o dinero en cuenta — pagás desde tu cuenta de Mercado Pago</div></div></div>
     </label>
   </div>
 
   <div class="co-step">
-    <div class="co-step-title"><div class="co-step-num">5</div>Resumen del pedido</div>
+    <div class="co-step-title"><div class="co-step-num">4</div>Resumen del pedido</div>
     <div id="coSummaryItems"></div>
     <div class="co-summary-item"><span>Subtotal</span><b id="coSubtotal">$0</b></div>
     <div class="co-summary-item"><span>Descuento</span><b id="coDiscount">$0</b></div>
-    <div class="co-summary-item"><span>Envío</span><b id="coShipCost">$4.500</b></div>
     <div class="co-summary-item" style="border-bottom:none;padding-top:14px"><span style="font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--text)">Total</span><b style="font-family:'Bebas Neue',sans-serif;font-size:24px" id="coTotal">$0</b></div>
     <button class="btn-confirm" onclick="confirmOrder()">Pagar con Mercado Pago</button>
   </div>
@@ -1162,12 +1149,6 @@ function toggleCartClosed(){
   document.getElementById('cartDrawer').classList.remove('open');
   document.getElementById('cartOverlay').classList.remove('open');
 }
-function selectShip(el, idx){
-  document.querySelectorAll('.co-step')[2].querySelectorAll('.co-option').forEach(o=>o.classList.remove('active'));
-  el.classList.add('active');
-  selectedShipCost = idx===0 ? 4500 : 0;
-  renderCheckoutSummary();
-}
 function selectPay(el){
   el.closest('.co-step').querySelectorAll('.co-option').forEach(o=>o.classList.remove('active'));
   el.classList.add('active');
@@ -1175,14 +1156,13 @@ function selectPay(el){
 function renderCheckoutSummary(){
   const subtotal = cartSubtotal();
   const discountAmt = Math.round(subtotal*couponDiscount);
-  const total = subtotal - discountAmt + selectedShipCost;
+  const total = subtotal - discountAmt;
   document.getElementById('coSummaryItems').innerHTML = cart.map(i=>{
     const p = PRODUCTS.find(x=>x.id===i.pid);
     return `<div class="co-summary-item"><span>${p.name} x${i.qty}</span><b>${fmt(p.price*i.qty)}</b></div>`;
   }).join('');
   document.getElementById('coSubtotal').textContent = fmt(subtotal);
   document.getElementById('coDiscount').textContent = discountAmt>0 ? '-'+fmt(discountAmt) : fmt(0);
-  document.getElementById('coShipCost').textContent = selectedShipCost>0 ? fmt(selectedShipCost) : 'Gratis';
   document.getElementById('coTotal').textContent = fmt(total);
 }
 function confirmOrder(){
@@ -1191,14 +1171,41 @@ function confirmOrder(){
   const phone = document.getElementById('coPhone').value.trim();
   const address = document.getElementById('coAddress').value.trim();
   if(!name || !email || !phone || !address){ showToast('Completá los datos obligatorios'); return; }
+
   const orderNum = Math.floor(100000+Math.random()*900000);
-  document.getElementById('orderNumDisplay').textContent = 'Pedido #'+orderNum;
-  document.getElementById('checkoutView').style.display='none';
-  document.getElementById('checkoutSuccess').style.display='block';
+  const total = cartSubtotal() - Math.round(cartSubtotal()*couponDiscount);
+  const itemsText = cart.map(i=>{
+    const p = PRODUCTS.find(x=>x.id===i.pid);
+    return `${p.name} x${i.qty} — ${fmt(p.price*i.qty)}`;
+  }).join('\n');
+
+  // Guardamos el pedido localmente para tener un respaldo del seguimiento
+  // (el link de pago fijo de Mercado Pago no devuelve esta info automáticamente).
+  const pendingOrders = JSON.parse(localStorage.getItem('tienda_pending_orders')||'[]');
+  pendingOrders.push({ orderNum, name, email, phone, address, itemsText, total, date: new Date().toISOString() });
+  localStorage.setItem('tienda_pending_orders', JSON.stringify(pendingOrders));
+
+  // Mail a wesellsoluciones@gmail.com con los datos cargados por el cliente
+  // y el detalle del pedido, vía EmailJS. Ver configuración en EMAILJS_* arriba.
+  if(typeof emailjs !== 'undefined' && EMAILJS_PUBLIC_KEY !== 'TU_PUBLIC_KEY'){
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+      to_email: 'wesellsoluciones@gmail.com',
+      order_num: orderNum,
+      customer_name: name,
+      customer_email: email,
+      customer_phone: phone,
+      customer_address: address,
+      order_items: itemsText,
+      order_total: fmt(total),
+    }).catch(err => console.error('EmailJS error:', err));
+  }
+
   cart = []; couponDiscount = 0; saveState(); updateBadges();
-  window.scrollTo(0,0);
-  // NOTA: acá se integra la creación de la preferencia real de Mercado Pago
-  // (vía una función serverless / Netlify Function) y el guardado del pedido en Supabase.
+  showToast('Redirigiendo a Mercado Pago...');
+
+  // Redirige al link de pago fijo de Mercado Pago para que el cliente
+  // complete el pago desde su propia cuenta.
+  setTimeout(()=>{ window.location.href = MERCADOPAGO_LINK; }, 700);
 }
 
 /* ══════════════════════════════════════════
