@@ -498,7 +498,7 @@
     <div class="hero-stats">
       <div><div class="hero-stat-num">+2.400</div><div class="hero-stat-label">Pedidos entregados</div></div>
       <div><div class="hero-stat-num">24–72h</div><div class="hero-stat-label">Envío a todo el país</div></div>
-      <div><div class="hero-stat-num">12</div><div class="hero-stat-label">Cuotas sin interés</div></div>
+      <div><div class="hero-stat-num">100%</div><div class="hero-stat-label">Pago seguro con Mercado Pago</div></div>
     </div>
   </section>
 
@@ -633,7 +633,7 @@
   <div class="co-step">
     <div class="co-step-title"><div class="co-step-num">4</div>Método de pago</div>
     <label class="co-option active">
-      <div class="co-option-left"><input type="radio" name="pay" checked disabled><div><div class="co-option-name">Mercado Pago</div><div class="co-option-desc">Tarjeta, cuotas o dinero en cuenta — pagás desde tu cuenta de Mercado Pago</div></div></div>
+      <div class="co-option-left"><input type="radio" name="pay" checked disabled><div><div class="co-option-name">Mercado Pago</div><div class="co-option-desc">Tarjeta (cuotas con interés según tu banco), dinero en cuenta o transferencia</div></div></div>
     </label>
   </div>
 
@@ -901,7 +901,6 @@ function renderGrid(){
           <span class="p-price-now">${fmt(p.price)}</span>
           ${disc>0 ? `<span class="p-discount">${disc}% OFF</span>` : ''}
         </div>
-        <div class="p-cuotas">12x ${fmt(Math.round(p.price/12))} sin interés</div>
         ${p.stock>0 && p.stock<=8 ? `<div class="p-stock-low">¡Últimas ${p.stock} unidades!</div>` : ''}
         <button class="p-addcart" ${noStock?'disabled':''} onclick="quickAddToCart(${p.id})">${noStock?'Sin stock':'Agregar al carrito'}</button>
       </div>
@@ -1120,7 +1119,6 @@ function renderProductModal(){
           <span class="modal-price-now">${fmt(p.price)}</span>
           ${disc>0?`<span class="modal-discount-badge">${disc}% OFF</span>`:''}
         </div>
-        <div class="modal-cuotas">12x ${fmt(Math.round(p.price/12))} sin interés</div>
         <div class="modal-stock"><div class="stock-dot ${stockLabel.cls}"></div>${stockLabel.txt}</div>
         ${variantsHtml}
         <div class="qty-row">
