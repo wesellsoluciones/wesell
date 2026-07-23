@@ -376,6 +376,8 @@
 
   /* ── CHECKOUT ── */
   .checkout-view { max-width: 760px; margin: 0 auto; padding: 150px 24px 100px; }
+  .btn-back-catalog { display: inline-flex; align-items: center; gap: 6px; font-family: var(--mono); font-size: 11.5px; letter-spacing: 0.06em; color: var(--muted); cursor: pointer; margin-bottom: 20px; text-transform: uppercase; }
+  .btn-back-catalog:hover { color: var(--red-bright); }
   .checkout-view h2 { font-family: 'Bebas Neue', sans-serif; font-size: 42px; margin-bottom: 30px; }
   .co-step { background: var(--surface); border: 1px solid var(--border-gray); border-radius: 10px; padding: 26px 28px; margin-bottom: 18px; }
   .co-step-title { display: flex; align-items: center; gap: 12px; font-family: 'Bebas Neue', sans-serif; font-size: 19px; letter-spacing: 0.03em; margin-bottom: 18px; }
@@ -578,6 +580,7 @@
 
 <!-- ═══ CHECKOUT VIEW ═══ -->
 <div id="checkoutView" class="checkout-view" style="display:none">
+  <div class="btn-back-catalog" onclick="volverAlCatalogo()">← Volver al catálogo</div>
   <h2>Finalizar compra</h2>
   <div class="co-step">
     <div class="co-step-title"><div class="co-step-num">1</div>Datos personales</div>
@@ -918,11 +921,16 @@ function renderAll(){
 ═══════════════════════════════════════════ */
 function cartKey(pid,variant){ return pid+'::'+JSON.stringify(variant||{}); }
 function addToCart(pid, variant, qty){
+  const p = PRODUCTS.find(x=>x.id===pid);
   const key = cartKey(pid,variant);
   const existing = cart.find(i=>i.key===key);
-  if(existing) existing.qty += qty;
-  else cart.push({ key, pid, variant: variant||{}, qty });
-  saveState(); updateBadges(); showToast('Agregado al carrito ✓');
+  const currentInCart = existing ? existing.qty : 0;
+  const allowedQty = Math.max(0, Math.min(qty, (p?p.stock:qty) - currentInCart));
+  if(allowedQty<=0){ showToast('Ya tenés en el carrito todo el stock disponible'); return; }
+  if(existing) existing.qty += allowedQty;
+  else cart.push({ key, pid, variant: variant||{}, qty: allowedQty });
+  saveState(); updateBadges();
+  showToast(allowedQty<qty ? `Agregamos ${allowedQty} (es todo el stock disponible)` : 'Agregado al carrito ✓');
 }
 function quickAddToCart(pid){ addToCart(pid, {}, 1); }
 function updateCartQty(key, delta){
@@ -1152,7 +1160,11 @@ function renderProductModal(){
 }
 function setMainImg(i){ mainImgIndex = i; document.getElementById('modalMainImg').src = currentModalProduct.images[i]; document.querySelectorAll('.modal-thumb').forEach((t,idx)=>t.classList.toggle('active',idx===i)); }
 function setVariant(type,val){ currentVariant[type]=val; renderProductModal(); }
-function changeModalQty(d){ currentQty = Math.max(1, currentQty+d); document.getElementById('modalQty').textContent = currentQty; }
+function changeModalQty(d){
+  const maxQty = currentModalProduct ? currentModalProduct.stock : 99;
+  currentQty = Math.min(maxQty, Math.max(1, currentQty+d));
+  document.getElementById('modalQty').textContent = currentQty;
+}
 function switchTab(tab){
   document.querySelectorAll('.modal-tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
   document.querySelectorAll('.modal-tab-content').forEach(c=>c.classList.toggle('active', c.dataset.tab===tab));
@@ -1182,6 +1194,12 @@ function sampleQA(p){
 /* ══════════════════════════════════════════
    CHECKOUT
 ═══════════════════════════════════════════ */
+function volverAlCatalogo(){
+  document.getElementById('checkoutView').style.display='none';
+  document.getElementById('checkoutSuccess').style.display='none';
+  document.getElementById('shopView').style.display='block';
+  window.scrollTo(0,0);
+}
 function goToCheckout(){
   if(cart.length===0){ showToast('Tu carrito está vacío'); return; }
   document.getElementById('shopView').style.display='none';
