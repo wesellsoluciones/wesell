@@ -395,6 +395,17 @@
   .co-option-name { font-size: 13.5px; }
   .co-option-desc { font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
   .co-option-price { font-family: var(--mono); font-size: 13px; }
+  .fz-hint { font-size: 12.5px; color: var(--muted); margin: 4px 0 14px; line-height: 1.5; }
+  .fz-hint b { color: var(--green); }
+  .fz-svg { width: 100%; max-width: 320px; display: block; margin: 0 auto; }
+  .fz-zone { fill: var(--surface2); stroke: var(--border-gray); stroke-width: 1.5; cursor: pointer; transition: fill 0.2s, stroke 0.2s; }
+  .fz-zone:hover { fill: rgba(46,204,113,0.25); stroke: var(--green); }
+  .fz-zone.selected { fill: rgba(46,204,113,0.35); stroke: var(--green); stroke-width: 2; }
+  .fz-label { fill: var(--text); font-family: 'DM Sans', sans-serif; font-size: 13px; pointer-events: none; }
+  .fz-other { text-align: center; font-family: var(--mono); font-size: 11px; color: var(--muted); text-decoration: underline; cursor: pointer; margin-top: 12px; }
+  .fz-result { text-align: center; font-size: 13px; margin-top: 12px; min-height: 18px; }
+  .fz-result.free { color: var(--green); font-weight: 500; }
+  .fz-result.paid { color: var(--muted); }
   .co-summary-item { display: flex; justify-content: space-between; font-size: 12.5px; padding: 8px 0; border-bottom: 1px solid var(--border-gray); color: var(--muted); }
   .co-summary-item b { color: var(--text); font-weight: 400; }
   .btn-confirm { width: 100%; padding: 17px; background: var(--red); color: #fff; border: none; border-radius: 8px; font-size: 14px; letter-spacing: 0.05em; text-transform: uppercase; cursor: pointer; margin-top: 8px; }
@@ -595,6 +606,25 @@
     <label class="co-option" onclick="selectShip(this,'domicilio')">
       <div class="co-option-left"><input type="radio" name="ship"><div><div class="co-option-name">Envío a domicilio — Correo Argentino</div><div class="co-option-desc">El costo se coordina por WhatsApp una vez confirmado el pago, según tu ubicación</div></div></div>
     </label>
+
+    <div id="freeZoneMap" style="display:none">
+      <div class="fz-hint">¿Tu barrio es Palermo, Belgrano, Colegiales o Núñez? Tocalo en el mapa — el envío es <b>gratis</b> en esas zonas.</div>
+      <svg viewBox="0 0 300 220" class="fz-svg">
+        <rect id="fz-nunez" class="fz-zone" x="70" y="10" width="160" height="45" rx="6" onclick="selectBarrio('nunez', this)"/>
+        <text x="150" y="36" class="fz-label" text-anchor="middle">Núñez</text>
+
+        <rect id="fz-belgrano" class="fz-zone" x="150" y="60" width="80" height="70" rx="6" onclick="selectBarrio('belgrano', this)"/>
+        <text x="190" y="98" class="fz-label" text-anchor="middle">Belgrano</text>
+
+        <rect id="fz-colegiales" class="fz-zone" x="70" y="60" width="75" height="70" rx="6" onclick="selectBarrio('colegiales', this)"/>
+        <text x="107" y="98" class="fz-label" text-anchor="middle" font-size="11">Colegiales</text>
+
+        <rect id="fz-palermo" class="fz-zone" x="40" y="135" width="220" height="75" rx="6" onclick="selectBarrio('palermo', this)"/>
+        <text x="150" y="176" class="fz-label" text-anchor="middle">Palermo</text>
+      </svg>
+      <div class="fz-other" onclick="selectBarrio('otro', null)">Vivo en otro barrio / fuera de CABA</div>
+      <div id="fzResult" class="fz-result"></div>
+    </div>
   </div>
 
   <div class="co-step">
@@ -721,6 +751,7 @@ let currentSort = 'relevancia';
 let currentSearch = '';
 let couponDiscount = 0;
 let selectedShipMethod = 'sucursal'; // 'sucursal' | 'domicilio'
+let selectedBarrio = null; // 'nunez' | 'belgrano' | 'colegiales' | 'palermo' | 'otro' | null
 let currentModalProduct = null;
 let currentVariant = {};
 let currentQty = 1;
@@ -1168,10 +1199,28 @@ function selectPay(el){
   el.closest('.co-step').querySelectorAll('.co-option').forEach(o=>o.classList.remove('active'));
   el.classList.add('active');
 }
+const FREE_ZONE_BARRIOS = { nunez:'Núñez', belgrano:'Belgrano', colegiales:'Colegiales', palermo:'Palermo' };
 function selectShip(el, method){
   el.closest('.co-step').querySelectorAll('.co-option').forEach(o=>o.classList.remove('active'));
   el.classList.add('active');
   selectedShipMethod = method;
+  document.getElementById('freeZoneMap').style.display = method==='domicilio' ? 'block' : 'none';
+  if(method!=='domicilio'){ selectedBarrio = null; }
+  renderCheckoutSummary();
+}
+function selectBarrio(barrio, el){
+  selectedBarrio = barrio;
+  document.querySelectorAll('.fz-zone').forEach(z=>z.classList.remove('selected'));
+  if(el) el.classList.add('selected');
+  const box = document.getElementById('fzResult');
+  if(FREE_ZONE_BARRIOS[barrio]){
+    box.className = 'fz-result free';
+    box.textContent = `¡Genial! ${FREE_ZONE_BARRIOS[barrio]} tiene envío gratis 🎉`;
+  } else {
+    box.className = 'fz-result paid';
+    box.textContent = 'Sin problema, coordinamos el costo del envío por WhatsApp.';
+  }
+  renderCheckoutSummary();
 }
 function renderCheckoutSummary(){
   const subtotal = cartSubtotal();
@@ -1183,6 +1232,8 @@ function renderCheckoutSummary(){
   }).join('');
   document.getElementById('coSubtotal').textContent = fmt(subtotal);
   document.getElementById('coDiscount').textContent = discountAmt>0 ? '-'+fmt(discountAmt) : fmt(0);
+  const isFreeZone = selectedShipMethod==='domicilio' && FREE_ZONE_BARRIOS[selectedBarrio];
+  document.getElementById('coShipCost').textContent = isFreeZone ? 'Gratis (' + FREE_ZONE_BARRIOS[selectedBarrio] + ')' : 'A coordinar';
   document.getElementById('coTotal').textContent = fmt(total);
 }
 async function confirmOrder(){
