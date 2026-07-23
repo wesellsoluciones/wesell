@@ -1157,7 +1157,7 @@ function switchTab(tab){
   document.querySelectorAll('.modal-tab-btn').forEach(b=>b.classList.toggle('active', b.dataset.tab===tab));
   document.querySelectorAll('.modal-tab-content').forEach(c=>c.classList.toggle('active', c.dataset.tab===tab));
 }
-function addToCartFromModal(){ addToCart(currentModalProduct.id, currentVariant, currentQty); }
+function addToCartFromModal(){ addToCart(currentModalProduct.id, currentVariant, currentQty); closeProductModal(); }
 function buyNowFromModal(){ addToCart(currentModalProduct.id, currentVariant, currentQty); closeProductModal(); goToCheckout(); }
 function shareProduct(pid){
   const p = PRODUCTS.find(x=>x.id===pid);
