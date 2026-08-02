@@ -492,6 +492,33 @@
       .product-hero-visual { width: 100%; }
     }
   </style>
+<style>
+  body { background: linear-gradient(180deg,#fff 0%,#f7f8fb 48%,#fff 100%) !important; color: #171923 !important; }
+  header { border-bottom: 1px solid rgba(217,45,45,0.12) !important; box-shadow: 0 12px 32px rgba(16,24,40,0.08) !important; }
+  .page-hero { min-height: 86vh !important; background: radial-gradient(circle at 82% 24%, rgba(217,45,45,0.14), transparent 28%), linear-gradient(135deg,#fff 0%,#f7f8fb 100%) !important; border-bottom: 1px solid #e4e7ec !important; }
+  .page-hero-inner { display: grid !important; grid-template-columns: minmax(0,1fr) minmax(360px,500px) !important; align-items: center !important; gap: 64px !important; }
+  .page-hero-inner > :not(.product-hero-visual) { grid-column: 1 !important; }
+  .product-hero-visual { grid-column: 2 !important; grid-row: 1 / span 5 !important; opacity: 1 !important; animation: none !important; }
+  .page-hero h1, .page-hero h1 .outline { color: #171923 !important; -webkit-text-stroke: 0 !important; opacity: 1 !important; }
+  .page-hero h1 .red { color: #d92d2d !important; }
+  .page-hero p, .section-label { color: #667085 !important; }
+  .btn-hero-primary, .btn-hero-ghost, .nav-cta { border-radius: 8px !important; }
+  .product-window { background: rgba(255,255,255,0.94); border: 1px solid #e4e7ec; border-radius: 8px; box-shadow: 0 28px 90px rgba(16,24,40,0.16); overflow: hidden; }
+  .product-window-top { display: flex; align-items: center; gap: 8px; padding: 14px 18px; border-bottom: 1px solid #e4e7ec; background: #fff; }
+  .product-window-top span { width: 10px; height: 10px; border-radius: 50%; background: #d92d2d; opacity: .28; }
+  .product-window-top strong { margin-left: auto; color: #667085; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+  .product-window-body { padding: 22px; }
+  .product-metric-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 18px; }
+  .product-metric-row div { background: #f7f8fb; border: 1px solid #e4e7ec; border-radius: 8px; padding: 14px; }
+  .product-metric-row b { display: block; color: #d92d2d; font-family: 'Bebas Neue',sans-serif; font-size: 30px; line-height: 1; }
+  .product-metric-row small { color: #667085; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; }
+  .dash-chart { height: 150px; display: flex; align-items: end; gap: 10px; padding: 18px; border-radius: 8px; background: #f7f8fb; border: 1px solid #e4e7ec; }
+  .dash-chart i { flex: 1; display: block; border-radius: 6px 6px 0 0; background: linear-gradient(180deg,#d92d2d,rgba(217,45,45,.22)); }
+  .source-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .source-pills span { border: 1px solid #e4e7ec; border-radius: 999px; padding: 6px 10px; color: #667085; font-size: 10px; letter-spacing: .1em; text-transform: uppercase; background: #fff; }
+  #que-es, #features, #como-funciona { background: transparent !important; }
+  @media (max-width: 900px) { .page-hero-inner { display: flex !important; flex-direction: column !important; align-items: flex-start !important; gap: 36px !important; } .product-hero-visual { width: 100% !important; } }
+</style>
 </head>
 <body>
 
