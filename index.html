@@ -457,7 +457,6 @@
     .profile-tab-content h4 { font-family:'Bebas Neue',sans-serif; font-size:18px; color:var(--text); letter-spacing:0.06em; margin:20px 0 10px; }
 
     /* ── TEAM (viejo) ── */
-    #equipo { background:var(--surface); }
     .team-grid { display:grid; grid-template-columns:400px; justify-content:center; gap:20px; }
     .team-card { position:relative; overflow:hidden; border-radius:3px; border:1px solid var(--border-gray); transition:transform 0.3s,box-shadow 0.3s; }
     .team-card:hover { transform:translateY(-6px); box-shadow:0 20px 50px rgba(220,38,38,0.2); }
@@ -705,7 +704,7 @@
 <body>
 
 <header>
-  <img src="logo.png" alt="We Sell Soluciones" class="header-logo">
+  <img src="logo.png" alt="We Sell Soluciones" class="header-logo secret-logo" onclick="handleSecretLogoClick()" title="We Sell Soluciones">
   <nav>
     <a href="#servicios">Servicios</a>
     <div class="nav-dropdown">
@@ -718,8 +717,6 @@
         <a href="reportes.html">Reportes — Dashify</a>
       </div>
     </div>
-    <a href="tienda.html">Tienda</a>
-    <a href="#equipo">Equipo</a>
     <a href="#nosotros">Nosotros</a>
     <a href="#metodologia">Metodología</a>
     <a href="#contacto" class="nav-cta">Contacto</a>
@@ -762,13 +759,26 @@
       </div>
       <div class="seal-pulse"></div>
       <div class="seal-pulse-2"></div>
-      <div class="logo-circle" onmouseenter="logoHover()" onmouseleave="logoLeave()">
+      <div class="logo-circle" onmouseenter="logoHover()" onmouseleave="logoLeave()" onclick="handleSecretLogoClick()">
         <img src="logo.png" alt="We Sell" class="hero-logo-img" id="hero-logo">
       </div>
       <div class="logo-msg" id="logo-msg"></div>
     </div>
   </div>
 </section>
+
+<div class="secret-access-overlay" id="secret-access-overlay" onclick="closeSecretAccess(event)">
+  <div class="secret-access-modal">
+    <button class="secret-access-close" onclick="closeSecretAccess()">×</button>
+    <span class="secret-access-label">Acceso privado</span>
+    <h3>Herramientas internas</h3>
+    <p>Elegí a qué área querés entrar.</p>
+    <div class="secret-access-actions">
+      <a href="tienda.html" class="secret-access-primary">Entrar a tienda</a>
+      <a href="panel-wesell.html" class="secret-access-secondary">Panel admin</a>
+    </div>
+  </div>
+</div>
 
 <div class="marquee-wrap">
   <div class="marquee-track">
@@ -799,74 +809,42 @@
   </div>
 </section>
 
-<section id="equipo" class="section">
-  <span class="section-label reveal">Quiénes somos</span>
-  <h2 class="section-title reveal">Nuestro Equipo</h2>
-
-  <div class="carousel-3d-wrap">
-    <div class="carousel-3d" id="team-carousel">
-      <div class="carousel-card" data-index="0" onclick="openProfile(0)">
-        <div class="carousel-card-inner">
-          <img src="foto.jpg" alt="Santiago Silberstein">
-          <div class="carousel-overlay">
-            <span class="carousel-name">Santiago Silberstein</span>
-            <span class="carousel-role">Founder</span>
-            <span class="carousel-hint">Ver perfil →</span>
-          </div>
-        </div>
-      </div>
-      <div class="carousel-card" data-index="1" style="background:#0a0f1e;" onclick="openProfile(1)">
-        <div class="carousel-card-inner">
-          <img src="IT_Implementation_Analyst.png" alt="Nahuel Decima" style="object-fit:cover; object-position: center top; filter: grayscale(30%) contrast(1.05);">
-          <div class="carousel-overlay">
-            <span class="carousel-name">Nahuel Decima</span>
-            <span class="carousel-role">IT Implementation Analyst</span>
-            <span class="carousel-hint">Ver perfil →</span>
-          </div>
-        </div>
-      </div>
-    </div>
-    <button class="carousel-btn carousel-prev" onclick="carouselMove(-1)">&#8249;</button>
-    <button class="carousel-btn carousel-next" onclick="carouselMove(1)">&#8250;</button>
-    <div class="carousel-dots" id="carousel-dots"></div>
-  </div>
-
-  <!-- POPUP PERFIL -->
-  <div class="profile-overlay" id="profile-overlay" onclick="closeProfile(event)">
-    <div class="profile-modal">
-      <button class="profile-close" onclick="closeProfile()">✕</button>
-      <div class="profile-header">
-        <img class="profile-photo" id="profile-photo" src="" alt="">
-        <div class="profile-info">
-          <h3 class="profile-modal-name" id="profile-modal-name"></h3>
-          <span class="profile-modal-role" id="profile-modal-role"></span>
-          <p class="profile-tagline" id="profile-tagline"></p>
-        </div>
-      </div>
-      <div class="profile-tabs">
-        <button class="profile-tab active" onclick="switchTab('descripcion')">Descripción</button>
-        <button class="profile-tab" onclick="switchTab('acerca')">Acerca de</button>
-      </div>
-      <div class="profile-tab-content" id="tab-descripcion"></div>
-      <div class="profile-tab-content" id="tab-acerca" style="display:none"></div>
-    </div>
-  </div>
-</section>
-
 <section id="nosotros" class="section">
-  <div class="about-img-wrap reveal-left">
-    <img src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=800&q=80" alt="Equipo" class="about-img-main">
-    <img src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?w=600&q=80" alt="Reunión" class="about-img-accent">
-    <span class="about-tag">DESDE 2021</span>
+  <div class="about-img-wrap about-profile-media reveal-left">
+    <img src="santiago-profile.png" alt="Santiago Silberstein" class="about-img-main about-profile-photo">
+    <span class="about-tag">FOUNDER</span>
   </div>
   <div class="about-text reveal-right">
-    <span class="section-label">Sobre nosotros</span>
-    <h2 class="section-title">Expertos en Crecimiento Digital</h2>
+    <span class="section-label">Nosotros</span>
+    <h2 class="section-title">Santiago Silberstein</h2>
     <div class="red-line"></div>
-    <p>Somos un equipo de estrategas, tecnólogos y creativos con una obsesión en común: hacer crecer negocios de manera sostenible y medible.</p>
+    <p class="about-role">International Digital Business Consultant | Project Manager | Continuous Improvement Specialist | Strategy Planner</p>
+    <p>Profesional con enfoque internacional especializado en transformación digital, gestión de proyectos y optimización de procesos, con una sólida combinación de visión estratégica, orientación comercial y capacidad analítica.</p>
     <p>No vendemos soluciones genéricas. Cada cliente recibe una estrategia construida desde cero, basada en sus datos, su mercado y sus metas.</p>
+    <button class="btn-primary about-profile-btn" onclick="openProfile(0)">Ver biografía</button>
   </div>
 </section>
+
+<!-- POPUP PERFIL -->
+<div class="profile-overlay" id="profile-overlay" onclick="closeProfile(event)">
+  <div class="profile-modal">
+    <button class="profile-close" onclick="closeProfile()">✕</button>
+    <div class="profile-header">
+      <img class="profile-photo" id="profile-photo" src="" alt="">
+      <div class="profile-info">
+        <h3 class="profile-modal-name" id="profile-modal-name"></h3>
+        <span class="profile-modal-role" id="profile-modal-role"></span>
+        <p class="profile-tagline" id="profile-tagline"></p>
+      </div>
+    </div>
+    <div class="profile-tabs">
+      <button class="profile-tab active" onclick="switchTab('descripcion')">Descripción</button>
+      <button class="profile-tab" onclick="switchTab('acerca')">Acerca de</button>
+    </div>
+    <div class="profile-tab-content" id="tab-descripcion"></div>
+    <div class="profile-tab-content" id="tab-acerca" style="display:none"></div>
+  </div>
+</div>
 
 <style>
   .metodologia-grid { display:grid; grid-template-columns:repeat(6,1fr); gap:24px; }
@@ -1111,7 +1089,6 @@ header {
 #contacto {
   background: transparent;
 }
-#equipo,
 #metodologia {
   background: transparent !important;
 }
@@ -1201,6 +1178,58 @@ header {
 #contacto p:last-of-type {
   color: var(--text) !important;
 }
+.about-profile-media {
+  height: 560px;
+  min-height: 560px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.about-profile-photo {
+  position: static;
+  width: min(520px, 100%);
+  height: min(520px, 100%);
+  border-radius: 8px;
+  object-fit: cover;
+  object-position: center;
+  filter: none;
+  border: 1px solid var(--border-gray);
+  box-shadow: 0 28px 90px rgba(16,24,40,0.18);
+}
+.about-profile-media::before {
+  content: '';
+  position: absolute;
+  inset: 34px;
+  border: 1px solid rgba(217,45,45,0.18);
+  border-radius: 8px;
+  transform: rotate(-3deg);
+  z-index: -1;
+}
+.about-role {
+  color: var(--red) !important;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.about-profile-btn {
+  margin-top: 12px;
+}
+.profile-photo {
+  background: #ffffff;
+  object-position: center;
+}
+.profile-overlay {
+  background: rgba(17,24,39,0.72);
+  backdrop-filter: blur(8px);
+}
+.profile-modal {
+  background: #ffffff !important;
+  opacity: 1 !important;
+  max-height: 86vh;
+  overflow-y: auto;
+}
+.profile-tab-content {
+  color: #667085;
+}
 .input-group,
 .contact-form input,
 .contact-form textarea,
@@ -1243,6 +1272,15 @@ footer {
   .stats-bar {
     margin: 0 18px;
     border-radius: 8px;
+  }
+  .about-profile-media {
+    height: auto;
+    min-height: 0;
+  }
+  .about-profile-photo {
+    width: 100%;
+    height: auto;
+    aspect-ratio: 1;
   }
 }
 @media (max-width: 560px) {
@@ -1392,7 +1430,7 @@ footer {
     {
       nombre: 'Santiago Silberstein',
       rol: 'Founder',
-      foto: 'foto.jpg',
+      foto: 'santiago-profile.png',
       tagline: 'International Digital Business Consultant | Project Manager | Continuous Improvement Specialist | Strategy Planner | Commercial and Analytical Profile',
       descripcion: `<p>Profesional con enfoque internacional especializado en transformación digital, gestión de proyectos y optimización de procesos, con una sólida combinación de visión estratégica, orientación comercial y capacidad analítica.</p>
       <p>Experiencia liderando iniciativas de negocio en entornos dinámicos y multiculturales, impulsando el crecimiento a través de soluciones digitales, mejora continua y toma de decisiones basada en datos. Capacidad para identificar oportunidades, diseñar estrategias escalables y ejecutar proyectos end-to-end, alineando objetivos comerciales con capacidades tecnológicas.</p>
@@ -1491,6 +1529,7 @@ footer {
   (function() {
     const cards = Array.from(document.querySelectorAll('.carousel-card'));
     const dotsWrap = document.getElementById('carousel-dots');
+    if (!cards.length || !dotsWrap) return;
     let current = 0;
 
     function buildDots() {
