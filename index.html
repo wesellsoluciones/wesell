@@ -138,7 +138,7 @@
 
     /* Círculo blanco contenedor del logo */
     .logo-circle {
-      width: 240px; height: 240px; border-radius: 50%;
+      width: 320px; height: 320px; border-radius: 50%;
       background: #ffffff;
       border: 3px solid rgba(255,255,255,0.9);
       display: flex; align-items: center; justify-content: center;
@@ -152,8 +152,8 @@
 
     /* Anillos giratorios alrededor del círculo */
     .ring-bg { position:absolute; border-radius:50%; top:50%; left:50%; }
-    .ring-bg-1 { width:280px; height:280px; transform:translate(-50%,-50%); border:1px solid rgba(255,255,255,0.15); animation: spinRing 20s linear infinite; }
-    .ring-bg-2 { width:340px; height:340px; transform:translate(-50%,-50%); border:1px dashed rgba(255,255,255,0.08); animation: spinRing 35s linear infinite reverse; }
+    .ring-bg-1 { width:370px; height:370px; transform:translate(-50%,-50%); border:1px solid rgba(255,255,255,0.15); animation: spinRing 20s linear infinite; }
+    .ring-bg-2 { width:450px; height:450px; transform:translate(-50%,-50%); border:1px dashed rgba(255,255,255,0.08); animation: spinRing 35s linear infinite reverse; }
     @keyframes spinRing { from{transform:translate(-50%,-50%) rotate(0deg);} to{transform:translate(-50%,-50%) rotate(360deg);} }
 
 
@@ -191,12 +191,12 @@
       display: flex; align-items: center; justify-content: center;
     }
     .seal-pulse {
-      position: absolute; width: 160px; height: 160px; border-radius: 50%;
+      position: absolute; width: 240px; height: 240px; border-radius: 50%;
       border: 2px solid rgba(255,255,255,0.5);
       animation: sealPulse 2.5s ease-out infinite;
     }
     .seal-pulse-2 {
-      position: absolute; width: 160px; height: 160px; border-radius: 50%;
+      position: absolute; width: 240px; height: 240px; border-radius: 50%;
       border: 2px solid rgba(255,255,255,0.25);
       animation: sealPulse 2.5s ease-out infinite 0.9s;
     }
@@ -207,7 +207,7 @@
 
 
     .hero-logo-img {
-      width: 180px; height: 180px; object-fit: contain;
+      width: 240px; height: 240px; object-fit: contain;
       position: relative; z-index: 4;
       animation: stampDrop 0.5s 0.6s cubic-bezier(0.22,0.61,0.36,1) both, floatSeal 5s 1.2s ease-in-out infinite;
     }
@@ -570,12 +570,12 @@
       .hero-vline { display:none; }
 
       /* Logo circular */
-      .logo-circle { width:180px; height:180px; }
-      .hero-logo-img { width:130px; height:130px; }
-      .seal-pulse, .seal-pulse-2 { width:180px; height:180px; }
-      .seal-ring-glow { width:200px; height:200px; }
-      .ring-bg-1 { width:220px; height:220px; }
-      .ring-bg-2 { width:270px; height:270px; }
+      .logo-circle { width:230px; height:230px; }
+      .hero-logo-img { width:170px; height:170px; }
+      .seal-pulse, .seal-pulse-2 { width:230px; height:230px; }
+      .seal-ring-glow { width:250px; height:250px; }
+      .ring-bg-1 { width:280px; height:280px; }
+      .ring-bg-2 { width:330px; height:330px; }
 
       /* Stats */
       .stats-bar { flex-direction:column; gap:28px; padding:40px 24px; }
@@ -634,11 +634,11 @@
       .hero-actions { flex-direction:column; gap:12px; width:100%; }
       .btn-primary, .btn-ghost { width:100%; text-align:center; padding:14px 20px; }
       .hero-visual { padding:20px 18px 50px; width:100%; min-height:260px; overflow:visible; }
-      .logo-circle { width:150px; height:150px; }
-      .hero-logo-img { width:110px; height:110px; }
-      .seal-pulse, .seal-pulse-2 { width:150px; height:150px; }
-      .ring-bg-1 { width:190px; height:190px; }
-      .ring-bg-2 { width:240px; height:240px; }
+      .logo-circle { width:190px; height:190px; }
+      .hero-logo-img { width:140px; height:140px; }
+      .seal-pulse, .seal-pulse-2 { width:190px; height:190px; }
+      .ring-bg-1 { width:230px; height:230px; }
+      .ring-bg-2 { width:280px; height:280px; }
 
       /* Marquee */
       .marquee-item { font-size:16px; gap:40px; }
@@ -706,6 +706,7 @@
 <header>
   <img src="logo.png" alt="We Sell Soluciones" class="header-logo secret-logo" onclick="handleSecretLogoClick()" title="We Sell Soluciones">
   <nav>
+    <a href="index.html">Inicio</a>
     <a href="#servicios">Servicios</a>
     <div class="nav-dropdown">
       <a>Productos</a>
