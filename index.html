@@ -1230,6 +1230,96 @@ header {
 .profile-tab-content {
   color: #667085;
 }
+.secret-logo,
+.logo-circle {
+  cursor: pointer;
+}
+.secret-access-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(17,24,39,0.72);
+  backdrop-filter: blur(8px);
+}
+.secret-access-overlay.open {
+  display: flex;
+}
+.secret-access-modal {
+  position: relative;
+  width: min(420px, 100%);
+  background: #ffffff;
+  border: 1px solid var(--border-gray);
+  border-radius: 8px;
+  padding: 34px;
+  box-shadow: 0 28px 90px rgba(16,24,40,0.24);
+}
+.secret-access-close {
+  position: absolute;
+  top: 14px;
+  right: 16px;
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-size: 28px;
+  line-height: 1;
+  cursor: pointer;
+}
+.secret-access-label {
+  display: inline-flex;
+  color: var(--red);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+.secret-access-modal h3 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 38px;
+  letter-spacing: 0.04em;
+  color: var(--text);
+  margin-bottom: 8px;
+}
+.secret-access-modal p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.7;
+  margin-bottom: 24px;
+}
+.secret-access-actions {
+  display: grid;
+  gap: 12px;
+}
+.secret-access-actions a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  border-radius: 8px;
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+.secret-access-primary {
+  background: var(--red);
+  color: #ffffff;
+  box-shadow: 0 14px 32px rgba(217,45,45,0.22);
+}
+.secret-access-secondary {
+  background: #ffffff;
+  color: var(--text);
+  border: 1px solid var(--border-gray);
+}
+.secret-access-secondary:hover {
+  border-color: rgba(217,45,45,0.28);
+  color: var(--red);
+}
 .input-group,
 .contact-form input,
 .contact-form textarea,
@@ -1423,6 +1513,41 @@ footer {
   window.addEventListener('scroll', () => {
     const msg = document.getElementById('logo-msg');
     if (msg) msg.classList.remove('visible');
+  });
+
+  let secretLogoClicks = 0;
+  let secretLogoTimer;
+
+  function handleSecretLogoClick() {
+    secretLogoClicks += 1;
+    clearTimeout(secretLogoTimer);
+
+    if (secretLogoClicks >= 3) {
+      secretLogoClicks = 0;
+      openSecretAccess();
+      return;
+    }
+
+    secretLogoTimer = setTimeout(() => {
+      secretLogoClicks = 0;
+    }, 900);
+  }
+
+  function openSecretAccess() {
+    const overlay = document.getElementById('secret-access-overlay');
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeSecretAccess(e) {
+    const overlay = document.getElementById('secret-access-overlay');
+    if (e && e.target !== overlay && !e.target.classList.contains('secret-access-close')) return;
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeSecretAccess();
   });
 
   // ── PERFILES DEL EQUIPO ──
