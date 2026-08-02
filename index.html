@@ -788,10 +788,9 @@
 </div>
 
 <div class="stats-bar">
-  <div class="stat reveal"><span class="stat-num" data-target="10" data-prefix="+">0</span><span class="stat-label">Años de experiencia</span></div>
-  <div class="stat reveal" style="transition-delay:0.1s"><span class="stat-num" data-target="30" data-prefix="+">0</span><span class="stat-label">Cuentas auditadas</span></div>
-  <div class="stat reveal" style="transition-delay:0.2s"><span class="stat-num" data-target="2">0</span><span class="stat-label">Consultores senior</span></div>
-  <div class="stat reveal" style="transition-delay:0.3s"><span class="stat-num" style="font-size:52px;">Máx. 5</span><span class="stat-label">Clientes activos</span></div>
+  <div class="stat reveal"><span class="stat-num">+10</span><span class="stat-label">Años de experiencia</span></div>
+  <div class="stat reveal" style="transition-delay:0.1s"><span class="stat-num">+50</span><span class="stat-label">Proyectos impulsados</span></div>
+  <div class="stat reveal" style="transition-delay:0.2s"><span class="stat-num" style="font-size:52px;">Máx. 5</span><span class="stat-label">Clientes activos</span></div>
 </div>
 
 <section id="servicios" class="section">
@@ -1064,10 +1063,13 @@ header {
 .marquee-wrap {
   border-top: 1px solid rgba(217,45,45,0.16);
   border-bottom: 1px solid rgba(217,45,45,0.16);
+  position: relative;
+  z-index: 1;
+  margin-bottom: 48px;
 }
 .stats-bar {
   max-width: 1180px;
-  margin: -34px auto 0;
+  margin: 0 auto 92px;
   position: relative;
   z-index: 4;
   padding: 34px 42px;
@@ -1360,7 +1362,7 @@ footer {
     letter-spacing: 0.12em;
   }
   .stats-bar {
-    margin: 0 18px;
+    margin: 0 18px 64px;
     border-radius: 8px;
   }
   .about-profile-media {
