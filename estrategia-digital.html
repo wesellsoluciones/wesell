@@ -222,6 +222,19 @@
 
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
+      header { gap: 16px; overflow: hidden; }
+      .header-logo { height: 64px; flex: 0 0 auto; }
+      nav {
+        max-width: calc(100vw - 112px);
+        overflow-x: auto;
+        overflow-y: hidden;
+        white-space: nowrap;
+        scrollbar-width: none;
+        gap: 22px;
+        padding-bottom: 4px;
+      }
+      nav::-webkit-scrollbar { display: none; }
+      nav a { font-size: 11px; letter-spacing: 0.12em; }
       header { padding: 10px 20px; }
       nav { gap: 16px; }
       .page-hero { padding: 120px 24px 60px; }
@@ -230,6 +243,153 @@
       .pilares-grid { grid-template-columns: 1fr; }
       .cta-section { flex-direction: column; text-align: center; padding: 40px 24px; }
       footer { flex-direction: column; gap: 16px; text-align: center; padding: 28px 24px; }
+    }
+
+    /* Modern refresh */
+    :root {
+      --bg: #f7f8fb;
+      --surface: #ffffff;
+      --surface2: #f1f3f7;
+      --red: #d92d2d;
+      --red-bright: #b91f1f;
+      --text: #171923;
+      --muted: #667085;
+      --border: rgba(217,45,45,0.18);
+      --border-gray: #e4e7ec;
+    }
+    body {
+      background:
+        linear-gradient(135deg, rgba(217,45,45,0.035), transparent 34%),
+        linear-gradient(180deg, #ffffff 0%, var(--bg) 42%, #ffffff 100%);
+    }
+    header {
+      border-bottom: 1px solid rgba(217,45,45,0.12);
+      box-shadow: 0 12px 32px rgba(16,24,40,0.08);
+    }
+    .page-hero {
+      min-height: 58vh;
+      background:
+        radial-gradient(circle at 86% 22%, rgba(217,45,45,0.14), transparent 28%),
+        linear-gradient(135deg, #ffffff 0%, #f7f8fb 100%);
+      border-bottom: 1px solid var(--border-gray);
+    }
+    .page-hero::after {
+      width: min(560px, 55vw);
+      height: min(560px, 55vw);
+      background: repeating-linear-gradient(135deg, rgba(217,45,45,0.08) 0 1px, transparent 1px 18px);
+      opacity: 0.65;
+      transform: rotate(8deg);
+    }
+    .breadcrumb,
+    .breadcrumb a,
+    .page-hero .lead,
+    .intro-block p,
+    .pilar-card p,
+    .cta-section p {
+      color: var(--muted);
+    }
+    .breadcrumb span,
+    .page-hero h1,
+    .intro-visual h3,
+    .pilares-title,
+    .pilar-card h4,
+    .cta-section h3 {
+      color: var(--text);
+    }
+    .content {
+      max-width: 1240px;
+      margin: 0 auto;
+    }
+    .page-hero,
+    .pilares {
+      scroll-margin-top: 92px;
+    }
+    .intro-visual,
+    .pilar-card,
+    .cta-section {
+      border-radius: 8px;
+      border: 1px solid var(--border-gray);
+      background: rgba(255,255,255,0.88);
+      box-shadow: 0 18px 50px rgba(16,24,40,0.08);
+    }
+    .intro-visual::before {
+      color: rgba(217,45,45,0.08);
+    }
+    .pilares-label {
+      color: var(--red);
+      font-weight: 500;
+    }
+    .pilares-grid {
+      gap: 24px;
+    }
+    .pilar-card {
+      min-height: 178px;
+      padding: 34px;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    .pilar-card:hover {
+      background: #ffffff;
+      border-color: rgba(217,45,45,0.24);
+      box-shadow: 0 24px 70px rgba(16,24,40,0.12);
+      transform: translateY(-5px);
+    }
+    .pilar-card::after {
+      display: none;
+    }
+    .pilar-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 8px;
+      background: #fff4f4;
+      border: 1px solid rgba(217,45,45,0.16);
+      position: relative;
+      color: transparent;
+    }
+    .pilar-icon::before,
+    .pilar-icon::after {
+      content: '';
+      position: absolute;
+      inset: 11px;
+      border: 2px solid var(--red);
+    }
+    .pilar-icon::after {
+      inset: 17px 9px 9px 17px;
+      background: var(--red);
+      border: 0;
+      opacity: 0.22;
+    }
+    .pilar-icon.icon-target::before { border-radius: 50%; }
+    .pilar-icon.icon-target::after { inset: 18px; border-radius: 50%; opacity: 1; }
+    .pilar-icon.icon-process::before { border-radius: 2px; transform: rotate(45deg); }
+    .pilar-icon.icon-growth::before {
+      inset: 13px 10px 12px 10px;
+      border-top: 0;
+      border-right: 0;
+      transform: skew(-12deg);
+    }
+    .pilar-icon.icon-growth::after {
+      inset: auto 9px 10px auto;
+      width: 9px;
+      height: 9px;
+      clip-path: polygon(0 0, 100% 50%, 0 100%);
+      opacity: 1;
+    }
+    .btn-primary {
+      border-radius: 8px;
+      box-shadow: 0 14px 32px rgba(217,45,45,0.22);
+    }
+    @media (max-width: 560px) {
+      header { justify-content: space-between; }
+      .header-logo { height: 72px; }
+      nav { max-width: none; overflow: visible; padding-bottom: 0; }
+      nav a:not(.nav-cta),
+      .nav-dropdown { display: none; }
+      .nav-cta {
+        display: inline-flex;
+        align-items: center;
+        min-height: 38px;
+        padding: 8px 16px;
+      }
     }
   </style>
 </head>
@@ -284,22 +444,22 @@
     <h2 class="pilares-title">Pilares de nuestra estrategia</h2>
     <div class="pilares-grid">
       <div class="pilar-card">
-        <div class="pilar-icon">📊</div>
+        <div class="pilar-icon icon-analysis" aria-hidden="true"></div>
         <h4>Plan de análisis alineado</h4>
         <p>Definimos un plan de análisis completamente alineado con los objetivos del negocio, asegurando que cada dato relevante sea considerado.</p>
       </div>
       <div class="pilar-card">
-        <div class="pilar-icon">🎯</div>
+        <div class="pilar-icon icon-target" aria-hidden="true"></div>
         <h4>Priorización de iniciativas</h4>
         <p>Priorizamos iniciativas basadas en datos para maximizar el impacto y enfocarnos en lo que realmente genera resultados.</p>
       </div>
       <div class="pilar-card">
-        <div class="pilar-icon">⚙️</div>
+        <div class="pilar-icon icon-process" aria-hidden="true"></div>
         <h4>Optimización de procesos</h4>
         <p>Optimizamos procesos mediante automatización y reporting inteligente para mejorar la eficiencia operativa de tu organización.</p>
       </div>
       <div class="pilar-card">
-        <div class="pilar-icon">📈</div>
+        <div class="pilar-icon icon-growth" aria-hidden="true"></div>
         <h4>Monitoreo y ajuste continuo</h4>
         <p>Realizamos monitoreo continuo y ajuste estratégico según el comportamiento de los datos para garantizar resultados sostenibles.</p>
       </div>
