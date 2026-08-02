@@ -509,6 +509,80 @@
       .cta-inner::before { font-size: 120px; }
     }
   </style>
+  <style>
+    :root {
+      --bg: #f7f8fb;
+      --surface: #ffffff;
+      --surface2: #f1f3f7;
+      --red: #d92d2d;
+      --red-bright: #b91f1f;
+      --text: #171923;
+      --muted: #667085;
+      --border: rgba(217,45,45,0.18);
+      --border-gray: #e4e7ec;
+    }
+    body { background: linear-gradient(180deg,#fff 0%,var(--bg) 48%,#fff 100%); color: var(--text); }
+    header { border-bottom: 1px solid rgba(217,45,45,0.12); box-shadow: 0 12px 32px rgba(16,24,40,0.08); }
+    #hero-canvas { opacity: .12; }
+    .hero {
+      min-height: 86vh;
+      background: radial-gradient(circle at 82% 24%, rgba(217,45,45,0.14), transparent 28%), linear-gradient(135deg,#fff 0%,#f7f8fb 100%);
+      border-bottom: 1px solid var(--border-gray);
+    }
+    .hero-inner { display: grid; grid-template-columns: minmax(0,1fr) minmax(360px,500px); align-items: center; gap: 64px; }
+    .hero-inner > :not(.product-hero-visual) { grid-column: 1; }
+    .product-hero-visual { grid-column: 2; grid-row: 1 / span 5; opacity: 0; animation: fadeUp 0.8s 0.65s ease both; }
+    .hero h1 .outline { color: var(--text); -webkit-text-stroke: 0; }
+    .hero-sub, .hero-desc, .section-label, .mockup-title-bar { color: var(--muted); }
+    .btn-primary, .btn-ghost, .nav-back { border-radius: 8px !important; }
+    .product-window { background: rgba(255,255,255,0.92); border: 1px solid var(--border-gray); border-radius: 8px; box-shadow: 0 28px 90px rgba(16,24,40,0.16); overflow: hidden; }
+    .product-window-top { display: flex; align-items: center; gap: 8px; padding: 14px 18px; border-bottom: 1px solid var(--border-gray); background: #fff; }
+    .product-window-top span { width: 10px; height: 10px; border-radius: 50%; background: #d92d2d; opacity: .28; }
+    .product-window-top strong { margin-left: auto; color: var(--muted); font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+    .product-window-body { padding: 22px; }
+    .task-board { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    .task-column { background: #f7f8fb; border: 1px solid var(--border-gray); border-radius: 8px; padding: 14px; min-height: 190px; }
+    .task-column small { display: block; color: var(--red); font-size: 10px; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 12px; }
+    .task-column p { display: flex; gap: 8px; margin: 0 0 10px; padding: 10px; border-radius: 8px; background: #fff; color: var(--text); font-size: 12px; }
+    .task-column p b { width: 12px; height: 12px; border: 2px solid var(--red); border-radius: 4px; margin-top: 2px; flex: 0 0 auto; }
+    .task-column p.done { color: var(--muted); text-decoration: line-through; }
+    .task-column p.done b { background: #16a34a; border-color: #16a34a; }
+    .focus-ring { width: 120px; height: 120px; border-radius: 50%; border: 8px solid #fff; outline: 2px solid rgba(217,45,45,.18); display: grid; place-items: center; margin: 14px auto 0; color: var(--red); font-family: 'Bebas Neue',sans-serif; font-size: 34px; background: #fff4f4; }
+    #que-es, #features { background: transparent !important; }
+    .wetask-mockup, .feature-card, .cta-inner, .price-box { border-radius: 8px; }
+    @media (max-width: 900px) {
+      .hero-inner { display: flex; flex-direction: column; align-items: flex-start; gap: 36px; }
+      .product-hero-visual { width: 100%; }
+      .task-board { grid-template-columns: 1fr; }
+    }
+  </style>
+<style>
+  body { background: linear-gradient(180deg,#fff 0%,#f7f8fb 48%,#fff 100%) !important; color: #171923 !important; }
+  header { border-bottom: 1px solid rgba(217,45,45,0.12) !important; box-shadow: 0 12px 32px rgba(16,24,40,0.08) !important; }
+  #hero-canvas { opacity: .12 !important; }
+  .hero { min-height: 86vh !important; background: radial-gradient(circle at 82% 24%, rgba(217,45,45,0.14), transparent 28%), linear-gradient(135deg,#fff 0%,#f7f8fb 100%) !important; border-bottom: 1px solid #e4e7ec !important; }
+  .hero-inner { display: grid !important; grid-template-columns: minmax(0,1fr) minmax(360px,500px) !important; align-items: center !important; gap: 64px !important; }
+  .hero-inner > :not(.product-hero-visual) { grid-column: 1 !important; }
+  .product-hero-visual { grid-column: 2 !important; grid-row: 1 / span 5 !important; opacity: 1 !important; animation: none !important; }
+  .hero h1, .hero h1 .outline { color: #171923 !important; -webkit-text-stroke: 0 !important; opacity: 1 !important; }
+  .hero h1 .red, .hero-badge { color: #d92d2d !important; }
+  .hero-sub, .hero-desc { color: #667085 !important; }
+  .btn-primary, .btn-ghost, .nav-back { border-radius: 8px !important; }
+  .product-window { background: rgba(255,255,255,0.94); border: 1px solid #e4e7ec; border-radius: 8px; box-shadow: 0 28px 90px rgba(16,24,40,0.16); overflow: hidden; }
+  .product-window-top { display: flex; align-items: center; gap: 8px; padding: 14px 18px; border-bottom: 1px solid #e4e7ec; background: #fff; }
+  .product-window-top span { width: 10px; height: 10px; border-radius: 50%; background: #d92d2d; opacity: .28; }
+  .product-window-top strong { margin-left: auto; color: #667085; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+  .product-window-body { padding: 22px; }
+  .task-board { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+  .task-column { background: #f7f8fb; border: 1px solid #e4e7ec; border-radius: 8px; padding: 14px; min-height: 190px; }
+  .task-column small { display: block; color: #d92d2d; font-size: 10px; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 12px; }
+  .task-column p { display: flex; gap: 8px; margin: 0 0 10px; padding: 10px; border-radius: 8px; background: #fff; color: #171923; font-size: 12px; }
+  .task-column p b { width: 12px; height: 12px; border: 2px solid #d92d2d; border-radius: 4px; margin-top: 2px; flex: 0 0 auto; }
+  .task-column p.done { color: #667085; text-decoration: line-through; } .task-column p.done b { background: #16a34a; border-color: #16a34a; }
+  .focus-ring { width: 120px; height: 120px; border-radius: 50%; border: 8px solid #fff; outline: 2px solid rgba(217,45,45,.18); display: grid; place-items: center; margin: 14px auto 0; color: #d92d2d; font-family: 'Bebas Neue',sans-serif; font-size: 34px; background: #fff4f4; }
+  #que-es, #features { background: transparent !important; }
+  @media (max-width: 900px) { .hero-inner { display: flex !important; flex-direction: column !important; align-items: flex-start !important; gap: 36px !important; } .product-hero-visual { width: 100% !important; } .task-board { grid-template-columns: 1fr !important; } }
+</style>
 </head>
 <body>
 

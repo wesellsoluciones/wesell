@@ -655,6 +655,32 @@
       .product-hero-visual { width: 100%; }
     }
   </style>
+<style>
+  body { background: linear-gradient(180deg,#fff 0%,#f7f8fb 48%,#fff 100%) !important; color: #171923 !important; }
+  header { border-bottom: 1px solid rgba(217,45,45,0.12) !important; box-shadow: 0 12px 32px rgba(16,24,40,0.08) !important; }
+  .hero { min-height: 86vh !important; background: radial-gradient(circle at 82% 24%, rgba(217,45,45,0.14), transparent 28%), linear-gradient(135deg,#fff 0%,#f7f8fb 100%) !important; border-bottom: 1px solid #e4e7ec !important; }
+  .hero-inner { display: grid !important; grid-template-columns: minmax(0,1fr) minmax(360px,480px) !important; align-items: center !important; gap: 64px !important; }
+  .hero-inner > :not(.product-hero-visual) { grid-column: 1 !important; }
+  .product-hero-visual { grid-column: 2 !important; grid-row: 1 / span 5 !important; opacity: 1 !important; animation: none !important; }
+  .hero h1, .hero h1 .outline { color: #171923 !important; -webkit-text-stroke: 0 !important; opacity: 1 !important; }
+  .hero h1 .red, .hero-badge, .product-metric-row b { color: #d92d2d !important; }
+  .hero-sub, .hero-desc, .mockup-title-bar { color: #667085 !important; }
+  .btn-primary, .btn-ghost, .nav-back { border-radius: 8px !important; }
+  .product-window { background: rgba(255,255,255,0.94); border: 1px solid #e4e7ec; border-radius: 8px; box-shadow: 0 28px 90px rgba(16,24,40,0.16); overflow: hidden; }
+  .product-window-top { display: flex; align-items: center; gap: 8px; padding: 14px 18px; border-bottom: 1px solid #e4e7ec; background: #fff; }
+  .product-window-top span { width: 10px; height: 10px; border-radius: 50%; background: #d92d2d; opacity: .28; }
+  .product-window-top strong { margin-left: auto; color: #667085; font-size: 11px; letter-spacing: .12em; text-transform: uppercase; }
+  .product-window-body { padding: 22px; }
+  .product-metric-row { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; margin-bottom: 18px; }
+  .product-metric-row div { background: #f7f8fb; border: 1px solid #e4e7ec; border-radius: 8px; padding: 14px; }
+  .product-metric-row b { display: block; font-family: 'Bebas Neue',sans-serif; font-size: 32px; line-height: 1; }
+  .product-metric-row small { color: #667085; font-size: 9px; letter-spacing: .12em; text-transform: uppercase; }
+  .inventory-list { display: grid; gap: 8px; }
+  .inventory-list p { display: flex; justify-content: space-between; margin: 0; padding: 11px 12px; border: 1px solid #e4e7ec; border-radius: 8px; color: #171923; background: #fff; }
+  .inventory-list strong { color: #16a34a; } .inventory-list .warning { color: #d97706; } .inventory-list .danger { color: #d92d2d; }
+  #que-es, #features, #como-funciona { background: transparent !important; }
+  @media (max-width: 900px) { .hero-inner { display: flex !important; flex-direction: column !important; align-items: flex-start !important; gap: 36px !important; } .product-hero-visual { width: 100% !important; } }
+</style>
 </head>
 <body>
 
