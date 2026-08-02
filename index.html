@@ -1218,6 +1218,23 @@ header {
 .about-profile-btn {
   margin-top: 12px;
 }
+.about-profile-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  align-items: center;
+  margin-top: 12px;
+}
+.about-profile-actions .about-profile-btn {
+  margin-top: 0;
+}
+.about-cv-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  text-decoration: none;
+}
 .profile-photo {
   background: #ffffff;
   object-position: center;
@@ -1376,6 +1393,15 @@ footer {
     width: 100%;
     height: auto;
     aspect-ratio: 1;
+  }
+  .about-profile-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .about-profile-actions .btn-primary,
+  .about-profile-actions .btn-ghost {
+    width: 100%;
+    text-align: center;
   }
 }
 @media (max-width: 560px) {
