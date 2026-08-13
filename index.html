@@ -1003,6 +1003,20 @@
       <button class="btn-primary magnetic" onclick="Calendly.initPopupWidget({url:'https://calendly.com/wesellsoluciones/entrevista?primary_color=e03030&text_color=ffffff&background_color=131929'});return false;" data-i18n="hero.btn1">Agendar reunión</button>
       <button class="btn-ghost magnetic" onclick="scrollToSection('servicios')" data-i18n="hero.btn2">Ver servicios →</button>
     </div>
+    <div class="hero-command-panel reveal">
+      <div class="command-line">
+        <span data-i18n="experience.command1">Canales</span>
+        <i style="--level:82%"></i>
+      </div>
+      <div class="command-line">
+        <span data-i18n="experience.command2">Automatización</span>
+        <i style="--level:74%"></i>
+      </div>
+      <div class="command-line">
+        <span data-i18n="experience.command3">Métricas</span>
+        <i style="--level:91%"></i>
+      </div>
+    </div>
   </div>
   <div class="hero-visual">
     <div class="logo-seal-wrap">
@@ -1060,6 +1074,30 @@
   <div class="stat reveal" style="transition-delay:0.1s"><span class="stat-num">+50</span><span class="stat-label" data-i18n="stats.projects">Proyectos impulsados</span></div>
   <div class="stat reveal" style="transition-delay:0.2s"><span class="stat-num" data-i18n="stats.maxnum">+100</span><span class="stat-label" data-i18n="stats.clients">Clientes satisfechos</span></div>
 </div>
+
+<section class="experience-map reveal" aria-label="Sistema de trabajo We Sell">
+  <div class="experience-map-copy">
+    <span class="section-label" data-i18n="experience.label">Sistema We Sell</span>
+    <h2 class="section-title" data-i18n="experience.title">Menos ruido. Más señales para vender mejor.</h2>
+  </div>
+  <div class="experience-map-grid">
+    <div class="experience-node">
+      <span>01</span>
+      <strong data-i18n="experience.node1.title">Detectar</strong>
+      <p data-i18n="experience.node1.text">Miramos canales, márgenes y fricciones antes de mover una sola pieza.</p>
+    </div>
+    <div class="experience-node">
+      <span>02</span>
+      <strong data-i18n="experience.node2.title">Ordenar</strong>
+      <p data-i18n="experience.node2.text">Convertimos la operación en un sistema entendible, medible y accionable.</p>
+    </div>
+    <div class="experience-node">
+      <span>03</span>
+      <strong data-i18n="experience.node3.title">Escalar</strong>
+      <p data-i18n="experience.node3.text">Ajustamos comunicación, automatización y pauta con foco en conversión.</p>
+    </div>
+  </div>
+</section>
 
 <div class="institutional-video-section">
   <div class="institutional-video-inner">
@@ -1782,6 +1820,302 @@ footer {
 }
 </style>
 
+<style>
+/* Experience system refresh */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background:
+    linear-gradient(rgba(17,24,39,0.026) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(17,24,39,0.026) 1px, transparent 1px);
+  background-size: 44px 44px;
+  -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 86%, transparent);
+  mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 86%, transparent);
+}
+header,
+.marquee-wrap,
+.stats-bar,
+section,
+footer {
+  position: relative;
+  z-index: 2;
+}
+.hero {
+  min-height: 88vh;
+  background:
+    radial-gradient(circle at 82% 20%, rgba(217,45,45,0.13), transparent 28%),
+    radial-gradient(circle at 18% 76%, rgba(17,24,39,0.08), transparent 30%),
+    linear-gradient(135deg, #ffffff 0%, #f7f8fb 58%, #eef1f6 100%);
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  inset: auto 0 0;
+  height: 120px;
+  pointer-events: none;
+  background: linear-gradient(to bottom, transparent, rgba(247,248,251,0.96));
+  z-index: 1;
+}
+.hero-content h1 {
+  max-width: 620px;
+}
+.hero-content p {
+  font-size: 14px;
+}
+.hero-command-panel {
+  width: min(430px, 100%);
+  display: grid;
+  gap: 10px;
+  margin-top: 28px;
+  padding: 12px;
+  background: rgba(255,255,255,0.76);
+  border: 1px solid rgba(17,24,39,0.08);
+  border-radius: 8px;
+  box-shadow: 0 18px 54px rgba(16,24,40,0.09);
+  backdrop-filter: blur(14px);
+}
+.command-line {
+  display: grid;
+  grid-template-columns: 118px 1fr;
+  gap: 14px;
+  align-items: center;
+  padding: 10px;
+  border-radius: 6px;
+  background: rgba(255,255,255,0.74);
+}
+.command-line span {
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.command-line i {
+  display: block;
+  height: 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--red), #111827);
+  transform-origin: left center;
+  transform: scaleX(.28);
+  animation: commandMeter 4.2s ease-in-out infinite;
+}
+@keyframes commandMeter {
+  0%, 100% { transform: scaleX(.28); opacity: .72; }
+  48%, 58% { transform: scaleX(calc(var(--level) / 100%)); opacity: 1; }
+}
+.stats-bar {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  overflow: hidden;
+}
+.stat {
+  position: relative;
+  padding: 10px 8px;
+}
+.stat::before {
+  content: '';
+  position: absolute;
+  inset: 8px;
+  opacity: 0;
+  border-radius: 8px;
+  background: linear-gradient(135deg, rgba(217,45,45,0.08), transparent 70%);
+  transition: opacity .25s ease;
+}
+.stat:hover::before {
+  opacity: 1;
+}
+.experience-map {
+  max-width: 1240px;
+  margin: -32px auto 34px;
+  padding: 76px 60px 34px;
+}
+.experience-map-copy {
+  max-width: 760px;
+}
+.experience-map .section-title {
+  margin-bottom: 34px;
+}
+.experience-map-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1px;
+  border: 1px solid var(--border-gray);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--border-gray);
+  box-shadow: 0 22px 70px rgba(16,24,40,0.08);
+}
+.experience-node {
+  position: relative;
+  min-height: 210px;
+  padding: 28px;
+  background:
+    radial-gradient(circle at 86% 18%, rgba(217,45,45,0.08), transparent 34%),
+    rgba(255,255,255,0.92);
+  overflow: hidden;
+}
+.experience-node::after {
+  content: '';
+  position: absolute;
+  left: 28px;
+  right: 28px;
+  bottom: 24px;
+  height: 2px;
+  background: linear-gradient(90deg, var(--red), transparent);
+  transform: scaleX(.34);
+  transform-origin: left center;
+  transition: transform .35s ease;
+}
+.experience-node:hover::after {
+  transform: scaleX(1);
+}
+.experience-node span {
+  display: inline-flex;
+  width: 42px;
+  height: 42px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 30px;
+  border: 1px solid rgba(217,45,45,0.18);
+  border-radius: 8px;
+  color: var(--red);
+  background: #fff4f4;
+  font-size: 12px;
+  font-weight: 800;
+}
+.experience-node strong {
+  display: block;
+  color: var(--text);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 30px;
+  font-weight: 400;
+  letter-spacing: .04em;
+  margin-bottom: 12px;
+}
+.experience-node p {
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.75;
+}
+.institutional-video-section {
+  margin-top: 26px;
+}
+.service-card,
+.metodo-card,
+.video-card {
+  isolation: isolate;
+  overflow: hidden;
+}
+.service-card::before,
+.metodo-card::after,
+.video-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  opacity: 0;
+  background:
+    linear-gradient(135deg, rgba(217,45,45,0.10), transparent 38%),
+    radial-gradient(circle at var(--mx, 50%) var(--my, 50%), rgba(217,45,45,0.14), transparent 34%);
+  transition: opacity .25s ease;
+}
+.service-card:hover::before,
+.metodo-card:hover::after,
+.video-card:hover::after {
+  opacity: 1;
+}
+.service-card {
+  min-height: 292px;
+}
+.service-card h3 {
+  font-size: 32px;
+}
+.service-arrow {
+  opacity: 1;
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: #fff4f4;
+  border: 1px solid rgba(217,45,45,0.16);
+}
+.metodologia-grid {
+  position: relative;
+}
+.metodologia-grid::before {
+  content: '';
+  position: absolute;
+  left: 8%;
+  right: 8%;
+  top: 50%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(217,45,45,0.24), transparent);
+  pointer-events: none;
+}
+.metodo-card {
+  min-height: 244px;
+  background: rgba(255,255,255,0.92);
+}
+.content-grid {
+  align-items: stretch;
+}
+.video-card {
+  background: rgba(255,255,255,0.92);
+  box-shadow: 0 18px 50px rgba(16,24,40,0.08);
+}
+.video-card video {
+  filter: saturate(1.02) contrast(1.02);
+}
+.contact-inner {
+  position: relative;
+}
+@media(max-width:900px) {
+  .hero {
+    min-height: 0;
+  }
+  .hero-command-panel {
+    margin-top: 22px;
+  }
+  .stats-bar,
+  .experience-map-grid {
+    grid-template-columns: 1fr;
+  }
+  .experience-map {
+    margin: 0 auto 18px;
+    padding: 62px 24px 24px;
+  }
+  .metodologia-grid::before {
+    display: none;
+  }
+}
+@media(max-width:560px) {
+  .command-line {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+  .experience-map {
+    padding-inline: 18px;
+  }
+  .experience-node {
+    min-height: 0;
+    padding: 24px;
+  }
+  .service-card {
+    min-height: 238px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .command-line i {
+    animation: none;
+    transform: scaleX(1);
+  }
+}
+</style>
+
 <script>
   // ── EMAILJS INIT ──
   // IMPORTANTE: Reemplazá "TU_PUBLIC_KEY" con tu clave pública de EmailJS
@@ -2360,6 +2694,11 @@ footer {
       "hero.word1": "WE SELL", "hero.word2": "SOLUTIONS", "hero.word3": "THAT SCALE",
       "hero.p": "Mercado Libre account management, automation, and digital marketing. We combine strategy, technology, and data to take your business to the next level.",
       "hero.btn1": "Book a call", "hero.btn2": "See services →",
+      "experience.command1": "Channels", "experience.command2": "Automation", "experience.command3": "Metrics",
+      "experience.label": "We Sell System", "experience.title": "Less noise. More signals to sell better.",
+      "experience.node1.title": "Detect", "experience.node1.text": "We review channels, margins, and friction before moving a single piece.",
+      "experience.node2.title": "Organize", "experience.node2.text": "We turn operations into a system that is understandable, measurable, and actionable.",
+      "experience.node3.title": "Scale", "experience.node3.text": "We tune communication, automation, and ads with conversion as the focus.",
       "marquee.items": "DIGITAL STRATEGY " + DOT + " AUTOMATION " + DOT + " MARKETING & ADS " + DOT + " GROWTH " + DOT + " ROI " + DOT + " DATA " + DOT + " ARTIFICIAL INTELLIGENCE " + DOT,
       "stats.years": "Years of experience", "stats.projects": "Projects delivered", "stats.maxnum": "+100", "stats.clients": "Satisfied clients", "institucional.label": "Get to know We Sell", "institucional.title": "Our institutional video",
       "institucional.text": "A direct look at how we work: strategy, technology, and hands-on guidance so every project moves forward with commercial focus and measurable results.",
@@ -2407,6 +2746,11 @@ footer {
       "hero.word1": "VENDEMOS", "hero.word2": "SOLUÇÕES", "hero.word3": "QUE ESCALAM",
       "hero.p": "Gestão de contas do Mercado Livre, automação e marketing digital. Combinamos estratégia, tecnologia e dados para levar seu negócio ao próximo nível.",
       "hero.btn1": "Agendar reunião", "hero.btn2": "Ver serviços →",
+      "experience.command1": "Canais", "experience.command2": "Automação", "experience.command3": "Métricas",
+      "experience.label": "Sistema We Sell", "experience.title": "Menos ruído. Mais sinais para vender melhor.",
+      "experience.node1.title": "Detectar", "experience.node1.text": "Analisamos canais, margens e fricções antes de mover qualquer peça.",
+      "experience.node2.title": "Organizar", "experience.node2.text": "Transformamos a operação em um sistema compreensível, mensurável e acionável.",
+      "experience.node3.title": "Escalar", "experience.node3.text": "Ajustamos comunicação, automação e anúncios com foco em conversão.",
       "marquee.items": "ESTRATÉGIA DIGITAL " + DOT + " AUTOMAÇÃO " + DOT + " MARKETING & ADS " + DOT + " CRESCIMENTO " + DOT + " ROI " + DOT + " DADOS " + DOT + " INTELIGÊNCIA ARTIFICIAL " + DOT,
       "stats.years": "Anos de experiência", "stats.projects": "Projetos impulsionados", "stats.maxnum": "+100", "stats.clients": "Clientes satisfeitos", "institucional.label": "Conheça a We Sell", "institucional.title": "Nosso vídeo institucional",
       "institucional.text": "Um olhar direto sobre nossa forma de trabalhar: estratégia, tecnologia e acompanhamento para que cada projeto avance com foco comercial e resultados mensuráveis.",
@@ -2524,6 +2868,8 @@ footer {
       const r = el.getBoundingClientRect();
       const px = (e.clientX - r.left) / r.width - 0.5;
       const py = (e.clientY - r.top) / r.height - 0.5;
+      el.style.setProperty('--mx', ((px + 0.5) * 100) + '%');
+      el.style.setProperty('--my', ((py + 0.5) * 100) + '%');
       el.classList.add('tilting');
       el.style.transform = `perspective(700px) rotateX(${-py*7}deg) rotateY(${px*7}deg) translateY(-2px)`;
     });
