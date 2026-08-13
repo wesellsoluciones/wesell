@@ -1,15 +1,85 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es-AR">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>We Sell Soluciones</title>
+  <title>Gestión de Cuentas de Mercado Libre y Marketing Digital | We Sell Soluciones</title>
+  <meta name="description" content="Agencia especializada en gestión de cuentas de Mercado Libre, automatización de ventas y marketing digital en Buenos Aires, Argentina. Estrategias a medida para escalar tu negocio online.">
+  <meta name="keywords" content="gestión de cuentas mercado libre, agencia mercado libre, marketing digital buenos aires, automatización de ventas, consultoría ecommerce, we sell soluciones">
+  <meta name="robots" content="index, follow">
+  <meta name="author" content="We Sell Soluciones">
+  <link rel="canonical" href="https://wesellsoluciones.com/">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Gestión de Cuentas de Mercado Libre y Marketing Digital | We Sell Soluciones">
+  <meta property="og:description" content="Agencia especializada en gestión de cuentas de Mercado Libre, automatización de ventas y marketing digital. Estrategias a medida para escalar tu negocio online.">
+  <meta property="og:url" content="https://wesellsoluciones.com/">
+  <meta property="og:image" content="https://wesellsoluciones.com/logo.png">
+  <meta property="og:locale" content="es_AR">
+  <meta property="og:site_name" content="We Sell Soluciones">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Gestión de Cuentas de Mercado Libre y Marketing Digital | We Sell Soluciones">
+  <meta name="twitter:description" content="Agencia especializada en gestión de cuentas de Mercado Libre, automatización de ventas y marketing digital en Buenos Aires.">
+  <meta name="twitter:image" content="https://wesellsoluciones.com/logo.png">
+
+  <link rel="icon" href="logo.png" type="image/png">
+
   <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
   <!-- EmailJS -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <!-- Calendly -->
   <link href="https://assets.calendly.com/assets/external/widget.css" rel="stylesheet">
   <script src="https://assets.calendly.com/assets/external/widget.js" type="text/javascript" async></script>
+
+  <!-- Structured Data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "ProfessionalService",
+    "name": "We Sell Soluciones",
+    "url": "https://wesellsoluciones.com/",
+    "logo": "https://wesellsoluciones.com/logo.png",
+    "image": "https://wesellsoluciones.com/logo.png",
+    "description": "Agencia especializada en gestión de cuentas de Mercado Libre, automatización de ventas y marketing digital.",
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Buenos Aires",
+      "addressCountry": "AR"
+    },
+    "areaServed": "AR",
+    "founder": {
+      "@type": "Person",
+      "name": "Santiago Silberstein"
+    },
+    "makesOffer": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Gestión de cuentas de Mercado Libre"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Automatización de ventas online"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Marketing digital y publicidad"
+        }
+      }
+    ]
+  }
+  </script>
+
   <style>
     :root {
       --bg: #0a0f1e;
@@ -118,9 +188,9 @@
 
     .hero-eyebrow { font-size: 11px; letter-spacing: 0.3em; text-transform: uppercase; color: #ffffff; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; opacity: 0; animation: fadeUp 0.8s 0.3s ease both; }
     .hero-eyebrow::before { content:''; display:block; width:30px; height:1px; background:var(--red); }
-    .hero-content h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(56px,6vw,96px); font-weight:400; line-height:0.95; letter-spacing:0.02em; margin-bottom:28px; opacity:0; animation: fadeUp 0.8s 0.5s ease both; color: var(--text); }
-    .hero-content h2 .red { color: var(--red); }
-    .hero-content h2 .outline { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.25); }
+    .hero-content h1 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(56px,6vw,96px); font-weight:400; line-height:0.95; letter-spacing:0.02em; margin-bottom:28px; opacity:0; animation: fadeUp 0.8s 0.5s ease both; color: var(--text); }
+    .hero-content h1 .red { color: var(--red); }
+    .hero-content h1 .outline { color: transparent; -webkit-text-stroke: 1px rgba(255,255,255,0.25); }
     .hero-content p { font-size:13px; color:var(--muted); line-height:1.8; max-width:520px; margin-bottom:44px; opacity:0; animation: fadeUp 0.8s 0.7s ease both; }
     .hero-actions { display:flex; gap:16px; align-items:center; opacity:0; animation: fadeUp 0.8s 0.9s ease both; }
     @keyframes fadeUp { from{opacity:0;transform:translateY(24px);} to{opacity:1;transform:translateY(0);} }
@@ -629,7 +699,7 @@
 
       /* Hero */
       .hero-content { padding:90px 18px 30px; width:100%; }
-      .hero-content h2 { font-size:clamp(44px,12vw,72px); }
+      .hero-content h1 { font-size:clamp(44px,12vw,72px); }
       .hero-content p { font-size:13px; margin-bottom:28px; }
       .hero-actions { flex-direction:column; gap:12px; width:100%; }
       .btn-primary, .btn-ghost { width:100%; text-align:center; padding:14px 20px; }
@@ -695,7 +765,7 @@
     /* Mobile pequeño (380px) */
     @media (max-width:380px) {
       nav a:not(.nav-cta) { display:none; }
-      .hero-content h2 { font-size:38px; }
+      .hero-content h1 { font-size:38px; }
       .carousel-3d { width:230px; height:290px; }
       .carousel-card { width:230px; height:290px; }
     }
@@ -794,8 +864,8 @@
 
   <div class="hero-content">
     <span class="hero-eyebrow">Consultoría en Negocios Digitales</span>
-    <h2><span class="red">VENDEMOS</span><br><span class="outline">SOLUCIONES</span><br>QUE ESCALAN</h2>
-    <p>Combinamos estrategia, tecnología y datos para llevar tu empresa al siguiente nivel en el mundo digital.</p>
+    <h1><span class="red">VENDEMOS</span><br><span class="outline">SOLUCIONES</span><br>QUE ESCALAN</h1>
+    <p>Gestión de cuentas de Mercado Libre, automatización y marketing digital. Combinamos estrategia, tecnología y datos para llevar tu negocio al siguiente nivel.</p>
     <div class="hero-actions">
       <button class="btn-primary" onclick="Calendly.initPopupWidget({url:'https://calendly.com/wesellsoluciones/entrevista?primary_color=e03030&text_color=ffffff&background_color=131929'});return false;">Agendar reunión</button>
       <button class="btn-ghost" onclick="scrollToSection('servicios')">Ver servicios →</button>
@@ -862,7 +932,7 @@
   <span class="section-label reveal">Lo que hacemos</span>
   <h2 class="section-title reveal">Nuestros Servicios</h2>
   <div class="services-grid">
-    <div class="service-card reveal" onclick="window.location.href='estrategia-digital.html'" style="cursor:pointer"><span class="service-num">01</span><h3>Estrategia Digital</h3><p>Diseñamos planes de crecimiento online adaptados a tu modelo de negocio y objetivos reales.</p><span class="service-arrow">↗</span></div>
+    <div class="service-card reveal" onclick="window.location.href='estrategia-digital.html'" style="cursor:pointer"><span class="service-num">01</span><h3>Estrategia Digital</h3><p>Gestión de cuentas de Mercado Libre y planes de crecimiento online adaptados a tu modelo de negocio.</p><span class="service-arrow">↗</span></div>
     <div class="service-card reveal" style="transition-delay:0.1s" onclick="window.location.href='automatizacion.html'" style="cursor:pointer"><span class="service-num">02</span><h3>Automatización</h3><p>Implementamos sistemas inteligentes para escalar ventas sin incrementar el esfuerzo manual.</p><span class="service-arrow">↗</span></div>
     <div class="service-card reveal" style="transition-delay:0.2s" onclick="window.location.href='marketing-ads.html'" style="cursor:pointer">
       <span class="service-num">03</span>
@@ -875,7 +945,7 @@
 
 <section id="nosotros" class="section">
   <div class="about-img-wrap about-profile-media reveal-left">
-    <img src="santiago-profile.png" alt="Santiago Silberstein" class="about-img-main about-profile-photo">
+    <img src="santiago-profile.png" alt="Santiago Silberstein, especialista en gestión de cuentas de Mercado Libre" class="about-img-main about-profile-photo">
     <span class="about-tag">FOUNDER</span>
   </div>
   <div class="about-text reveal-right">
@@ -1112,7 +1182,7 @@ header {
   color: var(--red);
   font-weight: 500;
 }
-.hero-content h2,
+.hero-content h1,
 .section-title,
 .service-card h3,
 .mkt-sub-title,
@@ -1123,7 +1193,7 @@ header {
 .contact-info h3 {
   color: var(--text);
 }
-.hero-content h2 .outline {
+.hero-content h1 .outline {
   color: var(--text);
   -webkit-text-stroke: 0;
 }

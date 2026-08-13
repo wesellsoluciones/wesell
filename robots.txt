@@ -1,0 +1,5 @@
+User-agent: *
+Allow: /
+Disallow: /panel-wesell.html
+
+Sitemap: https://wesellsoluciones.com/sitemap.xml
