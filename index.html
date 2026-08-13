@@ -2253,10 +2253,10 @@ footer {
 .footer-inner {
   max-width: 1240px;
   margin: 0 auto;
-  padding: 48px 60px;
+  padding: 48px 72px;
   display: grid;
-  grid-template-columns: minmax(260px, .82fr) minmax(500px, 1.35fr) minmax(280px, .83fr);
-  gap: 44px;
+  grid-template-columns: minmax(280px, 1fr) minmax(260px, .72fr) minmax(280px, .82fr);
+  gap: 76px;
   align-items: start;
 }
 .footer-brand,
@@ -2328,7 +2328,7 @@ footer {
   text-transform: uppercase;
 }
 .footer-nav {
-  gap: 18px;
+  gap: 17px;
   padding: 0;
   background: transparent;
   border-radius: 0;
@@ -2344,16 +2344,17 @@ footer {
 }
 .footer-nav-grid {
   width: 100%;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(132px, 1fr));
-  column-gap: 24px;
-  row-gap: 13px;
-  align-items: start;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 .footer-product-links {
-  display: grid;
+  display: flex;
+  flex-direction: column;
   gap: 9px;
-  grid-row: span 3;
+  margin: 2px 0 3px;
+  padding-left: 15px;
+  border-left: 1px solid rgba(255,255,255,0.14);
 }
 .footer-product-links small {
   color: rgba(255,255,255,0.38);
@@ -2391,22 +2392,18 @@ footer {
   transform: translateX(2px);
 }
 .footer-contact {
-  gap: 14px;
+  gap: 17px;
   padding: 0;
   background: transparent;
   border: 0;
   border-radius: 0;
-}
-.footer-contact span {
-  margin-bottom: 8px;
-  color: var(--red);
 }
 .footer-contact p {
   margin: 0;
 }
 .footer-contact-list {
   display: grid;
-  gap: 13px;
+  gap: 14px;
 }
 .footer-contact-list a,
 .footer-contact-list p {
@@ -2450,14 +2447,14 @@ footer {
   .footer-inner {
     grid-template-columns: 1fr;
     padding: 44px 24px;
+    gap: 34px;
   }
   .footer-nav,
   .footer-contact {
     padding-top: 0;
   }
   .footer-nav-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    max-width: 560px;
+    max-width: 360px;
   }
   .footer-bottom {
     padding: 20px 24px 26px;
@@ -2494,11 +2491,8 @@ footer {
   .service-card {
     min-height: 238px;
   }
-  .footer-nav-grid {
-    grid-template-columns: 1fr;
-  }
   .footer-product-links {
-    grid-row: auto;
+    padding-left: 13px;
   }
   .footer-bottom {
     flex-direction: column;
