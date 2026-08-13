@@ -783,6 +783,7 @@
     </div>
     <a href="#nosotros">Nosotros</a>
     <a href="#metodologia">Metodología</a>
+    <a href="#contenido">Contenido</a>
     <a href="#contacto" class="nav-cta">Contacto</a>
   </nav>
 </header>
@@ -928,6 +929,19 @@
   .metodo-desc { font-size:14px; color:var(--muted); line-height:1.8; }
   @media(max-width:900px){ .metodologia-grid{grid-template-columns:1fr;} .metodo-card:nth-child(n){grid-column:auto;} }
   @media(max-width:560px){ .metodo-title{font-size:20px;} }
+
+  /* ── CONTENIDO / VIDEOS IA ── */
+  .content-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(220px,1fr)); gap:24px; }
+  .video-card { background:var(--bg); border:1px solid var(--border-gray); border-radius:6px; overflow:hidden; position:relative; transition:border-color 0.3s,transform 0.3s,box-shadow 0.3s; }
+  .video-card::before { content:''; position:absolute; top:0; left:0; right:0; height:2px; background:var(--red); border-radius:6px 6px 0 0; transform:scaleX(0); transform-origin:left; transition:transform 0.4s ease; }
+  .video-card:hover { border-color:rgba(220,38,38,0.3); transform:translateY(-4px); box-shadow:0 16px 40px rgba(0,0,0,0.2); }
+  .video-card:hover::before { transform:scaleX(1); }
+  .video-card video { width:100%; aspect-ratio:9/16; object-fit:cover; display:block; background:#000; }
+  .video-card-info { padding:16px 18px 20px; }
+  .video-card-tag { display:inline-block; font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--red); font-weight:500; margin-bottom:10px; }
+  .video-card-title { font-family:'Bebas Neue',sans-serif; font-size:19px; font-weight:400; letter-spacing:0.03em; color:var(--text); line-height:1.1; }
+  .video-card-placeholder { aspect-ratio:9/16; display:flex; align-items:center; justify-content:center; flex-direction:column; gap:10px; color:var(--muted); font-size:11px; letter-spacing:0.14em; text-transform:uppercase; border-bottom:1px dashed var(--border-gray); }
+  @media(max-width:560px){ .content-grid{grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px;} .video-card-title{font-size:16px;} }
 </style>
 
 <section id="metodologia" class="section" style="background:var(--surface);">
@@ -959,6 +973,23 @@
       <span class="metodo-step">PASO 5</span>
       <h3 class="metodo-title">Plan de Acción y Ejecución</h3>
       <p class="metodo-desc">Implementamos, medimos y ajustamos en tiempo real con métricas claras para sostener el crecimiento en el tiempo.</p>
+    </div>
+  </div>
+</section>
+
+<section id="contenido" class="section">
+  <span class="section-label reveal">Portfolio digital</span>
+  <h2 class="section-title reveal">Contenido & Videos con IA</h2>
+  <p class="reveal" style="font-size:15px;color:var(--muted);max-width:640px;margin-bottom:56px;line-height:1.85;">Piezas de contenido para redes y videos generados con inteligencia artificial, parte de lo que producimos para nuestras marcas y clientes.</p>
+  <div class="content-grid reveal">
+    <div class="video-card">
+      <video controls preload="metadata" playsinline muted>
+        <source src="videos/reel-ia-mujer.mp4" type="video/mp4">
+      </video>
+      <div class="video-card-info">
+        <span class="video-card-tag">Video IA</span>
+        <h3 class="video-card-title">Reel — Presentadora IA</h3>
+      </div>
     </div>
   </div>
 </section>

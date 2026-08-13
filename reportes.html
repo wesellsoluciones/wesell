@@ -131,13 +131,6 @@
       box-shadow: 0 20px 60px rgba(220,38,38,0.12);
       transform: translateY(-4px);
     }
-    .product-card::before {
-      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-      background: var(--red); transform: scaleX(0); transform-origin: left;
-      transition: transform 0.4s ease;
-    }
-    .product-card:hover::before { transform: scaleX(1); }
-
     .card-badge {
       display: inline-flex; align-items: center; gap: 6px;
       font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase;
@@ -171,7 +164,7 @@
 
     .card-divider { height: 1px; background: var(--border-gray); margin: 0 28px; }
 
-    .card-footer { padding: 20px 28px 24px; display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+    .card-footer { padding: 20px 28px 24px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 16px; }
     .card-price { display: flex; flex-direction: column; }
     .price-amount { font-family: 'Bebas Neue', sans-serif; font-size: 40px; color: var(--text); line-height: 1; letter-spacing: 0.02em; }
     .price-amount span { font-size: 22px; color: var(--muted); }
@@ -187,7 +180,9 @@
       cursor: pointer; border-radius: 2px; text-decoration: none;
       transition: background 0.2s, transform 0.2s, box-shadow 0.3s;
       white-space: nowrap;
+      flex: 1 1 auto; justify-content: center;
     }
+    .card-price { flex: 0 1 auto; }
     .btn-buy:hover { background: var(--red-bright); transform: translateY(-2px); box-shadow: 0 10px 30px rgba(220,38,38,0.35); }
     .btn-buy svg { flex-shrink: 0; }
 
@@ -414,9 +409,9 @@
     }
     .cta-inner::before {
       content: 'DASHIFY'; position: absolute;
-      font-family: 'Bebas Neue', sans-serif; font-size: 200px;
+      font-family: 'Bebas Neue', sans-serif; font-size: 130px;
       color: rgba(224,48,48,0.04); letter-spacing: 0.05em;
-      right: -20px; bottom: -30px; line-height: 1;
+      right: -10px; bottom: -10px; line-height: 1;
       pointer-events: none; user-select: none;
     }
     .cta-label { font-size: 11px; letter-spacing: 0.28em; text-transform: uppercase; color: var(--red); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; }
