@@ -1365,14 +1365,19 @@
 
     <nav class="footer-nav" aria-label="Menú del footer">
       <span data-i18n="footer.menu">Menú</span>
-      <a href="index.html" data-i18n="nav.inicio">Inicio</a>
-      <a href="#servicios" data-i18n="nav.servicios">Servicios</a>
-      <a href="westock.html" data-i18n="nav.westock">Stock — WeStock</a>
-      <a href="wetask.html" data-i18n="nav.wetask">Productividad — WeTask</a>
-      <a href="reportes.html" data-i18n="nav.reportes">Reportes — Dashify</a>
-      <a href="#nosotros" data-i18n="nav.nosotros">Nosotros</a>
-      <a href="#metodologia" data-i18n="nav.metodologia">Metodología</a>
-      <a href="#contacto" data-i18n="nav.contacto">Contacto</a>
+      <div class="footer-nav-grid">
+        <a href="index.html" data-i18n="nav.inicio">Inicio</a>
+        <a href="#servicios" data-i18n="nav.servicios">Servicios</a>
+        <div class="footer-product-links">
+          <small data-i18n="nav.productos">Productos</small>
+          <a href="westock.html" data-i18n="nav.westock">Stock — WeStock</a>
+          <a href="wetask.html" data-i18n="nav.wetask">Productividad — WeTask</a>
+          <a href="reportes.html" data-i18n="nav.reportes">Reportes — Dashify</a>
+        </div>
+        <a href="#nosotros" data-i18n="nav.nosotros">Nosotros</a>
+        <a href="#metodologia" data-i18n="nav.metodologia">Metodología</a>
+        <a href="#contacto" data-i18n="nav.contacto">Contacto</a>
+      </div>
     </nav>
 
     <div class="footer-contact">
@@ -2250,9 +2255,9 @@ footer {
   margin: 0 auto;
   padding: 48px 60px;
   display: grid;
-  grid-template-columns: minmax(280px, .9fr) minmax(360px, 1fr) minmax(300px, .9fr);
+  grid-template-columns: minmax(260px, .82fr) minmax(500px, 1.35fr) minmax(280px, .83fr);
   gap: 44px;
-  align-items: center;
+  align-items: start;
 }
 .footer-brand,
 .footer-contact,
@@ -2323,20 +2328,41 @@ footer {
   text-transform: uppercase;
 }
 .footer-nav {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(160px, 1fr));
-  column-gap: 28px;
-  row-gap: 11px;
+  gap: 18px;
   padding: 0;
   background: transparent;
   border-radius: 0;
 }
-.footer-nav span {
-  grid-column: 1 / -1;
-  margin-bottom: 8px;
-  color: var(--red);
+.footer-nav,
+.footer-contact {
+  padding-top: 10px;
 }
-.footer-nav a,
+.footer-nav span,
+.footer-contact span {
+  margin: 0;
+  min-height: 14px;
+}
+.footer-nav-grid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(132px, 1fr));
+  column-gap: 24px;
+  row-gap: 13px;
+  align-items: start;
+}
+.footer-product-links {
+  display: grid;
+  gap: 9px;
+  grid-row: span 3;
+}
+.footer-product-links small {
+  color: rgba(255,255,255,0.38);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.footer-nav-grid a,
 .footer-contact a,
 .footer-contact p,
 .footer-bottom a,
@@ -2347,15 +2373,15 @@ footer {
   text-decoration: none;
   letter-spacing: 0;
 }
-.footer-nav a {
+.footer-nav-grid a {
   color: rgba(255,255,255,0.72);
 }
-.footer-nav a,
+.footer-nav-grid a,
 .footer-contact a,
 .footer-bottom a {
   transition: color .22s ease, transform .22s ease;
 }
-.footer-nav a:hover {
+.footer-nav-grid a:hover {
   color: #ffffff;
   transform: translateX(2px);
 }
@@ -2425,6 +2451,14 @@ footer {
     grid-template-columns: 1fr;
     padding: 44px 24px;
   }
+  .footer-nav,
+  .footer-contact {
+    padding-top: 0;
+  }
+  .footer-nav-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 560px;
+  }
   .footer-bottom {
     padding: 20px 24px 26px;
   }
@@ -2460,8 +2494,11 @@ footer {
   .service-card {
     min-height: 238px;
   }
-  .footer-nav {
+  .footer-nav-grid {
     grid-template-columns: 1fr;
+  }
+  .footer-product-links {
+    grid-row: auto;
   }
   .footer-bottom {
     flex-direction: column;
