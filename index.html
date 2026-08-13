@@ -382,6 +382,53 @@
     .section-label::before { content:''; display:block; width:24px; height:1px; background:var(--red); }
     .section-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(40px,5vw,72px); font-weight:400; line-height:1; letter-spacing:0.03em; margin-bottom:56px; }
 
+    /* Video institucional */
+    #video-institucional {
+      background:
+        radial-gradient(circle at 85% 12%, rgba(224,48,48,0.14), transparent 34%),
+        linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
+      border-top: 1px solid var(--border-gray);
+      border-bottom: 1px solid var(--border-gray);
+      overflow: hidden;
+    }
+    .institutional-video-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 0.86fr) minmax(320px, 1.14fr);
+      gap: 58px;
+      align-items: center;
+      max-width: 1180px;
+      margin: 0 auto;
+    }
+    .institutional-video-copy .section-title { margin-bottom: 24px; }
+    .institutional-video-copy p {
+      max-width: 500px;
+      color: var(--muted);
+      font-size: 15px;
+      line-height: 1.8;
+    }
+    .institutional-video-frame {
+      position: relative;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: #050814;
+      box-shadow: 0 30px 90px rgba(0,0,0,0.38), 0 0 0 1px rgba(224,48,48,0.14);
+      overflow: hidden;
+    }
+    .institutional-video-frame::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-top: 3px solid var(--red);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .institutional-video {
+      display: block;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+      object-fit: cover;
+      background: #050814;
+    }
+
     /* ── SERVICES ── */
     #servicios { background:var(--bg); }
     .services-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:1px; background:var(--border-gray); border:1px solid var(--border-gray); grid-auto-rows: auto; }
@@ -663,6 +710,8 @@
       /* Sections */
       .section { padding:70px 24px; }
       .section-title { font-size:clamp(32px,5vw,56px); margin-bottom:36px; }
+      .institutional-video-inner { grid-template-columns:1fr; gap:34px; }
+      .institutional-video-copy p { max-width:100%; }
 
       /* Servicios */
       .services-grid { grid-template-columns:1fr; }
@@ -728,6 +777,9 @@
       .section { padding:60px 18px; }
       .section-title { font-size:clamp(28px,9vw,48px); margin-bottom:28px; }
       .section-label { font-size:10px; }
+      .institutional-video-inner { gap:26px; }
+      .institutional-video-copy .section-title { margin-bottom:18px; }
+      .institutional-video-copy p { font-size:14px; }
 
       /* Servicios */
       .service-card { padding:32px 24px; }
@@ -939,6 +991,22 @@
   <div class="stat reveal" style="transition-delay:0.1s"><span class="stat-num">+50</span><span class="stat-label" data-i18n="stats.projects">Proyectos impulsados</span></div>
   <div class="stat reveal" style="transition-delay:0.2s"><span class="stat-num" style="font-size:52px;" data-i18n="stats.maxnum">Máx. 5</span><span class="stat-label" data-i18n="stats.clients">Clientes activos</span></div>
 </div>
+
+<section id="video-institucional" class="section">
+  <div class="institutional-video-inner">
+    <div class="institutional-video-copy">
+      <span class="section-label reveal" data-i18n="video.label">Conoce We Sell</span>
+      <h2 class="section-title reveal" data-i18n="video.title">Video Institucional</h2>
+      <p class="reveal" data-i18n="video.desc">Una mirada directa a nuestra forma de trabajar: estrategia, tecnologia y acompanamiento para que cada proyecto avance con foco comercial y resultados medibles.</p>
+    </div>
+    <div class="institutional-video-frame reveal" style="transition-delay:0.12s">
+      <video class="institutional-video" controls preload="metadata" poster="WE SELL SOLUCIONES-Cover.jpg">
+        <source src="WE SELL SOLUCIONES.mp4" type="video/mp4">
+        Tu navegador no puede reproducir este video.
+      </video>
+    </div>
+  </div>
+</section>
 
 <section id="servicios" class="section">
   <span class="section-label reveal" data-i18n="servicios.label">Lo que hacemos</span>
@@ -2210,6 +2278,7 @@ footer {
       "hero.btn1": "Book a call", "hero.btn2": "See services →",
       "marquee.items": "DIGITAL STRATEGY " + DOT + " AUTOMATION " + DOT + " MARKETING & ADS " + DOT + " GROWTH " + DOT + " ROI " + DOT + " DATA " + DOT + " ARTIFICIAL INTELLIGENCE " + DOT,
       "stats.years": "Years of experience", "stats.projects": "Projects delivered", "stats.maxnum": "Max. 5", "stats.clients": "Active clients",
+      "video.label": "Meet We Sell", "video.title": "Institutional Video", "video.desc": "A direct look at the way we work: strategy, technology, and support so every project moves forward with commercial focus and measurable results.",
       "servicios.label": "What we do", "servicios.title": "Our Services",
       "servicios.s1.title": "Digital Strategy", "servicios.s1.desc": "Mercado Libre account management and online growth plans tailored to your business model.",
       "servicios.s2.title": "Automation", "servicios.s2.desc": "We implement smart systems to scale sales without increasing manual effort.",
@@ -2252,6 +2321,7 @@ footer {
       "hero.btn1": "Agendar reunião", "hero.btn2": "Ver serviços →",
       "marquee.items": "ESTRATÉGIA DIGITAL " + DOT + " AUTOMAÇÃO " + DOT + " MARKETING & ADS " + DOT + " CRESCIMENTO " + DOT + " ROI " + DOT + " DADOS " + DOT + " INTELIGÊNCIA ARTIFICIAL " + DOT,
       "stats.years": "Anos de experiência", "stats.projects": "Projetos impulsionados", "stats.maxnum": "Máx. 5", "stats.clients": "Clientes ativos",
+      "video.label": "Conheça a We Sell", "video.title": "Vídeo Institucional", "video.desc": "Uma visão direta da nossa forma de trabalhar: estratégia, tecnologia e acompanhamento para que cada projeto avance com foco comercial e resultados mensuráveis.",
       "servicios.label": "O que fazemos", "servicios.title": "Nossos Serviços",
       "servicios.s1.title": "Estratégia Digital", "servicios.s1.desc": "Gestão de contas do Mercado Livre e planos de crescimento online adaptados ao seu modelo de negócio.",
       "servicios.s2.title": "Automação", "servicios.s2.desc": "Implementamos sistemas inteligentes para escalar vendas sem aumentar o esforço manual.",
