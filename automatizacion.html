@@ -39,6 +39,10 @@
     nav a:hover { color: var(--red); }
     .nav-cta { border: 1px solid var(--red) !important; color: var(--red) !important; padding: 8px 20px; border-radius: 2px; transition: background 0.3s, color 0.3s !important; }
     .nav-cta:hover { background: var(--red) !important; color: #fff !important; }
+    .lang-switcher { display: flex; align-items: center; gap: 2px; margin-left: 6px; border: 1px solid rgba(0,0,0,0.12); border-radius: 20px; padding: 3px; }
+    .lang-btn { background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; color: #666; padding: 5px 10px; border-radius: 16px; transition: background 0.25s, color 0.25s; }
+    .lang-btn:hover { color: var(--red); }
+    .lang-btn.active { background: var(--red); color: #fff; }
 
     /* ── HERO ── */
     .page-hero {
@@ -423,35 +427,40 @@
 <header>
   <a href="index.html"><img src="logo.png" alt="We Sell" class="header-logo"></a>
   <nav>
-    <a href="index.html">Inicio</a>
-    <a href="index.html#servicios">Servicios</a>
+    <a href="index.html" data-i18n="nav.inicio">Inicio</a>
+    <a href="index.html#servicios" data-i18n="nav.servicios">Servicios</a>
     <div class="nav-dropdown">
-      <a>Productos</a>
+      <a data-i18n="nav.productos">Productos</a>
       <div class="nav-dropdown-menu">
-        <a href="westock.html">Stock — WeStock</a>
+        <a href="westock.html" data-i18n="nav.westock">Stock — WeStock</a>
         <div class="menu-divider"></div>
-        <a href="wetask.html">Productividad — WeTask</a>
+        <a href="wetask.html" data-i18n="nav.wetask">Productividad — WeTask</a>
         <div class="menu-divider"></div>
-        <a href="reportes.html">Reportes — Dashify</a>
+        <a href="reportes.html" data-i18n="nav.reportes">Reportes — Dashify</a>
       </div>
     </div>
-    <a href="index.html#nosotros">Nosotros</a>
-    <a href="index.html#contacto" class="nav-cta">Contacto</a>
+    <a href="index.html#nosotros" data-i18n="nav.nosotros">Nosotros</a>
+    <a href="index.html#contacto" class="nav-cta" data-i18n="nav.contacto">Contacto</a>
+    <div class="lang-switcher" id="lang-switcher">
+      <button type="button" data-lang="es" class="lang-btn active">ES</button>
+      <button type="button" data-lang="en" class="lang-btn">EN</button>
+      <button type="button" data-lang="pt" class="lang-btn">PT</button>
+    </div>
   </nav>
 </header>
 
 <section class="page-hero">
   <div class="breadcrumb">
-    <a href="index.html">Inicio</a> / <span>Automatización</span>
+    <a href="index.html" data-i18n="nav.inicio">Inicio</a> / <span data-i18n="page.breadcrumb">Automatización</span>
   </div>
-  <h1><span class="red">Automati</span>zación</h1>
-  <p class="lead">Implementamos sistemas inteligentes para escalar tu negocio combinando el poder de los datos y la inteligencia artificial.</p>
+  <h1><span class="red" data-i18n="hero.word1">Automati</span><span data-i18n="hero.word2">zación</span></h1>
+  <p class="lead" data-i18n="hero.lead">Implementamos sistemas inteligentes para escalar tu negocio combinando el poder de los datos y la inteligencia artificial.</p>
 </section>
 
 <!-- TABS -->
 <div class="tabs-wrap">
-  <button class="tab-btn active" onclick="switchTab('db')">Base de Datos</button>
-  <button class="tab-btn" onclick="switchTab('ia')">IA Environment</button>
+  <button class="tab-btn active" onclick="switchTab('db')" data-i18n="tabs.db">Base de Datos</button>
+  <button class="tab-btn" onclick="switchTab('ia')" data-i18n="tabs.ia">IA Environment</button>
 </div>
 
 <div class="content">
@@ -462,46 +471,46 @@
     <div class="enfoque-block">
       <div>
         <div class="red-line"></div>
-        <p>En un entorno altamente competitivo, las empresas necesitan tomar decisiones informadas y estratégicas basadas en datos precisos y oportunos. Nuestro servicio de análisis de datos y Business Intelligence (BI) está diseñado para transformar grandes volúmenes de información en insights accionables, permitiendo a nuestros clientes optimizar sus procesos y mejorar su rendimiento.</p>
+        <p data-i18n="bi.p1">En un entorno altamente competitivo, las empresas necesitan tomar decisiones informadas y estratégicas basadas en datos precisos y oportunos. Nuestro servicio de análisis de datos y Business Intelligence (BI) está diseñado para transformar grandes volúmenes de información en insights accionables, permitiendo a nuestros clientes optimizar sus procesos y mejorar su rendimiento.</p>
       </div>
       <div class="enfoque-visual">
-        <h3>Business Intelligence</h3>
-        <p>Transformamos datos en decisiones estratégicas con herramientas de BI de última generación.</p>
+        <h3 data-i18n="bi.visual.title">Business Intelligence</h3>
+        <p data-i18n="bi.visual.desc">Transformamos datos en decisiones estratégicas con herramientas de BI de última generación.</p>
       </div>
     </div>
 
-    <span class="section-label">Desarrollo</span>
-    <h2 class="section-title">¿Qué desarrollamos?</h2>
+    <span class="section-label" data-i18n="dev.label">Desarrollo</span>
+    <h2 class="section-title" data-i18n="dev.title">¿Qué desarrollamos?</h2>
     <div class="cards-grid">
-      <div class="card-item"><h4>Informes automatizados</h4><p>Generación automática de reportes periódicos con la información clave de tu negocio.</p></div>
-      <div class="card-item"><h4>Análisis para decisiones</h4><p>Análisis de datos profundo orientado a mejorar la toma de decisiones estratégicas.</p></div>
-      <div class="card-item"><h4>Segmentación de clientes</h4><p>Segmentación y perfilamiento de clientes para estrategias más efectivas.</p></div>
-      <div class="card-item"><h4>Paneles interactivos</h4><p>Dashboards y reportes interactivos que permiten explorar los datos en tiempo real.</p></div>
-      <div class="card-item"><h4>Optimización de bases</h4><p>Optimización de bases de datos y procesos de datos para mayor eficiencia operativa.</p></div>
+      <div class="card-item"><h4 data-i18n="dev.c1.title">Informes automatizados</h4><p data-i18n="dev.c1.desc">Generación automática de reportes periódicos con la información clave de tu negocio.</p></div>
+      <div class="card-item"><h4 data-i18n="dev.c2.title">Análisis para decisiones</h4><p data-i18n="dev.c2.desc">Análisis de datos profundo orientado a mejorar la toma de decisiones estratégicas.</p></div>
+      <div class="card-item"><h4 data-i18n="dev.c3.title">Segmentación de clientes</h4><p data-i18n="dev.c3.desc">Segmentación y perfilamiento de clientes para estrategias más efectivas.</p></div>
+      <div class="card-item"><h4 data-i18n="dev.c4.title">Paneles interactivos</h4><p data-i18n="dev.c4.desc">Dashboards y reportes interactivos que permiten explorar los datos en tiempo real.</p></div>
+      <div class="card-item"><h4 data-i18n="dev.c5.title">Optimización de bases</h4><p data-i18n="dev.c5.desc">Optimización de bases de datos y procesos de datos para mayor eficiencia operativa.</p></div>
     </div>
 
-    <span class="section-label">Alcance</span>
-    <h2 class="section-title">¿Qué incluye?</h2>
+    <span class="section-label" data-i18n="alcance.label">Alcance</span>
+    <h2 class="section-title" data-i18n="alcance.title">¿Qué incluye?</h2>
     <div class="alcance-grid">
       <div class="alcance-card">
         <span class="alcance-num">01</span>
-        <h4>Reportes mensuales</h4>
-        <p>Entrega mensual de reportes detallados con métricas clave y evolución del negocio.</p>
+        <h4 data-i18n="alcance.a1.title">Reportes mensuales</h4>
+        <p data-i18n="alcance.a1.desc">Entrega mensual de reportes detallados con métricas clave y evolución del negocio.</p>
       </div>
       <div class="alcance-card">
         <span class="alcance-num">02</span>
-        <h4>Análisis estratégico</h4>
-        <p>Análisis con enfoque comercial para identificar oportunidades y optimizar resultados.</p>
+        <h4 data-i18n="alcance.a2.title">Análisis estratégico</h4>
+        <p data-i18n="alcance.a2.desc">Análisis con enfoque comercial para identificar oportunidades y optimizar resultados.</p>
       </div>
       <div class="alcance-card">
         <span class="alcance-num">03</span>
-        <h4>Plan de mejoras</h4>
-        <p>Roadmaps detallados con pasos concretos para mejorar continuamente tu operación.</p>
+        <h4 data-i18n="alcance.a3.title">Plan de mejoras</h4>
+        <p data-i18n="alcance.a3.desc">Roadmaps detallados con pasos concretos para mejorar continuamente tu operación.</p>
       </div>
     </div>
 
-    <span class="section-label">Herramientas</span>
-    <h2 class="section-title">Tecnologías que usamos</h2>
+    <span class="section-label" data-i18n="tools.label1">Herramientas</span>
+    <h2 class="section-title" data-i18n="tools.title1">Tecnologías que usamos</h2>
     <div class="tools-grid">
       <span class="tool-tag">Power BI</span>
       <span class="tool-tag">Excel</span>
@@ -519,27 +528,27 @@
     <div class="enfoque-block">
       <div>
         <div class="red-line"></div>
-        <p>Desarrollo e integración de soluciones basadas en inteligencia artificial para automatizar procesos, mejorar la comunicación con clientes y crear aplicaciones inteligentes que potencian la eficiencia de tu negocio.</p>
+        <p data-i18n="ia.p1">Desarrollo e integración de soluciones basadas en inteligencia artificial para automatizar procesos, mejorar la comunicación con clientes y crear aplicaciones inteligentes que potencian la eficiencia de tu negocio.</p>
       </div>
       <div class="enfoque-visual">
-        <h3>IA al servicio de tu negocio</h3>
-        <p>Integramos las últimas tecnologías de inteligencia artificial para crear soluciones a medida que transforman tu operación.</p>
+        <h3 data-i18n="ia.visual.title">IA al servicio de tu negocio</h3>
+        <p data-i18n="ia.visual.desc">Integramos las últimas tecnologías de inteligencia artificial para crear soluciones a medida que transforman tu operación.</p>
       </div>
     </div>
 
-    <span class="section-label">Servicios incluidos</span>
-    <h2 class="section-title">¿Qué podemos hacer?</h2>
+    <span class="section-label" data-i18n="iaserv.label">Servicios incluidos</span>
+    <h2 class="section-title" data-i18n="iaserv.title">¿Qué podemos hacer?</h2>
     <div class="ia-grid">
-      <div class="ia-card"><h4>Desarrollo de aplicaciones con IA</h4><p>Creamos aplicaciones inteligentes personalizadas que aprovechan el poder de la IA para resolver problemas específicos de tu negocio.</p></div>
-      <div class="ia-card"><h4>Chatbots y asistentes inteligentes</h4><p>Diseñamos e implementamos chatbots y asistentes virtuales que mejoran la atención al cliente y automatizan consultas frecuentes.</p></div>
-      <div class="ia-card"><h4>Automatización de procesos con IA</h4><p>Identificamos y automatizamos procesos repetitivos utilizando inteligencia artificial para liberar tiempo y reducir errores.</p></div>
-      <div class="ia-card"><h4>Integración en sitios web y sistemas</h4><p>Integramos soluciones de IA directamente en tus plataformas existentes sin necesidad de reemplazar tu infraestructura actual.</p></div>
-      <div class="ia-card"><h4>Optimización de flujos de trabajo</h4><p>Analizamos y optimizamos tus flujos de trabajo con IA para maximizar la productividad y reducir tiempos operativos.</p></div>
-      <div class="ia-card"><h4>Integración de APIs de IA</h4><p>Conectamos las mejores APIs y herramientas de inteligencia artificial disponibles para potenciar tus sistemas actuales.</p></div>
+      <div class="ia-card"><h4 data-i18n="iaserv.i1.title">Desarrollo de aplicaciones con IA</h4><p data-i18n="iaserv.i1.desc">Creamos aplicaciones inteligentes personalizadas que aprovechan el poder de la IA para resolver problemas específicos de tu negocio.</p></div>
+      <div class="ia-card"><h4 data-i18n="iaserv.i2.title">Chatbots y asistentes inteligentes</h4><p data-i18n="iaserv.i2.desc">Diseñamos e implementamos chatbots y asistentes virtuales que mejoran la atención al cliente y automatizan consultas frecuentes.</p></div>
+      <div class="ia-card"><h4 data-i18n="iaserv.i3.title">Automatización de procesos con IA</h4><p data-i18n="iaserv.i3.desc">Identificamos y automatizamos procesos repetitivos utilizando inteligencia artificial para liberar tiempo y reducir errores.</p></div>
+      <div class="ia-card"><h4 data-i18n="iaserv.i4.title">Integración en sitios web y sistemas</h4><p data-i18n="iaserv.i4.desc">Integramos soluciones de IA directamente en tus plataformas existentes sin necesidad de reemplazar tu infraestructura actual.</p></div>
+      <div class="ia-card"><h4 data-i18n="iaserv.i5.title">Optimización de flujos de trabajo</h4><p data-i18n="iaserv.i5.desc">Analizamos y optimizamos tus flujos de trabajo con IA para maximizar la productividad y reducir tiempos operativos.</p></div>
+      <div class="ia-card"><h4 data-i18n="iaserv.i6.title">Integración de APIs de IA</h4><p data-i18n="iaserv.i6.desc">Conectamos las mejores APIs y herramientas de inteligencia artificial disponibles para potenciar tus sistemas actuales.</p></div>
     </div>
 
-    <span class="section-label">Tecnologías</span>
-    <h2 class="section-title">Herramientas que utilizamos</h2>
+    <span class="section-label" data-i18n="tools.label2">Tecnologías</span>
+    <h2 class="section-title" data-i18n="tools.title2">Herramientas que utilizamos</h2>
     <div class="tools-grid">
       <span class="tool-tag">GoHighLevel</span>
       <span class="tool-tag">Claude</span>
@@ -556,17 +565,17 @@
   <!-- CTA -->
   <div class="cta-section">
     <div>
-      <h3>¿Listo para <span>automatizar</span><br>tu negocio?</h3>
-      <p>Agendá una llamada sin compromiso y te mostramos cómo la automatización puede transformar tu empresa.</p>
+      <h3><span data-i18n="cta.title1">¿Listo para </span><span data-i18n="cta.title1b">automatizar</span><br><span data-i18n="cta.title2">tu negocio?</span></h3>
+      <p data-i18n="cta.desc">Agendá una llamada sin compromiso y te mostramos cómo la automatización puede transformar tu empresa.</p>
     </div>
-    <a href="https://wa.me/5491135019702" class="btn-primary">Agendar llamada</a>
+    <a href="https://wa.me/5491135019702" class="btn-primary" data-i18n="cta.btn">Agendar llamada</a>
   </div>
 
 </div>
 
 <footer>
   <a href="index.html"><img src="logo.png" alt="We Sell Soluciones" class="footer-logo"></a>
-  <p>© 2026 We Sell Soluciones — Todos los derechos reservados</p>
+  <p data-i18n="footer.rights">© 2026 We Sell Soluciones — Todos los derechos reservados</p>
 </footer>
 
 <a href="https://wa.me/5491135019702" target="_blank" class="whatsapp-btn" title="Chateá con nosotros">
@@ -580,6 +589,112 @@
     document.getElementById('tab-' + tab).classList.add('active');
     event.target.classList.add('active');
   }
+</script>
+<script>
+  const I18N = {
+    en: {
+      "nav.inicio": "Home", "nav.servicios": "Services", "nav.productos": "Products",
+      "nav.westock": "Inventory — WeStock", "nav.wetask": "Productivity — WeTask", "nav.reportes": "Reports — Dashify",
+      "nav.nosotros": "About", "nav.contacto": "Contact",
+      "page.breadcrumb": "Automation",
+      "hero.word1": "Automa", "hero.word2": "tion",
+      "hero.lead": "We implement smart systems to scale your business by combining the power of data and artificial intelligence.",
+      "tabs.db": "Database", "tabs.ia": "AI Environment",
+      "bi.p1": "In a highly competitive environment, companies need to make informed, strategic decisions based on precise and timely data. Our data analysis and Business Intelligence (BI) service is designed to turn large volumes of information into actionable insights, helping our clients optimize their processes and improve performance.",
+      "bi.visual.title": "Business Intelligence",
+      "bi.visual.desc": "We turn data into strategic decisions with next-generation BI tools.",
+      "dev.label": "Development", "dev.title": "What do we build?",
+      "dev.c1.title": "Automated reports", "dev.c1.desc": "Automatic generation of periodic reports with your business's key information.",
+      "dev.c2.title": "Decision-focused analysis", "dev.c2.desc": "In-depth data analysis aimed at improving strategic decision-making.",
+      "dev.c3.title": "Customer segmentation", "dev.c3.desc": "Customer segmentation and profiling for more effective strategies.",
+      "dev.c4.title": "Interactive dashboards", "dev.c4.desc": "Interactive dashboards and reports that let you explore data in real time.",
+      "dev.c5.title": "Database optimization", "dev.c5.desc": "Database and data-process optimization for greater operational efficiency.",
+      "alcance.label": "Scope", "alcance.title": "What's included?",
+      "alcance.a1.title": "Monthly reports", "alcance.a1.desc": "Monthly delivery of detailed reports with key metrics and business evolution.",
+      "alcance.a2.title": "Strategic analysis", "alcance.a2.desc": "Business-focused analysis to identify opportunities and optimize results.",
+      "alcance.a3.title": "Improvement plan", "alcance.a3.desc": "Detailed roadmaps with concrete steps to continuously improve your operation.",
+      "tools.label1": "Tools", "tools.title1": "Technologies we use",
+      "ia.p1": "Development and integration of AI-based solutions to automate processes, improve customer communication, and build intelligent applications that boost your business's efficiency.",
+      "ia.visual.title": "AI at the service of your business",
+      "ia.visual.desc": "We integrate the latest artificial intelligence technologies to build custom solutions that transform your operation.",
+      "iaserv.label": "Services included", "iaserv.title": "What can we do?",
+      "iaserv.i1.title": "AI application development", "iaserv.i1.desc": "We build custom intelligent applications that harness the power of AI to solve your business's specific problems.",
+      "iaserv.i2.title": "Chatbots and smart assistants", "iaserv.i2.desc": "We design and implement chatbots and virtual assistants that improve customer service and automate common queries.",
+      "iaserv.i3.title": "AI process automation", "iaserv.i3.desc": "We identify and automate repetitive processes using artificial intelligence to save time and reduce errors.",
+      "iaserv.i4.title": "Website and system integration", "iaserv.i4.desc": "We integrate AI solutions directly into your existing platforms without needing to replace your current infrastructure.",
+      "iaserv.i5.title": "Workflow optimization", "iaserv.i5.desc": "We analyze and optimize your workflows with AI to maximize productivity and reduce operating times.",
+      "iaserv.i6.title": "AI API integration", "iaserv.i6.desc": "We connect the best available AI APIs and tools to power up your current systems.",
+      "tools.label2": "Technologies", "tools.title2": "Tools we use",
+      "cta.title1": "Ready to ", "cta.title1b": "automate", "cta.title2": "your business?",
+      "cta.desc": "Book a no-commitment call and we'll show you how automation can transform your company.",
+      "cta.btn": "Book a call",
+      "footer.rights": "© 2026 We Sell Soluciones — All rights reserved"
+    },
+    pt: {
+      "nav.inicio": "Início", "nav.servicios": "Serviços", "nav.productos": "Produtos",
+      "nav.westock": "Estoque — WeStock", "nav.wetask": "Produtividade — WeTask", "nav.reportes": "Relatórios — Dashify",
+      "nav.nosotros": "Sobre", "nav.contacto": "Contato",
+      "page.breadcrumb": "Automação",
+      "hero.word1": "Automa", "hero.word2": "ção",
+      "hero.lead": "Implementamos sistemas inteligentes para escalar seu negócio combinando o poder dos dados e da inteligência artificial.",
+      "tabs.db": "Banco de Dados", "tabs.ia": "Ambiente de IA",
+      "bi.p1": "Em um ambiente altamente competitivo, as empresas precisam tomar decisões informadas e estratégicas baseadas em dados precisos e oportunos. Nosso serviço de análise de dados e Business Intelligence (BI) foi desenhado para transformar grandes volumes de informação em insights acionáveis, permitindo que nossos clientes otimizem seus processos e melhorem sua performance.",
+      "bi.visual.title": "Business Intelligence",
+      "bi.visual.desc": "Transformamos dados em decisões estratégicas com ferramentas de BI de última geração.",
+      "dev.label": "Desenvolvimento", "dev.title": "O que desenvolvemos?",
+      "dev.c1.title": "Relatórios automatizados", "dev.c1.desc": "Geração automática de relatórios periódicos com as informações-chave do seu negócio.",
+      "dev.c2.title": "Análise para decisões", "dev.c2.desc": "Análise de dados profunda voltada para melhorar a tomada de decisões estratégicas.",
+      "dev.c3.title": "Segmentação de clientes", "dev.c3.desc": "Segmentação e perfilamento de clientes para estratégias mais eficazes.",
+      "dev.c4.title": "Painéis interativos", "dev.c4.desc": "Dashboards e relatórios interativos que permitem explorar os dados em tempo real.",
+      "dev.c5.title": "Otimização de bases", "dev.c5.desc": "Otimização de bancos de dados e processos de dados para maior eficiência operacional.",
+      "alcance.label": "Alcance", "alcance.title": "O que inclui?",
+      "alcance.a1.title": "Relatórios mensais", "alcance.a1.desc": "Entrega mensal de relatórios detalhados com métricas-chave e evolução do negócio.",
+      "alcance.a2.title": "Análise estratégica", "alcance.a2.desc": "Análise com foco comercial para identificar oportunidades e otimizar resultados.",
+      "alcance.a3.title": "Plano de melhorias", "alcance.a3.desc": "Roadmaps detalhados com passos concretos para melhorar continuamente sua operação.",
+      "tools.label1": "Ferramentas", "tools.title1": "Tecnologias que usamos",
+      "ia.p1": "Desenvolvimento e integração de soluções baseadas em inteligência artificial para automatizar processos, melhorar a comunicação com clientes e criar aplicações inteligentes que potencializam a eficiência do seu negócio.",
+      "ia.visual.title": "IA a serviço do seu negócio",
+      "ia.visual.desc": "Integramos as mais recentes tecnologias de inteligência artificial para criar soluções sob medida que transformam sua operação.",
+      "iaserv.label": "Serviços incluídos", "iaserv.title": "O que podemos fazer?",
+      "iaserv.i1.title": "Desenvolvimento de aplicações com IA", "iaserv.i1.desc": "Criamos aplicações inteligentes personalizadas que aproveitam o poder da IA para resolver problemas específicos do seu negócio.",
+      "iaserv.i2.title": "Chatbots e assistentes inteligentes", "iaserv.i2.desc": "Desenhamos e implementamos chatbots e assistentes virtuais que melhoram o atendimento ao cliente e automatizam consultas frequentes.",
+      "iaserv.i3.title": "Automação de processos com IA", "iaserv.i3.desc": "Identificamos e automatizamos processos repetitivos usando inteligência artificial para liberar tempo e reduzir erros.",
+      "iaserv.i4.title": "Integração em sites e sistemas", "iaserv.i4.desc": "Integramos soluções de IA diretamente nas suas plataformas existentes sem precisar substituir sua infraestrutura atual.",
+      "iaserv.i5.title": "Otimização de fluxos de trabalho", "iaserv.i5.desc": "Analisamos e otimizamos seus fluxos de trabalho com IA para maximizar a produtividade e reduzir tempos operacionais.",
+      "iaserv.i6.title": "Integração de APIs de IA", "iaserv.i6.desc": "Conectamos as melhores APIs e ferramentas de inteligência artificial disponíveis para potencializar seus sistemas atuais.",
+      "tools.label2": "Tecnologias", "tools.title2": "Ferramentas que utilizamos",
+      "cta.title1": "Pronto para ", "cta.title1b": "automatizar", "cta.title2": "seu negócio?",
+      "cta.desc": "Agende uma chamada sem compromisso e mostramos como a automação pode transformar sua empresa.",
+      "cta.btn": "Agendar chamada",
+      "footer.rights": "© 2026 We Sell Soluciones — Todos os direitos reservados"
+    }
+  };
+
+  const ES_DEFAULTS = {};
+  document.querySelectorAll('[data-i18n]').forEach(el => { ES_DEFAULTS[el.getAttribute('data-i18n')] = el.textContent; });
+  I18N.es = ES_DEFAULTS;
+
+  window.currentLang = localStorage.getItem('wesell_lang') || 'es';
+
+  function applyLanguage(lang) {
+    window.currentLang = lang;
+    const dict = I18N[lang] || I18N.es;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key] !== undefined) el.textContent = dict[key];
+    });
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+    });
+    document.documentElement.setAttribute('lang', lang === 'es' ? 'es-AR' : (lang === 'pt' ? 'pt-BR' : 'en'));
+    localStorage.setItem('wesell_lang', lang);
+  }
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => applyLanguage(btn.getAttribute('data-lang')));
+  });
+
+  if (window.currentLang !== 'es') applyLanguage(window.currentLang);
 </script>
 </body>
 </html>
