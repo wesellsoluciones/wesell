@@ -1003,19 +1003,10 @@
       <button class="btn-primary magnetic" onclick="Calendly.initPopupWidget({url:'https://calendly.com/wesellsoluciones/entrevista?primary_color=e03030&text_color=ffffff&background_color=131929'});return false;" data-i18n="hero.btn1">Agendar reunión</button>
       <button class="btn-ghost magnetic" onclick="scrollToSection('servicios')" data-i18n="hero.btn2">Ver servicios →</button>
     </div>
-    <div class="hero-command-panel reveal">
-      <div class="command-line">
-        <span data-i18n="experience.command1">Canales</span>
-        <i style="--level:82%"></i>
-      </div>
-      <div class="command-line">
-        <span data-i18n="experience.command2">Automatización</span>
-        <i style="--level:74%"></i>
-      </div>
-      <div class="command-line">
-        <span data-i18n="experience.command3">Métricas</span>
-        <i style="--level:91%"></i>
-      </div>
+    <div class="hero-signal-strip reveal" aria-label="Señales de trabajo We Sell">
+      <span data-i18n="experience.signal1">Mercado Libre con foco comercial</span>
+      <span data-i18n="experience.signal2">Automatizaciones que alivian la operación</span>
+      <span data-i18n="experience.signal3">Decisiones guiadas por datos reales</span>
     </div>
   </div>
   <div class="hero-visual">
@@ -1902,46 +1893,50 @@ footer {
 .hero-content p {
   font-size: 14px;
 }
-.hero-command-panel {
-  width: min(430px, 100%);
-  display: grid;
+.hero-signal-strip {
+  display: flex;
+  flex-wrap: wrap;
   gap: 10px;
-  margin-top: 28px;
-  padding: 12px;
-  background: rgba(255,255,255,0.76);
-  border: 1px solid rgba(17,24,39,0.08);
-  border-radius: 8px;
-  box-shadow: 0 18px 54px rgba(16,24,40,0.09);
-  backdrop-filter: blur(14px);
+  max-width: 620px;
+  margin-top: 30px;
 }
-.command-line {
-  display: grid;
-  grid-template-columns: 118px 1fr;
-  gap: 14px;
+.hero-signal-strip span {
+  position: relative;
+  display: inline-flex;
   align-items: center;
-  padding: 10px;
-  border-radius: 6px;
-  background: rgba(255,255,255,0.74);
-}
-.command-line span {
-  color: var(--text);
-  font-size: 11px;
+  min-height: 42px;
+  padding: 10px 14px 10px 34px;
+  color: #293241;
+  font-size: 12px;
   font-weight: 700;
-  letter-spacing: .14em;
+  letter-spacing: .06em;
   text-transform: uppercase;
-}
-.command-line i {
-  display: block;
-  height: 8px;
+  background: rgba(255,255,255,0.66);
+  border: 1px solid rgba(17,24,39,0.08);
   border-radius: 999px;
-  background: linear-gradient(90deg, var(--red), #111827);
-  transform-origin: left center;
-  transform: scaleX(.28);
-  animation: commandMeter 4.2s ease-in-out infinite;
+  box-shadow: 0 14px 34px rgba(16,24,40,0.08);
+  backdrop-filter: blur(14px);
+  animation: signalFloat 6s ease-in-out infinite;
 }
-@keyframes commandMeter {
-  0%, 100% { transform: scaleX(.28); opacity: .72; }
-  48%, 58% { transform: scaleX(calc(var(--level) / 100%)); opacity: 1; }
+.hero-signal-strip span:nth-child(2) {
+  animation-delay: .8s;
+}
+.hero-signal-strip span:nth-child(3) {
+  animation-delay: 1.6s;
+}
+.hero-signal-strip span::before {
+  content: '';
+  position: absolute;
+  left: 14px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--red);
+  box-shadow: 0 0 18px rgba(217,45,45,0.55);
+}
+@keyframes signalFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
 }
 .stats-bar {
   display: grid;
@@ -2242,7 +2237,7 @@ footer {
   .hero {
     min-height: 0;
   }
-  .hero-command-panel {
+  .hero-signal-strip {
     margin-top: 22px;
   }
   .stats-bar,
@@ -2265,9 +2260,13 @@ footer {
   }
 }
 @media(max-width:560px) {
-  .command-line {
-    grid-template-columns: 1fr;
-    gap: 8px;
+  .hero-signal-strip {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero-signal-strip span {
+    width: 100%;
+    min-height: 40px;
   }
   .experience-map {
     padding-inline: 18px;
@@ -2872,7 +2871,7 @@ footer {
       "hero.word1": "WE SELL", "hero.word2": "SOLUTIONS", "hero.word3": "THAT SCALE",
       "hero.p": "Mercado Libre account management, automation, and digital marketing. We combine strategy, technology, and data to take your business to the next level.",
       "hero.btn1": "Book a call", "hero.btn2": "See services →",
-      "experience.command1": "Channels", "experience.command2": "Automation", "experience.command3": "Metrics",
+      "experience.signal1": "Mercado Libre with commercial focus", "experience.signal2": "Automations that lighten operations", "experience.signal3": "Decisions guided by real data",
       "experience.label": "We Sell System", "experience.title": "Less noise. More signals to sell better.",
       "experience.node1.title": "Detect", "experience.node1.text": "We review channels, margins, and friction before moving a single piece.",
       "experience.node2.title": "Organize", "experience.node2.text": "We turn operations into a system that is understandable, measurable, and actionable.",
@@ -2928,7 +2927,7 @@ footer {
       "hero.word1": "VENDEMOS", "hero.word2": "SOLUÇÕES", "hero.word3": "QUE ESCALAM",
       "hero.p": "Gestão de contas do Mercado Livre, automação e marketing digital. Combinamos estratégia, tecnologia e dados para levar seu negócio ao próximo nível.",
       "hero.btn1": "Agendar reunião", "hero.btn2": "Ver serviços →",
-      "experience.command1": "Canais", "experience.command2": "Automação", "experience.command3": "Métricas",
+      "experience.signal1": "Mercado Livre com foco comercial", "experience.signal2": "Automações que aliviam a operação", "experience.signal3": "Decisões guiadas por dados reais",
       "experience.label": "Sistema We Sell", "experience.title": "Menos ruído. Mais sinais para vender melhor.",
       "experience.node1.title": "Detectar", "experience.node1.text": "Analisamos canais, margens e fricções antes de mover qualquer peça.",
       "experience.node2.title": "Organizar", "experience.node2.text": "Transformamos a operação em um sistema compreensível, mensurável e acionável.",
