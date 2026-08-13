@@ -246,6 +246,10 @@
     nav a:hover { color: var(--red); }
     .nav-back { background: var(--red) !important; color: #ffffff !important; padding: 9px 20px !important; border-radius: 2px; font-weight: 500 !important; letter-spacing: 0.13em !important; font-size: 11px !important; transition: background 0.2s, box-shadow 0.2s, transform 0.15s !important; box-shadow: 0 2px 18px rgba(220,38,38,0.32); white-space: nowrap; }
     .nav-back:hover { background: var(--red-bright) !important; box-shadow: 0 4px 28px rgba(220,38,38,0.55) !important; transform: translateY(-1px); color: #ffffff !important; }
+    .lang-switcher { display: flex; align-items: center; gap: 2px; margin-left: 6px; border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 3px; }
+    .lang-btn { background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; color: rgba(0,0,0,0.55); padding: 5px 10px; border-radius: 16px; transition: background 0.25s, color 0.25s; }
+    .lang-btn:hover { color: var(--red); }
+    .lang-btn.active { background: var(--red); color: #fff; }
     .nav-dropdown { position: relative; }
     .nav-dropdown > a { display: flex; align-items: center; gap: 5px; cursor: pointer; color: #222222; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; transition: color 0.3s; }
     .nav-dropdown > a:hover { color: var(--red); }
@@ -757,53 +761,58 @@
     <img src="logo.png" alt="We Sell Soluciones" class="header-logo">
   </a>
   <nav>
-    <a href="index.html">Inicio</a>
-    <a href="index.html#servicios">Servicios</a>
+    <a href="index.html" data-i18n="nav.inicio">Inicio</a>
+    <a href="index.html#servicios" data-i18n="nav.servicios">Servicios</a>
     <div class="nav-dropdown">
-      <a>Productos</a>
+      <a data-i18n="nav.productos">Productos</a>
       <div class="nav-dropdown-menu">
-        <a href="westock.html" class="active-product">Stock — WeStock</a>
+        <a href="westock.html" class="active-product" data-i18n="nav.westock">Stock — WeStock</a>
         <div class="menu-divider"></div>
-        <a href="wetask.html">Productividad — WeTask</a>
+        <a href="wetask.html" data-i18n="nav.wetask">Productividad — WeTask</a>
         <div class="menu-divider"></div>
-        <a href="reportes.html">Reportes — Dashify</a>
+        <a href="reportes.html" data-i18n="nav.reportes">Reportes — Dashify</a>
       </div>
     </div>
-    <a href="index.html#nosotros">Nosotros</a>
-    <a href="index.html#contacto">Contacto</a>
-    <a href="#comprar" class="nav-back">↗ Obtener WeStock</a>
+    <a href="index.html#nosotros" data-i18n="nav.nosotros">Nosotros</a>
+    <a href="index.html#contacto" data-i18n="nav.contacto">Contacto</a>
+    <a href="#comprar" class="nav-back" data-i18n="nav.cta">↗ Obtener WeStock</a>
+    <div class="lang-switcher" id="lang-switcher">
+      <button type="button" data-lang="es" class="lang-btn active">ES</button>
+      <button type="button" data-lang="en" class="lang-btn">EN</button>
+      <button type="button" data-lang="pt" class="lang-btn">PT</button>
+    </div>
   </nav>
 </header>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
-    <div class="hero-badge">Producto</div>
+    <div class="hero-badge" data-i18n="hero.badge">Producto</div>
     <h1>
       WE<span class="red">STOCK</span><br>
-      <span class="outline">SISTEMA DE</span><br>
-      <span class="outline">GESTIÓN</span>
+      <span class="outline" data-i18n="hero.word1">SISTEMA DE</span><br>
+      <span class="outline" data-i18n="hero.word2">GESTIÓN</span>
     </h1>
-    <p class="hero-sub">Control total de tu inventario</p>
-    <p class="hero-desc">
+    <p class="hero-sub" data-i18n="hero.sub">Control total de tu inventario</p>
+    <p class="hero-desc" data-i18n="hero.desc">
       WeStock es la herramienta diseñada para que nunca más pierdas el control de tu stock.
       Gestioná productos, movimientos y alertas desde un solo lugar, de forma simple y eficiente.
     </p>
     <div class="hero-actions">
-      <a href="#comprar" class="btn-primary">Obtener ahora</a>
-      <a href="#que-es" class="btn-ghost">Ver más</a>
+      <a href="#comprar" class="btn-primary" data-i18n="hero.btn1">Obtener ahora</a>
+      <a href="#que-es" class="btn-ghost" data-i18n="hero.btn2">Ver más</a>
     </div>
     <div class="product-hero-visual stock-visual" aria-label="Vista previa de WeStock">
       <div class="product-window">
         <div class="product-window-top">
           <span></span><span></span><span></span>
-          <strong>WeStock · Inventario</strong>
+          <strong data-i18n="hero.windowTitle">WeStock · Inventario</strong>
         </div>
         <div class="product-window-body">
           <div class="product-metric-row">
-            <div><b>247</b><small>Productos</small></div>
-            <div><b>12</b><small>Stock bajo</small></div>
-            <div><b>98%</b><small>Control</small></div>
+            <div><b>247</b><small data-i18n="hero.metric1">Productos</small></div>
+            <div><b>12</b><small data-i18n="hero.metric2">Stock bajo</small></div>
+            <div><b>98%</b><small data-i18n="hero.metric3">Control</small></div>
           </div>
           <div class="inventory-list">
             <p><span>SKU-1024</span><strong>128 u</strong></p>
@@ -817,15 +826,15 @@
   </div>
   <div class="scroll-hint">
     <div class="scroll-line"></div>
-    Scroll
+    <span data-i18n="hero.scroll">Scroll</span>
   </div>
 </section>
 
 <!-- MARQUEE -->
 <div class="marquee-wrap">
   <div class="marquee-track">
-    <div class="marquee-item">GESTIÓN DE STOCK <div class="marquee-dot"></div> CONTROL DE INVENTARIO <div class="marquee-dot"></div> ALERTAS EN TIEMPO REAL <div class="marquee-dot"></div> REPORTES AUTOMÁTICOS <div class="marquee-dot"></div> WE SELL SOLUCIONES <div class="marquee-dot"></div> WESTOCK <div class="marquee-dot"></div></div>
-    <div class="marquee-item">GESTIÓN DE STOCK <div class="marquee-dot"></div> CONTROL DE INVENTARIO <div class="marquee-dot"></div> ALERTAS EN TIEMPO REAL <div class="marquee-dot"></div> REPORTES AUTOMÁTICOS <div class="marquee-dot"></div> WE SELL SOLUCIONES <div class="marquee-dot"></div> WESTOCK <div class="marquee-dot"></div></div>
+    <div class="marquee-item" data-i18n-html="marquee.items">GESTIÓN DE STOCK <div class="marquee-dot"></div> CONTROL DE INVENTARIO <div class="marquee-dot"></div> ALERTAS EN TIEMPO REAL <div class="marquee-dot"></div> REPORTES AUTOMÁTICOS <div class="marquee-dot"></div> WE SELL SOLUCIONES <div class="marquee-dot"></div> WESTOCK <div class="marquee-dot"></div></div>
+    <div class="marquee-item" data-i18n-html="marquee.items">GESTIÓN DE STOCK <div class="marquee-dot"></div> CONTROL DE INVENTARIO <div class="marquee-dot"></div> ALERTAS EN TIEMPO REAL <div class="marquee-dot"></div> REPORTES AUTOMÁTICOS <div class="marquee-dot"></div> WE SELL SOLUCIONES <div class="marquee-dot"></div> WESTOCK <div class="marquee-dot"></div></div>
   </div>
 </div>
 
@@ -834,15 +843,15 @@
   <div class="section-wrap">
     <div class="que-es-grid">
       <div class="que-es-text reveal-left">
-        <p class="section-label">Qué es WeStock</p>
-        <h2 class="section-title">Tu stock,<br>siempre <span style="color:var(--red)">bajo control</span></h2>
-        <p>
+        <p class="section-label" data-i18n="queEs.label">Qué es WeStock</p>
+        <h2 class="section-title"><span data-i18n="queEs.title1">Tu stock,</span><br><span data-i18n="queEs.title2">siempre</span> <span style="color:var(--red)" data-i18n="queEs.title3">bajo control</span></h2>
+        <p data-i18n-html="queEs.p1">
           WeStock es un <strong>sistema de gestión de inventario</strong> desarrollado por We Sell Soluciones para negocios que necesitan tener visibilidad total de sus productos, movimientos y existencias en todo momento.
         </p>
-        <p>
+        <p data-i18n="queEs.p2">
           Olvidate de las planillas desactualizadas y los errores manuales. Con WeStock podés registrar entradas y salidas, recibir alertas cuando el stock baja y tomar decisiones basadas en datos reales.
         </p>
-        <p>
+        <p data-i18n-html="queEs.p3">
           Diseñado para ser <strong>simple, rápido y confiable</strong>, sin curvas de aprendizaje complicadas ni configuraciones técnicas que te hagan perder tiempo.
         </p>
       </div>
@@ -853,53 +862,53 @@
             <div class="mockup-dot" style="background:#e03030;"></div>
             <div class="mockup-dot" style="background:#fbbf24;"></div>
             <div class="mockup-dot" style="background:#4ade80;"></div>
-            <span class="mockup-title-bar">WeStock — Panel de control</span>
+            <span class="mockup-title-bar" data-i18n="mockup.title">WeStock — Panel de control</span>
           </div>
           <div class="mockup-body">
             <div class="mockup-header-row">
-              <span class="mockup-heading">Inventario</span>
-              <span class="mockup-badge-red">● En vivo</span>
+              <span class="mockup-heading" data-i18n="mockup.heading">Inventario</span>
+              <span class="mockup-badge-red" data-i18n="mockup.live">● En vivo</span>
             </div>
             <div class="mockup-stats">
               <div class="mockup-stat">
                 <span class="mockup-stat-num">247</span>
-                <span class="mockup-stat-label">Productos</span>
+                <span class="mockup-stat-label" data-i18n="mockup.stat1">Productos</span>
               </div>
               <div class="mockup-stat">
                 <span class="mockup-stat-num" style="color:#fbbf24;">12</span>
-                <span class="mockup-stat-label">Stock bajo</span>
+                <span class="mockup-stat-label" data-i18n="mockup.stat2">Stock bajo</span>
               </div>
               <div class="mockup-stat">
                 <span class="mockup-stat-num" style="color:#4ade80;">98%</span>
-                <span class="mockup-stat-label">Cobertura</span>
+                <span class="mockup-stat-label" data-i18n="mockup.stat3">Cobertura</span>
               </div>
             </div>
             <div class="mockup-table-head">
-              <span>Producto</span><span>Stock</span><span>Mín.</span><span>Estado</span>
+              <span data-i18n="mockup.colProduct">Producto</span><span data-i18n="mockup.colStock">Stock</span><span data-i18n="mockup.colMin">Mín.</span><span data-i18n="mockup.colStatus">Estado</span>
             </div>
             <div class="mockup-row">
-              <span class="mockup-row-name">Remera talle M</span>
+              <span class="mockup-row-name" data-i18n="mockup.r1.name">Remera talle M</span>
               <span class="mockup-row-val">84</span>
               <span class="mockup-row-val">10</span>
-              <span class="stock-ok">✓ OK</span>
+              <span class="stock-ok" data-i18n="mockup.r1.status">✓ OK</span>
             </div>
             <div class="mockup-row">
-              <span class="mockup-row-name">Pantalón cargo</span>
+              <span class="mockup-row-name" data-i18n="mockup.r2.name">Pantalón cargo</span>
               <span class="mockup-row-val">7</span>
               <span class="mockup-row-val">10</span>
-              <span class="stock-low">⚠ Bajo</span>
+              <span class="stock-low" data-i18n="mockup.r2.status">⚠ Bajo</span>
             </div>
             <div class="mockup-row">
-              <span class="mockup-row-name">Campera L</span>
+              <span class="mockup-row-name" data-i18n="mockup.r3.name">Campera L</span>
               <span class="mockup-row-val">0</span>
               <span class="mockup-row-val">5</span>
-              <span class="stock-out">✕ Agotado</span>
+              <span class="stock-out" data-i18n="mockup.r3.status">✕ Agotado</span>
             </div>
             <div class="mockup-row">
-              <span class="mockup-row-name">Zapatillas 42</span>
+              <span class="mockup-row-name" data-i18n="mockup.r4.name">Zapatillas 42</span>
               <span class="mockup-row-val">23</span>
               <span class="mockup-row-val">8</span>
-              <span class="stock-ok">✓ OK</span>
+              <span class="stock-ok" data-i18n="mockup.r4.status">✓ OK</span>
             </div>
           </div>
         </div>
@@ -911,38 +920,38 @@
 <!-- FEATURES -->
 <div id="features" style="background:var(--bg);">
   <div class="section-wrap">
-    <p class="section-label reveal">Funcionalidades</p>
-    <h2 class="section-title reveal">Todo lo que<br>necesitás</h2>
+    <p class="section-label reveal" data-i18n="feat.label">Funcionalidades</p>
+    <h2 class="section-title reveal"><span data-i18n="feat.title1">Todo lo que</span><br><span data-i18n="feat.title2">necesitás</span></h2>
     <div class="features-grid">
       <div class="feature-card reveal">
         <span class="feature-icon">📦</span>
-        <h3>Control de inventario</h3>
-        <p>Registrá todos tus productos con nombre, categoría, cantidad mínima y precio. Accedé al estado actualizado de tu stock en cualquier momento.</p>
+        <h3 data-i18n="feat.f1.title">Control de inventario</h3>
+        <p data-i18n="feat.f1.desc">Registrá todos tus productos con nombre, categoría, cantidad mínima y precio. Accedé al estado actualizado de tu stock en cualquier momento.</p>
       </div>
       <div class="feature-card reveal">
         <span class="feature-icon">🔔</span>
-        <h3>Alertas de stock bajo</h3>
-        <p>Configurá umbrales mínimos por producto y recibí alertas automáticas cuando el stock está por debajo del nivel definido. Nunca más te quedés sin mercadería sin avisar.</p>
+        <h3 data-i18n="feat.f2.title">Alertas de stock bajo</h3>
+        <p data-i18n="feat.f2.desc">Configurá umbrales mínimos por producto y recibí alertas automáticas cuando el stock está por debajo del nivel definido. Nunca más te quedés sin mercadería sin avisar.</p>
       </div>
       <div class="feature-card reveal">
         <span class="feature-icon">📊</span>
-        <h3>Movimientos registrados</h3>
-        <p>Cada entrada y salida queda registrada con fecha, cantidad y usuario. Trazabilidad total de tu inventario para auditorías o revisiones internas.</p>
+        <h3 data-i18n="feat.f3.title">Movimientos registrados</h3>
+        <p data-i18n="feat.f3.desc">Cada entrada y salida queda registrada con fecha, cantidad y usuario. Trazabilidad total de tu inventario para auditorías o revisiones internas.</p>
       </div>
       <div class="feature-card reveal">
         <span class="feature-icon">📋</span>
-        <h3>Reportes simples</h3>
-        <p>Visualizá el estado de tu stock de forma clara. Identificá productos más rotados, faltantes críticos y tendencias de consumo.</p>
+        <h3 data-i18n="feat.f4.title">Reportes simples</h3>
+        <p data-i18n="feat.f4.desc">Visualizá el estado de tu stock de forma clara. Identificá productos más rotados, faltantes críticos y tendencias de consumo.</p>
       </div>
       <div class="feature-card reveal">
         <span class="feature-icon">👥</span>
-        <h3>Multi-usuario</h3>
-        <p>Permitís acceso a tu equipo con roles diferenciados. El encargado de depósito carga movimientos, el administrativo revisa reportes.</p>
+        <h3 data-i18n="feat.f5.title">Multi-usuario</h3>
+        <p data-i18n="feat.f5.desc">Permitís acceso a tu equipo con roles diferenciados. El encargado de depósito carga movimientos, el administrativo revisa reportes.</p>
       </div>
       <div class="feature-card reveal">
         <span class="feature-icon">⚡</span>
-        <h3>Fácil de usar</h3>
-        <p>Interfaz pensada para cualquier nivel de conocimiento técnico. Sin instalaciones complicadas, sin manuales interminables. Empezás el mismo día.</p>
+        <h3 data-i18n="feat.f6.title">Fácil de usar</h3>
+        <p data-i18n="feat.f6.desc">Interfaz pensada para cualquier nivel de conocimiento técnico. Sin instalaciones complicadas, sin manuales interminables. Empezás el mismo día.</p>
       </div>
     </div>
   </div>
@@ -951,35 +960,35 @@
 <!-- CÓMO FUNCIONA -->
 <div id="como-funciona" style="background:var(--surface);">
   <div class="section-wrap">
-    <p class="section-label reveal">Proceso</p>
-    <h2 class="section-title reveal">Cómo funciona<br><span style="color:var(--red)">WeStock</span></h2>
+    <p class="section-label reveal" data-i18n="proc.label">Proceso</p>
+    <h2 class="section-title reveal"><span data-i18n="proc.title">Cómo funciona</span><br><span style="color:var(--red)">WeStock</span></h2>
     <div class="steps-list">
       <div class="step reveal">
         <span class="step-num">01</span>
         <div class="step-content">
-          <h3>Adquirís el sistema</h3>
-          <p>Realizás el pago a través de Mercado Pago de forma segura. En minutos recibís el acceso y los datos de configuración inicial.</p>
+          <h3 data-i18n="proc.s1.title">Adquirís el sistema</h3>
+          <p data-i18n="proc.s1.desc">Realizás el pago a través de Mercado Pago de forma segura. En minutos recibís el acceso y los datos de configuración inicial.</p>
         </div>
       </div>
       <div class="step reveal">
         <span class="step-num">02</span>
         <div class="step-content">
-          <h3>Configuramos tu cuenta</h3>
-          <p>El equipo de We Sell Soluciones te acompaña en la configuración inicial: carga de productos, categorías y usuarios del sistema.</p>
+          <h3 data-i18n="proc.s2.title">Configuramos tu cuenta</h3>
+          <p data-i18n="proc.s2.desc">El equipo de We Sell Soluciones te acompaña en la configuración inicial: carga de productos, categorías y usuarios del sistema.</p>
         </div>
       </div>
       <div class="step reveal">
         <span class="step-num">03</span>
         <div class="step-content">
-          <h3>Empezás a operar</h3>
-          <p>Desde el primer día podés registrar movimientos, consultar el estado del stock y recibir alertas. Tu inventario, siempre actualizado.</p>
+          <h3 data-i18n="proc.s3.title">Empezás a operar</h3>
+          <p data-i18n="proc.s3.desc">Desde el primer día podés registrar movimientos, consultar el estado del stock y recibir alertas. Tu inventario, siempre actualizado.</p>
         </div>
       </div>
       <div class="step reveal">
         <span class="step-num">04</span>
         <div class="step-content">
-          <h3>Soporte continuo</h3>
-          <p>Contás con soporte de We Sell Soluciones para resolver dudas, ajustes y mejoras. No estás solo después de la compra.</p>
+          <h3 data-i18n="proc.s4.title">Soporte continuo</h3>
+          <p data-i18n="proc.s4.desc">Contás con soporte de We Sell Soluciones para resolver dudas, ajustes y mejoras. No estás solo después de la compra.</p>
         </div>
       </div>
     </div>
@@ -991,25 +1000,25 @@
   <div class="section-wrap">
     <div class="cta-inner reveal">
       <div>
-        <p class="cta-label">Obtener WeStock</p>
-        <h2 class="cta-title">Empezá a gestionar<br>tu stock <span style="color:var(--red)">hoy</span></h2>
-        <p class="cta-desc">
+        <p class="cta-label" data-i18n="cta.label">Obtener WeStock</p>
+        <h2 class="cta-title"><span data-i18n="cta.title1">Empezá a gestionar</span><br><span data-i18n="cta.title2">tu stock</span> <span style="color:var(--red)" data-i18n="cta.title3">hoy</span></h2>
+        <p class="cta-desc" data-i18n="cta.desc">
           Adquirí WeStock con un solo pago y tomá el control total de tu inventario. Sin suscripciones ocultas, sin sorpresas.
         </p>
       </div>
       <div class="price-box">
         <div class="price-tag"><span>$</span>7.999</div>
-        <p class="price-period">ARS · Pago único · Acceso total</p>
+        <p class="price-period" data-i18n="cta.priceDesc">ARS · Pago único · Acceso total</p>
         <ul class="price-features">
-          <li>Sistema completo de inventario</li>
-          <li>Alertas de stock bajo</li>
-          <li>Registro de movimientos</li>
-          <li>Multi-usuario incluido</li>
-          <li>Soporte de We Sell Soluciones</li>
-          <li>Configuración asistida</li>
+          <li data-i18n="cta.li1">Sistema completo de inventario</li>
+          <li data-i18n="cta.li2">Alertas de stock bajo</li>
+          <li data-i18n="cta.li3">Registro de movimientos</li>
+          <li data-i18n="cta.li4">Multi-usuario incluido</li>
+          <li data-i18n="cta.li5">Soporte de We Sell Soluciones</li>
+          <li data-i18n="cta.li6">Configuración asistida</li>
         </ul>
         <button onclick="abrirModal()" class="btn-buy">
-          Comprar con Mercado Pago →
+          <span data-i18n="cta.buy">Comprar con Mercado Pago →</span>
         </button>
       </div>
     </div>
@@ -1021,11 +1030,11 @@
   <div class="download-card">
     <button class="download-close" onclick="cerrarDescarga()" aria-label="Cerrar">✕</button>
     <div class="download-icon">✅</div>
-    <p class="download-label">Pago confirmado</p>
-    <h2 id="download-title">¡Gracias por<br>tu compra!</h2>
-    <p>Tu pago fue acreditado exitosamente. Hacé clic en el botón para descargar <strong>WeStock</strong> y comenzar a gestionar tu inventario hoy mismo.</p>
+    <p class="download-label" data-i18n="dl.label">Pago confirmado</p>
+    <h2 id="download-title"><span data-i18n="dl.title1">¡Gracias por</span><br><span data-i18n="dl.title2">tu compra!</span></h2>
+    <p data-i18n-html="dl.p1">Tu pago fue acreditado exitosamente. Hacé clic en el botón para descargar <strong>WeStock</strong> y comenzar a gestionar tu inventario hoy mismo.</p>
     <a id="btn-descarga" class="btn-download" href="#" download="WeStock.html">
-      ⬇ Descargar WeStock
+      <span data-i18n="dl.btn">⬇ Descargar WeStock</span>
     </a>
     <p class="download-note">🔒 Archivo verificado · Solo disponible tras pago acreditado<br>Ante cualquier duda escribinos a <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f29d80919a9b9681919d9c81879e869b9c95b2959f939b9edc919d9f">[email&#160;protected]</a></strong></p>
   </div>
@@ -1035,39 +1044,39 @@
 <div class="modal-overlay" id="modalOverlay" onclick="cerrarModalOverlay(event)">
   <div class="modal">
     <button class="modal-close" onclick="cerrarModal()" aria-label="Cerrar">✕</button>
-    <p class="modal-label">Último paso</p>
-    <h2>Completá tus<br>datos</h2>
-    <p class="modal-sub">Necesitamos esta información para configurar tu cuenta de WeStock y enviarte el acceso.</p>
+    <p class="modal-label" data-i18n="modal.label">Último paso</p>
+    <h2><span data-i18n="modal.title1">Completá tus</span><br><span data-i18n="modal.title2">datos</span></h2>
+    <p class="modal-sub" data-i18n="modal.sub">Necesitamos esta información para configurar tu cuenta de WeStock y enviarte el acceso.</p>
 
     <div id="modalForm">
       <div class="form-row">
         <div class="form-group">
-          <label for="campo-nombre">Nombre</label>
-          <input type="text" id="campo-nombre" placeholder="Tu nombre" required>
+          <label for="campo-nombre" data-i18n="modal.fname">Nombre</label>
+          <input type="text" id="campo-nombre" placeholder="Tu nombre" data-i18n-placeholder="modal.fnamePh" required>
         </div>
         <div class="form-group">
-          <label for="campo-apellido">Apellido</label>
-          <input type="text" id="campo-apellido" placeholder="Tu apellido" required>
+          <label for="campo-apellido" data-i18n="modal.flast">Apellido</label>
+          <input type="text" id="campo-apellido" placeholder="Tu apellido" data-i18n-placeholder="modal.flastPh" required>
         </div>
       </div>
       <div class="form-group">
-        <label for="campo-email">Email</label>
+        <label for="campo-email" data-i18n="modal.femail">Email</label>
         <input type="email" id="campo-email" placeholder="tu@email.com" required>
       </div>
       <div class="form-group">
-        <label for="campo-empresa">Empresa / Negocio</label>
-        <input type="text" id="campo-empresa" placeholder="Nombre de tu empresa">
+        <label for="campo-empresa" data-i18n="modal.fcompany">Empresa / Negocio</label>
+        <input type="text" id="campo-empresa" placeholder="Nombre de tu empresa" data-i18n-placeholder="modal.fcompanyPh">
       </div>
       <div class="form-group">
-        <label for="campo-telefono">Teléfono / WhatsApp</label>
+        <label for="campo-telefono" data-i18n="modal.fphone">Teléfono / WhatsApp</label>
         <input type="tel" id="campo-telefono" placeholder="+54 11 xxxx-xxxx">
       </div>
 
       <button class="btn-modal-submit" id="btnSubmit" onclick="procesarCompra()">
-        <span class="btn-text">Continuar al pago →</span>
+        <span class="btn-text" data-i18n="modal.submit">Continuar al pago →</span>
         <span class="spinner"></span>
       </button>
-      <p class="modal-privacy">🔒 Tus datos son usados únicamente para configurar tu acceso a WeStock.</p>
+      <p class="modal-privacy" data-i18n="modal.privacy">🔒 Tus datos son usados únicamente para configurar tu acceso a WeStock.</p>
     </div>
   </div>
 </div>
@@ -1077,8 +1086,8 @@
 
 <!-- FOOTER -->
 <footer>
-  <p>© 2025 We Sell Soluciones — WeStock</p>
-  <a href="index.html">← Volver al sitio principal</a>
+  <p data-i18n="footer.rights">© 2025 We Sell Soluciones — WeStock</p>
+  <a href="index.html" data-i18n="footer.back">← Volver al sitio principal</a>
 </footer>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
@@ -1416,14 +1425,6 @@
     }
   }
 
-  document.getElementById('admin-pwd').addEventListener('keydown', function(e) { if (e.key === 'Enter') adminIngresar(); });
-  document.getElementById('admin-usr').addEventListener('keydown', function(e) { if (e.key === 'Enter') adminIngresar(); });
-  ['admin-usr','admin-pwd'].forEach(function(id) {
-    document.getElementById(id).addEventListener('input', function() {
-      document.getElementById('admin-err').style.display = 'none';
-    });
-  });
-
 </script>
 
 <!-- ADMIN PANEL (acceso oculto: triple click en logo) -->
@@ -1451,8 +1452,175 @@
   </div>
 </div>
 
+<script>
+  document.getElementById('admin-pwd').addEventListener('keydown', function(e) { if (e.key === 'Enter') adminIngresar(); });
+  document.getElementById('admin-usr').addEventListener('keydown', function(e) { if (e.key === 'Enter') adminIngresar(); });
+  ['admin-usr','admin-pwd'].forEach(function(id) {
+    document.getElementById(id).addEventListener('input', function() {
+      document.getElementById('admin-err').style.display = 'none';
+    });
+  });
+</script>
+
 <a href="https://wa.me/5491135019702" target="_blank" class="whatsapp-btn" title="Chateá con nosotros">
   <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="white" width="28" height="28"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.558 4.17 1.595 5.938L.057 23.929l6.188-1.517A11.946 11.946 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.817 9.817 0 01-5.003-1.368l-.36-.214-3.722.912.947-3.628-.235-.374A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
 </a>
+<script>
+  const DOT = '<div class="marquee-dot"></div>';
+  const I18N = {
+    en: {
+      "nav.inicio": "Home", "nav.servicios": "Services", "nav.productos": "Products",
+      "nav.westock": "Inventory — WeStock", "nav.wetask": "Productivity — WeTask", "nav.reportes": "Reports — Dashify",
+      "nav.nosotros": "About", "nav.contacto": "Contact", "nav.cta": "↗ Get WeStock",
+      "hero.badge": "Product",
+      "hero.word1": "MANAGEMENT", "hero.word2": "SYSTEM",
+      "hero.sub": "Total control of your inventory",
+      "hero.desc": "WeStock is the tool designed so you never lose control of your stock again. Manage products, movements, and alerts from one place, simply and efficiently.",
+      "hero.btn1": "Get it now", "hero.btn2": "See more",
+      "hero.windowTitle": "WeStock · Inventory",
+      "hero.metric1": "Products", "hero.metric2": "Low stock", "hero.metric3": "Control",
+      "hero.scroll": "Scroll",
+      "marquee.items": "STOCK MANAGEMENT " + DOT + " INVENTORY CONTROL " + DOT + " REAL-TIME ALERTS " + DOT + " AUTOMATIC REPORTS " + DOT + " WE SELL SOLUCIONES " + DOT + " WESTOCK " + DOT,
+      "queEs.label": "What is WeStock",
+      "queEs.title1": "Your stock,", "queEs.title2": "always", "queEs.title3": "under control",
+      "queEs.p1": "WeStock is an <strong>inventory management system</strong> built by We Sell Soluciones for businesses that need full visibility into their products, movements, and stock at all times.",
+      "queEs.p2": "Forget outdated spreadsheets and manual errors. With WeStock you can log inflows and outflows, get alerts when stock runs low, and make decisions based on real data.",
+      "queEs.p3": "Designed to be <strong>simple, fast, and reliable</strong>, with no complicated learning curve or technical setup wasting your time.",
+      "mockup.title": "WeStock — Control panel", "mockup.heading": "Inventory", "mockup.live": "● Live",
+      "mockup.stat1": "Products", "mockup.stat2": "Low stock", "mockup.stat3": "Coverage",
+      "mockup.colProduct": "Product", "mockup.colStock": "Stock", "mockup.colMin": "Min.", "mockup.colStatus": "Status",
+      "mockup.r1.name": "T-shirt size M", "mockup.r1.status": "✓ OK",
+      "mockup.r2.name": "Cargo pants", "mockup.r2.status": "⚠ Low",
+      "mockup.r3.name": "Jacket L", "mockup.r3.status": "✕ Out of stock",
+      "mockup.r4.name": "Sneakers 42", "mockup.r4.status": "✓ OK",
+      "feat.label": "Features", "feat.title1": "Everything you", "feat.title2": "need",
+      "feat.f1.title": "Inventory control", "feat.f1.desc": "Log all your products with name, category, minimum quantity, and price. Access your stock's up-to-date status at any time.",
+      "feat.f2.title": "Low stock alerts", "feat.f2.desc": "Set minimum thresholds per product and get automatic alerts when stock falls below the defined level. Never run out of merchandise without warning again.",
+      "feat.f3.title": "Logged movements", "feat.f3.desc": "Every inflow and outflow is logged with date, quantity, and user. Full traceability of your inventory for audits or internal reviews.",
+      "feat.f4.title": "Simple reports", "feat.f4.desc": "View your stock status clearly. Identify best-selling products, critical shortages, and consumption trends.",
+      "feat.f5.title": "Multi-user", "feat.f5.desc": "Give your team access with differentiated roles. The warehouse manager logs movements, the admin reviews reports.",
+      "feat.f6.title": "Easy to use", "feat.f6.desc": "Interface designed for any level of technical knowledge. No complicated installs, no endless manuals. Get started the same day.",
+      "proc.label": "Process", "proc.title": "How WeStock",
+      "proc.s1.title": "Get the system", "proc.s1.desc": "Make a secure payment through Mercado Pago. Within minutes you receive access and the initial setup details.",
+      "proc.s2.title": "We set up your account", "proc.s2.desc": "The We Sell Soluciones team guides you through initial setup: loading products, categories, and system users.",
+      "proc.s3.title": "Start operating", "proc.s3.desc": "From day one you can log movements, check stock status, and receive alerts. Your inventory, always up to date.",
+      "proc.s4.title": "Ongoing support", "proc.s4.desc": "You have We Sell Soluciones' support to resolve questions, adjustments, and improvements. You're not alone after the purchase.",
+      "cta.label": "Get WeStock",
+      "cta.title1": "Start managing", "cta.title2": "your stock", "cta.title3": "today",
+      "cta.desc": "Get WeStock with a single payment and take full control of your inventory. No hidden subscriptions, no surprises.",
+      "cta.priceDesc": "ARS · One-time payment · Full access",
+      "cta.li1": "Complete inventory system", "cta.li2": "Low stock alerts", "cta.li3": "Movement tracking",
+      "cta.li4": "Multi-user included", "cta.li5": "We Sell Soluciones support", "cta.li6": "Assisted setup",
+      "cta.buy": "Buy with Mercado Pago →",
+      "dl.label": "Payment confirmed", "dl.title1": "Thank you for", "dl.title2": "your purchase!",
+      "dl.p1": "Your payment was successfully processed. Click the button to download <strong>WeStock</strong> and start managing your inventory today.",
+      "dl.btn": "⬇ Download WeStock",
+      "modal.label": "Last step", "modal.title1": "Complete your", "modal.title2": "details",
+      "modal.sub": "We need this information to set up your WeStock account and send you access.",
+      "modal.fname": "First name", "modal.fnamePh": "Your first name",
+      "modal.flast": "Last name", "modal.flastPh": "Your last name",
+      "modal.femail": "Email", "modal.fcompany": "Company / Business", "modal.fcompanyPh": "Your company name",
+      "modal.fphone": "Phone / WhatsApp",
+      "modal.submit": "Continue to payment →",
+      "modal.privacy": "🔒 Your data is only used to set up your WeStock access.",
+      "footer.rights": "© 2025 We Sell Soluciones — WeStock",
+      "footer.back": "← Back to main site"
+    },
+    pt: {
+      "nav.inicio": "Início", "nav.servicios": "Serviços", "nav.productos": "Produtos",
+      "nav.westock": "Estoque — WeStock", "nav.wetask": "Produtividade — WeTask", "nav.reportes": "Relatórios — Dashify",
+      "nav.nosotros": "Sobre", "nav.contacto": "Contato", "nav.cta": "↗ Obter WeStock",
+      "hero.badge": "Produto",
+      "hero.word1": "SISTEMA DE", "hero.word2": "GESTÃO",
+      "hero.sub": "Controle total do seu estoque",
+      "hero.desc": "WeStock é a ferramenta feita para você nunca mais perder o controle do seu estoque. Gerencie produtos, movimentações e alertas em um só lugar, de forma simples e eficiente.",
+      "hero.btn1": "Obter agora", "hero.btn2": "Ver mais",
+      "hero.windowTitle": "WeStock · Estoque",
+      "hero.metric1": "Produtos", "hero.metric2": "Estoque baixo", "hero.metric3": "Controle",
+      "hero.scroll": "Scroll",
+      "marquee.items": "GESTÃO DE ESTOQUE " + DOT + " CONTROLE DE INVENTÁRIO " + DOT + " ALERTAS EM TEMPO REAL " + DOT + " RELATÓRIOS AUTOMÁTICOS " + DOT + " WE SELL SOLUCIONES " + DOT + " WESTOCK " + DOT,
+      "queEs.label": "O que é WeStock",
+      "queEs.title1": "Seu estoque,", "queEs.title2": "sempre", "queEs.title3": "sob controle",
+      "queEs.p1": "WeStock é um <strong>sistema de gestão de estoque</strong> desenvolvido pela We Sell Soluciones para negócios que precisam ter visibilidade total de seus produtos, movimentações e existências a qualquer momento.",
+      "queEs.p2": "Esqueça as planilhas desatualizadas e os erros manuais. Com o WeStock você registra entradas e saídas, recebe alertas quando o estoque cai e toma decisões baseadas em dados reais.",
+      "queEs.p3": "Desenhado para ser <strong>simples, rápido e confiável</strong>, sem curvas de aprendizado complicadas nem configurações técnicas que te façam perder tempo.",
+      "mockup.title": "WeStock — Painel de controle", "mockup.heading": "Estoque", "mockup.live": "● Ao vivo",
+      "mockup.stat1": "Produtos", "mockup.stat2": "Estoque baixo", "mockup.stat3": "Cobertura",
+      "mockup.colProduct": "Produto", "mockup.colStock": "Estoque", "mockup.colMin": "Mín.", "mockup.colStatus": "Status",
+      "mockup.r1.name": "Camiseta tam. M", "mockup.r1.status": "✓ OK",
+      "mockup.r2.name": "Calça cargo", "mockup.r2.status": "⚠ Baixo",
+      "mockup.r3.name": "Jaqueta G", "mockup.r3.status": "✕ Esgotado",
+      "mockup.r4.name": "Tênis 42", "mockup.r4.status": "✓ OK",
+      "feat.label": "Funcionalidades", "feat.title1": "Tudo o que", "feat.title2": "você precisa",
+      "feat.f1.title": "Controle de estoque", "feat.f1.desc": "Registre todos os seus produtos com nome, categoria, quantidade mínima e preço. Acesse o status atualizado do seu estoque a qualquer momento.",
+      "feat.f2.title": "Alertas de estoque baixo", "feat.f2.desc": "Configure limites mínimos por produto e receba alertas automáticos quando o estoque estiver abaixo do nível definido. Nunca mais fique sem mercadoria sem aviso.",
+      "feat.f3.title": "Movimentações registradas", "feat.f3.desc": "Cada entrada e saída fica registrada com data, quantidade e usuário. Rastreabilidade total do seu estoque para auditorias ou revisões internas.",
+      "feat.f4.title": "Relatórios simples", "feat.f4.desc": "Visualize o status do seu estoque de forma clara. Identifique produtos mais vendidos, faltas críticas e tendências de consumo.",
+      "feat.f5.title": "Multiusuário", "feat.f5.desc": "Dê acesso à sua equipe com perfis diferenciados. O responsável pelo depósito registra movimentações, o administrativo revisa relatórios.",
+      "feat.f6.title": "Fácil de usar", "feat.f6.desc": "Interface pensada para qualquer nível de conhecimento técnico. Sem instalações complicadas, sem manuais intermináveis. Você começa no mesmo dia.",
+      "proc.label": "Processo", "proc.title": "Como funciona o",
+      "proc.s1.title": "Adquira o sistema", "proc.s1.desc": "Faça o pagamento com segurança pelo Mercado Pago. Em minutos você recebe o acesso e os dados de configuração inicial.",
+      "proc.s2.title": "Configuramos sua conta", "proc.s2.desc": "A equipe da We Sell Soluciones te acompanha na configuração inicial: cadastro de produtos, categorias e usuários do sistema.",
+      "proc.s3.title": "Comece a operar", "proc.s3.desc": "Desde o primeiro dia você pode registrar movimentações, consultar o status do estoque e receber alertas. Seu inventário, sempre atualizado.",
+      "proc.s4.title": "Suporte contínuo", "proc.s4.desc": "Você conta com o suporte da We Sell Soluciones para resolver dúvidas, ajustes e melhorias. Você não está sozinho após a compra.",
+      "cta.label": "Obter WeStock",
+      "cta.title1": "Comece a gerenciar", "cta.title2": "seu estoque", "cta.title3": "hoje",
+      "cta.desc": "Adquira o WeStock com um único pagamento e tenha o controle total do seu estoque. Sem assinaturas ocultas, sem surpresas.",
+      "cta.priceDesc": "ARS · Pagamento único · Acesso total",
+      "cta.li1": "Sistema completo de estoque", "cta.li2": "Alertas de estoque baixo", "cta.li3": "Registro de movimentações",
+      "cta.li4": "Multiusuário incluído", "cta.li5": "Suporte da We Sell Soluciones", "cta.li6": "Configuração assistida",
+      "cta.buy": "Comprar com Mercado Pago →",
+      "dl.label": "Pagamento confirmado", "dl.title1": "Obrigado pela", "dl.title2": "sua compra!",
+      "dl.p1": "Seu pagamento foi confirmado com sucesso. Clique no botão para baixar o <strong>WeStock</strong> e começar a gerenciar seu estoque hoje mesmo.",
+      "dl.btn": "⬇ Baixar WeStock",
+      "modal.label": "Última etapa", "modal.title1": "Complete seus", "modal.title2": "dados",
+      "modal.sub": "Precisamos dessas informações para configurar sua conta do WeStock e enviar seu acesso.",
+      "modal.fname": "Nome", "modal.fnamePh": "Seu nome",
+      "modal.flast": "Sobrenome", "modal.flastPh": "Seu sobrenome",
+      "modal.femail": "Email", "modal.fcompany": "Empresa / Negócio", "modal.fcompanyPh": "Nome da sua empresa",
+      "modal.fphone": "Telefone / WhatsApp",
+      "modal.submit": "Continuar para pagamento →",
+      "modal.privacy": "🔒 Seus dados são usados apenas para configurar seu acesso ao WeStock.",
+      "footer.rights": "© 2025 We Sell Soluciones — WeStock",
+      "footer.back": "← Voltar ao site principal"
+    }
+  };
+
+  const ES_DEFAULTS = {};
+  document.querySelectorAll('[data-i18n]').forEach(el => { ES_DEFAULTS[el.getAttribute('data-i18n')] = el.textContent; });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { ES_DEFAULTS[el.getAttribute('data-i18n-html')] = el.innerHTML; });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach(el => { ES_DEFAULTS[el.getAttribute('data-i18n-placeholder')] = el.getAttribute('placeholder'); });
+  I18N.es = ES_DEFAULTS;
+
+  window.currentLang = localStorage.getItem('wesell_lang') || 'es';
+
+  function applyLanguage(lang) {
+    window.currentLang = lang;
+    const dict = I18N[lang] || I18N.es;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key] !== undefined) el.textContent = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      if (dict[key] !== undefined) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
+      const key = el.getAttribute('data-i18n-placeholder');
+      if (dict[key] !== undefined) el.setAttribute('placeholder', dict[key]);
+    });
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+    });
+    document.documentElement.setAttribute('lang', lang === 'es' ? 'es-AR' : (lang === 'pt' ? 'pt-BR' : 'en'));
+    localStorage.setItem('wesell_lang', lang);
+  }
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => applyLanguage(btn.getAttribute('data-lang')));
+  });
+
+  if (window.currentLang !== 'es') applyLanguage(window.currentLang);
+</script>
 </body>
 </html>
