@@ -176,6 +176,65 @@
       z-index: 0; pointer-events: none;
     }
 
+    /* ── SEÑAL: cursor-reactive dot-grid spotlight ── */
+    .hero-signal-grid {
+      position: absolute; inset: 0; z-index: 1; pointer-events: none;
+      background-image: radial-gradient(rgba(224,48,48,0.55) 1px, transparent 1px);
+      background-size: 26px 26px;
+      -webkit-mask-image: radial-gradient(circle 240px at var(--sx,50%) var(--sy,30%), #000 0%, transparent 70%);
+      mask-image: radial-gradient(circle 240px at var(--sx,50%) var(--sy,30%), #000 0%, transparent 70%);
+      opacity: 0.55; transition: opacity 0.4s ease;
+    }
+    @media (max-width: 900px) { .hero-signal-grid { display: none; } }
+
+    /* ── SEÑAL: custom cursor ── */
+    body.has-signal-cursor { cursor: none; }
+    body.has-signal-cursor a, body.has-signal-cursor button, body.has-signal-cursor [onclick] { cursor: none; }
+    .signal-cursor-dot, .signal-cursor-ring {
+      position: fixed; top: 0; left: 0; pointer-events: none; z-index: 9999;
+      transform: translate(-50%, -50%);
+      border-radius: 50%;
+    }
+    .signal-cursor-dot { width: 5px; height: 5px; background: var(--red); transition: opacity 0.2s; }
+    .signal-cursor-ring {
+      width: 34px; height: 34px; border: 1px solid rgba(224,48,48,0.55);
+      transition: width 0.2s ease, height 0.2s ease, border-color 0.2s ease, background 0.2s ease, transform 0.05s linear;
+    }
+    .signal-cursor-ring::before, .signal-cursor-ring::after {
+      content: ''; position: absolute; background: rgba(224,48,48,0.7);
+    }
+    .signal-cursor-ring::before { left: 50%; top: -5px; width: 1px; height: 5px; transform: translateX(-50%); }
+    .signal-cursor-ring::after { left: 50%; bottom: -5px; width: 1px; height: 5px; transform: translateX(-50%); }
+    .signal-cursor-ring.hover { width: 52px; height: 52px; background: rgba(224,48,48,0.08); border-color: var(--red); }
+    @media (max-width: 900px), (hover: none) { .signal-cursor-dot, .signal-cursor-ring { display: none !important; } body.has-signal-cursor { cursor: auto; } }
+
+    /* ── SEÑAL: magnetic buttons ── */
+    .magnetic { display: inline-flex; will-change: transform; transition: transform 0.15s ease-out; }
+
+    /* ── SEÑAL: tilt cards ── */
+    .tilt-card { transform-style: preserve-3d; will-change: transform; transition: transform 0.15s ease-out, box-shadow 0.3s ease; }
+    .tilt-card.tilting { transition: transform 0.05s linear; }
+
+    /* ── SEÑAL: scroll progress rail ── */
+    #signal-rail {
+      position: fixed; right: 20px; top: 50%; transform: translateY(-50%);
+      z-index: 500; display: flex; flex-direction: column; align-items: center; gap: 4px;
+      opacity: 0; pointer-events: none; transition: opacity 0.4s ease;
+    }
+    #signal-rail.visible { opacity: 1; }
+    #signal-rail .rail-track { position: relative; width: 2px; height: 120px; background: rgba(255,255,255,0.12); border-radius: 2px; overflow: hidden; }
+    #signal-rail .rail-fill { position: absolute; bottom: 0; left: 0; width: 100%; background: var(--red); border-radius: 2px; height: 0%; transition: height 0.1s linear; }
+    #signal-rail .rail-pct { font-family: 'DM Sans', sans-serif; font-size: 9px; letter-spacing: 0.1em; color: var(--muted); writing-mode: vertical-rl; }
+    @media (max-width: 900px) { #signal-rail { display: none; } }
+
+    /* ── SEÑAL: scramble text ── */
+    .scramble-ready { visibility: hidden; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .signal-cursor-dot, .signal-cursor-ring, .hero-signal-grid, #signal-rail { display: none !important; }
+      .magnetic, .tilt-card { transition: none !important; transform: none !important; }
+    }
+
     .hero-content {
       background: transparent;
       padding: 140px 60px 80px 80px;
@@ -381,82 +440,6 @@
     .section-label { font-size:11px; letter-spacing:0.28em; text-transform:uppercase; color:#ffffff; margin-bottom:16px; display:flex; align-items:center; gap:10px; }
     .section-label::before { content:''; display:block; width:24px; height:1px; background:var(--red); }
     .section-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(40px,5vw,72px); font-weight:400; line-height:1; letter-spacing:0.03em; margin-bottom:56px; }
-
-    /* Video institucional */
-    #video-institucional {
-      background:
-        radial-gradient(circle at 85% 12%, rgba(224,48,48,0.14), transparent 34%),
-        linear-gradient(180deg, var(--surface) 0%, var(--bg) 100%);
-      border-top: 1px solid var(--border-gray);
-      border-bottom: 1px solid var(--border-gray);
-      overflow: hidden;
-    }
-    .institutional-video-inner {
-      display: grid;
-      grid-template-columns: minmax(0, 0.86fr) minmax(320px, 1.14fr);
-      gap: 58px;
-      align-items: center;
-      max-width: 1180px;
-      margin: 0 auto;
-    }
-    .institutional-video-copy .section-title { margin-bottom: 24px; }
-    .institutional-video-copy p {
-      max-width: 500px;
-      color: var(--muted);
-      font-size: 15px;
-      line-height: 1.8;
-    }
-    .institutional-video-frame {
-      position: relative;
-      width: 100%;
-      max-width: 420px;
-      aspect-ratio: 9 / 16;
-      justify-self: center;
-      border: 1px solid rgba(255,255,255,0.12);
-      background: #050814;
-      box-shadow: 0 30px 90px rgba(0,0,0,0.38), 0 0 0 1px rgba(224,48,48,0.14);
-      overflow: hidden;
-    }
-    .institutional-video-frame::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border-top: 3px solid var(--red);
-      pointer-events: none;
-      z-index: 2;
-    }
-    .institutional-video-frame::after {
-      content: '';
-      position: absolute;
-      inset: 0;
-      border: 1px solid rgba(224,48,48,0);
-      pointer-events: none;
-      z-index: 3;
-    }
-    .institutional-video-frame--intro.visible {
-      animation: institutionalFrameEnter 0.9s cubic-bezier(0.22,0.61,0.36,1) both;
-    }
-    .institutional-video-frame--intro.visible::after {
-      animation: institutionalFrameGlow 1.2s ease-out 0.1s both;
-    }
-    @keyframes institutionalFrameEnter {
-      0% { opacity: 0; transform: translateY(28px) scale(0.96); box-shadow: 0 16px 42px rgba(0,0,0,0.22), 0 0 0 1px rgba(224,48,48,0); }
-      58% { opacity: 1; transform: translateY(0) scale(1.018); box-shadow: 0 34px 96px rgba(0,0,0,0.42), 0 0 34px rgba(224,48,48,0.34); }
-      100% { opacity: 1; transform: translateY(0) scale(1); box-shadow: 0 30px 90px rgba(0,0,0,0.38), 0 0 0 1px rgba(224,48,48,0.14); }
-    }
-    @keyframes institutionalFrameGlow {
-      0% { border-color: rgba(224,48,48,0); box-shadow: inset 0 0 0 rgba(224,48,48,0); }
-      45% { border-color: rgba(240,64,64,0.75); box-shadow: inset 0 0 30px rgba(224,48,48,0.22); }
-      100% { border-color: rgba(224,48,48,0); box-shadow: inset 0 0 0 rgba(224,48,48,0); }
-    }
-    .institutional-video {
-      display: block;
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      object-position: center;
-      background: #000;
-    }
 
     /* ── SERVICES ── */
     #servicios { background:var(--bg); }
@@ -739,8 +722,6 @@
       /* Sections */
       .section { padding:70px 24px; }
       .section-title { font-size:clamp(32px,5vw,56px); margin-bottom:36px; }
-      .institutional-video-inner { grid-template-columns:1fr; gap:34px; }
-      .institutional-video-copy p { max-width:100%; }
 
       /* Servicios */
       .services-grid { grid-template-columns:1fr; }
@@ -806,9 +787,6 @@
       .section { padding:60px 18px; }
       .section-title { font-size:clamp(28px,9vw,48px); margin-bottom:28px; }
       .section-label { font-size:10px; }
-      .institutional-video-inner { gap:26px; }
-      .institutional-video-copy .section-title { margin-bottom:18px; }
-      .institutional-video-copy p { font-size:14px; }
 
       /* Servicios */
       .service-card { padding:32px 24px; }
@@ -951,17 +929,26 @@
   </nav>
 </header>
 
+<div class="signal-cursor-ring" id="signal-ring"></div>
+<div class="signal-cursor-dot" id="signal-dot"></div>
+
+<div id="signal-rail">
+  <span class="rail-pct" id="rail-pct">00%</span>
+  <div class="rail-track"><div class="rail-fill" id="rail-fill"></div></div>
+</div>
+
 <section class="hero">
   <canvas id="hero-canvas"></canvas>
+  <div class="hero-signal-grid" id="hero-signal-grid"></div>
   <div class="hero-vline"></div>
 
   <div class="hero-content">
     <span class="hero-eyebrow" data-i18n="hero.eyebrow">Consultoría en Negocios Digitales</span>
-    <h1><span class="red" data-i18n="hero.word1">VENDEMOS</span><br><span class="outline" data-i18n="hero.word2">SOLUCIONES</span><br><span data-i18n="hero.word3">QUE ESCALAN</span></h1>
+    <h1 id="hero-scramble-title"><span class="red" data-i18n="hero.word1">VENDEMOS</span><br><span class="outline" data-i18n="hero.word2">SOLUCIONES</span><br><span data-i18n="hero.word3">QUE ESCALAN</span></h1>
     <p data-i18n="hero.p">Gestión de cuentas de Mercado Libre, automatización y marketing digital. Combinamos estrategia, tecnología y datos para llevar tu negocio al siguiente nivel.</p>
     <div class="hero-actions">
-      <button class="btn-primary" onclick="Calendly.initPopupWidget({url:'https://calendly.com/wesellsoluciones/entrevista?primary_color=e03030&text_color=ffffff&background_color=131929'});return false;" data-i18n="hero.btn1">Agendar reunión</button>
-      <button class="btn-ghost" onclick="scrollToSection('servicios')" data-i18n="hero.btn2">Ver servicios →</button>
+      <button class="btn-primary magnetic" onclick="Calendly.initPopupWidget({url:'https://calendly.com/wesellsoluciones/entrevista?primary_color=e03030&text_color=ffffff&background_color=131929'});return false;" data-i18n="hero.btn1">Agendar reunión</button>
+      <button class="btn-ghost magnetic" onclick="scrollToSection('servicios')" data-i18n="hero.btn2">Ver servicios →</button>
     </div>
   </div>
   <div class="hero-visual">
@@ -1018,32 +1005,16 @@
 <div class="stats-bar">
   <div class="stat reveal"><span class="stat-num">+10</span><span class="stat-label" data-i18n="stats.years">Años de experiencia</span></div>
   <div class="stat reveal" style="transition-delay:0.1s"><span class="stat-num">+50</span><span class="stat-label" data-i18n="stats.projects">Proyectos impulsados</span></div>
-  <div class="stat reveal" style="transition-delay:0.2s"><span class="stat-num" style="font-size:52px;" data-i18n="stats.maxnum">+100</span><span class="stat-label" data-i18n="stats.clients">Clientes satisfechos</span></div>
+  <div class="stat reveal" style="transition-delay:0.2s"><span class="stat-num" style="font-size:52px;" data-i18n="stats.maxnum">Máx. 5</span><span class="stat-label" data-i18n="stats.clients">Clientes activos</span></div>
 </div>
-
-<section id="video-institucional" class="section">
-  <div class="institutional-video-inner">
-    <div class="institutional-video-copy">
-      <span class="section-label reveal" data-i18n="video.label">Conoce We Sell</span>
-      <h2 class="section-title reveal" data-i18n="video.title">Video Institucional</h2>
-      <p class="reveal" data-i18n="video.desc">Una mirada directa a nuestra forma de trabajar: estrategia, tecnologia y acompanamiento para que cada proyecto avance con foco comercial y resultados medibles.</p>
-    </div>
-    <div class="institutional-video-frame institutional-video-frame--intro reveal" style="transition-delay:0.12s">
-      <video class="institutional-video" controls preload="metadata" poster="WE SELL SOLUCIONES-Cover.jpg">
-        <source src="WE SELL SOLUCIONES.mp4" type="video/mp4">
-        Tu navegador no puede reproducir este video.
-      </video>
-    </div>
-  </div>
-</section>
 
 <section id="servicios" class="section">
   <span class="section-label reveal" data-i18n="servicios.label">Lo que hacemos</span>
   <h2 class="section-title reveal" data-i18n="servicios.title">Nuestros Servicios</h2>
   <div class="services-grid">
-    <div class="service-card reveal" onclick="window.location.href='estrategia-digital.html'" style="cursor:pointer"><span class="service-num">01</span><h3 data-i18n="servicios.s1.title">Estrategia Digital</h3><p data-i18n="servicios.s1.desc">Gestión de cuentas de Mercado Libre y planes de crecimiento online adaptados a tu modelo de negocio.</p><span class="service-arrow">↗</span></div>
-    <div class="service-card reveal" style="transition-delay:0.1s" onclick="window.location.href='automatizacion.html'" style="cursor:pointer"><span class="service-num">02</span><h3 data-i18n="servicios.s2.title">Automatización</h3><p data-i18n="servicios.s2.desc">Implementamos sistemas inteligentes para escalar ventas sin incrementar el esfuerzo manual.</p><span class="service-arrow">↗</span></div>
-    <div class="service-card reveal" style="transition-delay:0.2s" onclick="window.location.href='marketing-ads.html'" style="cursor:pointer">
+    <div class="service-card reveal tilt-card" onclick="window.location.href='estrategia-digital.html'" style="cursor:pointer"><span class="service-num">01</span><h3 data-i18n="servicios.s1.title">Estrategia Digital</h3><p data-i18n="servicios.s1.desc">Gestión de cuentas de Mercado Libre y planes de crecimiento online adaptados a tu modelo de negocio.</p><span class="service-arrow">↗</span></div>
+    <div class="service-card reveal tilt-card" style="transition-delay:0.1s" onclick="window.location.href='automatizacion.html'" style="cursor:pointer"><span class="service-num">02</span><h3 data-i18n="servicios.s2.title">Automatización</h3><p data-i18n="servicios.s2.desc">Implementamos sistemas inteligentes para escalar ventas sin incrementar el esfuerzo manual.</p><span class="service-arrow">↗</span></div>
+    <div class="service-card reveal tilt-card" style="transition-delay:0.2s" onclick="window.location.href='marketing-ads.html'" style="cursor:pointer">
       <span class="service-num">03</span>
       <h3 data-i18n="servicios.s3.title">Marketing & Ads</h3>
       <p data-i18n="servicios.s3.desc">Estrategia, publicidad y análisis de datos para escalar tu negocio de forma efectiva y medible.</p>
@@ -1116,7 +1087,6 @@
   .video-card:hover { border-color:rgba(220,38,38,0.3); transform:translateY(-4px); box-shadow:0 16px 40px rgba(0,0,0,0.2); }
   .video-card:hover::before { transform:scaleX(1); }
   .video-card video { width:100%; aspect-ratio:9/16; object-fit:cover; display:block; background:#000; }
-  .video-card--contain video { object-fit:cover; object-position:center; }
   .video-card-info { padding:16px 18px 20px; }
   .video-card-tag { display:inline-block; font-size:10px; letter-spacing:0.22em; text-transform:uppercase; color:var(--red); font-weight:500; margin-bottom:10px; }
   .video-card-title { font-family:'Bebas Neue',sans-serif; font-size:19px; font-weight:400; letter-spacing:0.03em; color:var(--text); line-height:1.1; }
@@ -1129,27 +1099,27 @@
   <h2 class="section-title reveal" data-i18n="metodologia.title">Nuestra Metodología</h2>
   <p class="reveal" style="font-size:15px;color:var(--muted);max-width:640px;margin-bottom:56px;line-height:1.85;"><span data-i18n="metodologia.subtitle">Primero entendemos. Luego diagnosticamos. Recién ahí ejecutamos con precisión.</span></p>
   <div class="metodologia-grid reveal">
-    <div class="metodo-card">
+    <div class="metodo-card tilt-card">
       <span class="metodo-step" data-i18n="metodologia.m1.step">PASO 1</span>
       <h3 class="metodo-title" data-i18n="metodologia.m1.title">Entrevista con el Seller</h3>
       <p class="metodo-desc" data-i18n="metodologia.m1.desc">Sesión privada con el dueño o responsable del negocio para entender su situación actual, objetivos, desafíos y visión de crecimiento.</p>
     </div>
-    <div class="metodo-card" style="transition-delay:0.1s">
+    <div class="metodo-card tilt-card" style="transition-delay:0.1s">
       <span class="metodo-step" data-i18n="metodologia.m2.step">PASO 2</span>
       <h3 class="metodo-title" data-i18n="metodologia.m2.title">Diagnóstico del Negocio</h3>
       <p class="metodo-desc" data-i18n="metodologia.m2.desc">Análisis integral de canales, márgenes, operaciones y procesos internos para identificar oportunidades reales de mejora y escala.</p>
     </div>
-    <div class="metodo-card" style="transition-delay:0.2s">
+    <div class="metodo-card tilt-card" style="transition-delay:0.2s">
       <span class="metodo-step" data-i18n="metodologia.m3.step">PASO 3</span>
       <h3 class="metodo-title" data-i18n="metodologia.m3.title">Análisis de Entorno</h3>
       <p class="metodo-desc" data-i18n="metodologia.m3.desc">Relevamiento profundo de la competencia y el mercado para posicionar la propuesta de valor con ventaja diferencial sostenible.</p>
     </div>
-    <div class="metodo-card" style="transition-delay:0.3s">
+    <div class="metodo-card tilt-card" style="transition-delay:0.3s">
       <span class="metodo-step" data-i18n="metodologia.m4.step">PASO 4</span>
       <h3 class="metodo-title" data-i18n="metodologia.m4.title">Estrategia de Comunicación y Comercial</h3>
       <p class="metodo-desc" data-i18n="metodologia.m4.desc">Definimos el mensaje, los canales y el modelo comercial que conecta con el cliente ideal y maximiza la conversión.</p>
     </div>
-    <div class="metodo-card" style="transition-delay:0.4s">
+    <div class="metodo-card tilt-card" style="transition-delay:0.4s">
       <span class="metodo-step" data-i18n="metodologia.m5.step">PASO 5</span>
       <h3 class="metodo-title" data-i18n="metodologia.m5.title">Plan de Acción y Ejecución</h3>
       <p class="metodo-desc" data-i18n="metodologia.m5.desc">Implementamos, medimos y ajustamos en tiempo real con métricas claras para sostener el crecimiento en el tiempo.</p>
@@ -1162,16 +1132,7 @@
   <h2 class="section-title reveal" data-i18n="contenido.title">Contenido & Videos con IA</h2>
   <p class="reveal" style="font-size:15px;color:var(--muted);max-width:640px;margin-bottom:56px;line-height:1.85;" data-i18n="contenido.subtitle">Piezas de contenido para redes y videos generados con inteligencia artificial, parte de lo que producimos para nuestras marcas y clientes.</p>
   <div class="content-grid reveal">
-    <div class="video-card video-card--contain">
-      <video controls preload="metadata" playsinline muted poster="WE SELL SOLUCIONES-Cover.jpg">
-        <source src="WE SELL SOLUCIONES.mp4" type="video/mp4">
-      </video>
-      <div class="video-card-info">
-        <span class="video-card-tag" data-i18n="contenido.tagInstitutional">Video institucional</span>
-        <h3 class="video-card-title" data-i18n="contenido.v0">Presentación WeSell</h3>
-      </div>
-    </div>
-    <div class="video-card">
+    <div class="video-card tilt-card">
       <video controls preload="metadata" playsinline muted poster="reel-ia-mujer-poster.jpg">
         <source src="reel-ia-mujer.mp4?v=2" type="video/mp4">
       </video>
@@ -1180,7 +1141,7 @@
         <h3 class="video-card-title" data-i18n="contenido.v1">Reel — Presentadora IA</h3>
       </div>
     </div>
-    <div class="video-card">
+    <div class="video-card tilt-card">
       <video controls preload="metadata" playsinline muted>
         <source src="publicidad-wesell-ml.mp4" type="video/mp4">
       </video>
@@ -1189,7 +1150,7 @@
         <h3 class="video-card-title" data-i18n="contenido.v2">Publicidad We Sell — Mercado Libre</h3>
       </div>
     </div>
-    <div class="video-card">
+    <div class="video-card tilt-card">
       <video controls preload="metadata" playsinline muted poster="surfer-delmar-poster.jpg">
         <source src="surfer-delmar.mp4" type="video/mp4">
       </video>
@@ -1198,7 +1159,7 @@
         <h3 class="video-card-title" data-i18n="contenido.v3">Publicidad Delmar — Zapatillas Surfer</h3>
       </div>
     </div>
-    <div class="video-card">
+    <div class="video-card tilt-card">
       <video controls preload="metadata" playsinline muted poster="we-stock-poster.jpg">
         <source src="we-stock.mp4" type="video/mp4">
       </video>
@@ -2316,8 +2277,7 @@ footer {
       "hero.p": "Mercado Libre account management, automation, and digital marketing. We combine strategy, technology, and data to take your business to the next level.",
       "hero.btn1": "Book a call", "hero.btn2": "See services →",
       "marquee.items": "DIGITAL STRATEGY " + DOT + " AUTOMATION " + DOT + " MARKETING & ADS " + DOT + " GROWTH " + DOT + " ROI " + DOT + " DATA " + DOT + " ARTIFICIAL INTELLIGENCE " + DOT,
-      "stats.years": "Years of experience", "stats.projects": "Projects delivered", "stats.maxnum": "+100", "stats.clients": "Satisfied clients",
-      "video.label": "Meet We Sell", "video.title": "Institutional Video", "video.desc": "A direct look at the way we work: strategy, technology, and support so every project moves forward with commercial focus and measurable results.",
+      "stats.years": "Years of experience", "stats.projects": "Projects delivered", "stats.maxnum": "Max. 5", "stats.clients": "Active clients",
       "servicios.label": "What we do", "servicios.title": "Our Services",
       "servicios.s1.title": "Digital Strategy", "servicios.s1.desc": "Mercado Libre account management and online growth plans tailored to your business model.",
       "servicios.s2.title": "Automation", "servicios.s2.desc": "We implement smart systems to scale sales without increasing manual effort.",
@@ -2337,8 +2297,8 @@ footer {
       "metodologia.m5.step": "STEP 5", "metodologia.m5.title": "Action Plan & Execution", "metodologia.m5.desc": "We implement, measure, and adjust in real time with clear metrics to sustain growth over time.",
       "contenido.label": "Digital portfolio", "contenido.title": "Content & AI Videos",
       "contenido.subtitle": "Social media content and videos generated with artificial intelligence, part of what we produce for our brands and clients.",
-      "contenido.tag": "AI Video", "contenido.tagInstitutional": "Institutional Video",
-      "contenido.v0": "WeSell Presentation", "contenido.v1": "Reel — AI Presenter", "contenido.v2": "We Sell Ad — Mercado Libre",
+      "contenido.tag": "AI Video",
+      "contenido.v1": "Reel — AI Presenter", "contenido.v2": "We Sell Ad — Mercado Libre",
       "contenido.v3": "Delmar Ad — Surfer Sneakers", "contenido.v4": "WeStock — Overview",
       "contacto.label": "Let's talk", "contacto.title": "Book Your Call",
       "contacto.p1": "First, we get to know each other.",
@@ -2359,8 +2319,7 @@ footer {
       "hero.p": "Gestão de contas do Mercado Livre, automação e marketing digital. Combinamos estratégia, tecnologia e dados para levar seu negócio ao próximo nível.",
       "hero.btn1": "Agendar reunião", "hero.btn2": "Ver serviços →",
       "marquee.items": "ESTRATÉGIA DIGITAL " + DOT + " AUTOMAÇÃO " + DOT + " MARKETING & ADS " + DOT + " CRESCIMENTO " + DOT + " ROI " + DOT + " DADOS " + DOT + " INTELIGÊNCIA ARTIFICIAL " + DOT,
-      "stats.years": "Anos de experiência", "stats.projects": "Projetos impulsionados", "stats.maxnum": "+100", "stats.clients": "Clientes satisfeitos",
-      "video.label": "Conheça a We Sell", "video.title": "Vídeo Institucional", "video.desc": "Uma visão direta da nossa forma de trabalhar: estratégia, tecnologia e acompanhamento para que cada projeto avance com foco comercial e resultados mensuráveis.",
+      "stats.years": "Anos de experiência", "stats.projects": "Projetos impulsionados", "stats.maxnum": "Máx. 5", "stats.clients": "Clientes ativos",
       "servicios.label": "O que fazemos", "servicios.title": "Nossos Serviços",
       "servicios.s1.title": "Estratégia Digital", "servicios.s1.desc": "Gestão de contas do Mercado Livre e planos de crescimento online adaptados ao seu modelo de negócio.",
       "servicios.s2.title": "Automação", "servicios.s2.desc": "Implementamos sistemas inteligentes para escalar vendas sem aumentar o esforço manual.",
@@ -2380,8 +2339,8 @@ footer {
       "metodologia.m5.step": "PASSO 5", "metodologia.m5.title": "Plano de Ação e Execução", "metodologia.m5.desc": "Implementamos, medimos e ajustamos em tempo real com métricas claras para sustentar o crescimento ao longo do tempo.",
       "contenido.label": "Portfólio digital", "contenido.title": "Conteúdo & Vídeos com IA",
       "contenido.subtitle": "Peças de conteúdo para redes sociais e vídeos gerados com inteligência artificial, parte do que produzimos para nossas marcas e clientes.",
-      "contenido.tag": "Vídeo IA", "contenido.tagInstitutional": "Vídeo institucional",
-      "contenido.v0": "Apresentação WeSell", "contenido.v1": "Reel — Apresentadora IA", "contenido.v2": "Publicidade We Sell — Mercado Livre",
+      "contenido.tag": "Vídeo IA",
+      "contenido.v1": "Reel — Apresentadora IA", "contenido.v2": "Publicidade We Sell — Mercado Livre",
       "contenido.v3": "Publicidade Delmar — Tênis Surfista", "contenido.v4": "WeStock — Apresentação",
       "contacto.label": "Vamos conversar", "contacto.title": "Agende sua Chamada",
       "contacto.p1": "Primeiro nos conhecemos.",
@@ -2425,6 +2384,102 @@ footer {
   });
 
   if (window.currentLang !== 'es') applyLanguage(window.currentLang);
+</script>
+<script>
+(function(){
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const isTouch = window.matchMedia('(hover: none)').matches || window.innerWidth < 900;
+  if (reduceMotion || isTouch) return;
+
+  /* ── Custom cursor ── */
+  document.body.classList.add('has-signal-cursor');
+  const dot = document.getElementById('signal-dot');
+  const ring = document.getElementById('signal-ring');
+  let mx = window.innerWidth/2, my = window.innerHeight/2;
+  let rx = mx, ry = my;
+  window.addEventListener('mousemove', e => {
+    mx = e.clientX; my = e.clientY;
+    dot.style.left = mx + 'px'; dot.style.top = my + 'px';
+    document.getElementById('hero-signal-grid') && document.getElementById('hero-signal-grid').style.setProperty('--sx', mx + 'px');
+    document.getElementById('hero-signal-grid') && document.getElementById('hero-signal-grid').style.setProperty('--sy', my + 'px');
+  });
+  (function ringLoop(){
+    rx += (mx - rx) * 0.18; ry += (my - ry) * 0.18;
+    ring.style.left = rx + 'px'; ring.style.top = ry + 'px';
+    requestAnimationFrame(ringLoop);
+  })();
+  document.querySelectorAll('a, button, [onclick], .tilt-card').forEach(el => {
+    el.addEventListener('mouseenter', () => ring.classList.add('hover'));
+    el.addEventListener('mouseleave', () => ring.classList.remove('hover'));
+  });
+
+  /* ── Magnetic buttons ── */
+  document.querySelectorAll('.magnetic').forEach(el => {
+    el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect();
+      const dx = e.clientX - (r.left + r.width/2);
+      const dy = e.clientY - (r.top + r.height/2);
+      el.style.transform = `translate(${dx*0.25}px, ${dy*0.35}px)`;
+    });
+    el.addEventListener('mouseleave', () => { el.style.transform = 'translate(0,0)'; });
+  });
+
+  /* ── Tilt cards ── */
+  document.querySelectorAll('.tilt-card').forEach(el => {
+    el.addEventListener('mousemove', e => {
+      const r = el.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width - 0.5;
+      const py = (e.clientY - r.top) / r.height - 0.5;
+      el.classList.add('tilting');
+      el.style.transform = `perspective(700px) rotateX(${-py*7}deg) rotateY(${px*7}deg) translateY(-2px)`;
+    });
+    el.addEventListener('mouseleave', () => {
+      el.classList.remove('tilting');
+      el.style.transform = 'perspective(700px) rotateX(0) rotateY(0) translateY(0)';
+    });
+  });
+
+  /* ── Scroll signal rail ── */
+  const rail = document.getElementById('signal-rail');
+  const fill = document.getElementById('rail-fill');
+  const pct = document.getElementById('rail-pct');
+  window.addEventListener('scroll', () => {
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    fill.style.height = scrolled + '%';
+    pct.textContent = String(Math.round(scrolled)).padStart(2,'0') + '%';
+    rail.classList.toggle('visible', h.scrollTop > 200);
+  }, { passive: true });
+
+  /* ── Scramble-decode hero title ── */
+  const CHARS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ01#$%&';
+  function scramble(el, finalText, duration) {
+    const len = finalText.length;
+    let frame = 0;
+    const totalFrames = Math.round(duration / 30);
+    const interval = setInterval(() => {
+      frame++;
+      let out = '';
+      for (let i = 0; i < len; i++) {
+        if (finalText[i] === ' ') { out += ' '; continue; }
+        const revealFrame = (i / len) * totalFrames * 0.7;
+        if (frame >= revealFrame + totalFrames * 0.3) out += finalText[i];
+        else out += CHARS[Math.floor(Math.random() * CHARS.length)];
+      }
+      el.textContent = out;
+      if (frame >= totalFrames) { el.textContent = finalText; clearInterval(interval); }
+    }, 30);
+  }
+  const scrambleTitle = document.getElementById('hero-scramble-title');
+  if (scrambleTitle) {
+    const spans = scrambleTitle.querySelectorAll('span[data-i18n]');
+    spans.forEach((span, i) => {
+      const original = span.textContent;
+      span.style.opacity = '1';
+      setTimeout(() => scramble(span, original, 500), 500 + i * 180);
+    });
+  }
+})();
 </script>
 </body>
 </html>
