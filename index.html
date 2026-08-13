@@ -117,6 +117,13 @@
     .nav-cta { border: 1px solid var(--red) !important; color: var(--red) !important; padding: 8px 20px; border-radius: 2px; transition: background 0.3s, color 0.3s !important; }
     .nav-cta:hover { background: var(--red) !important; color: #fff !important; }
 
+    /* ── LANG SWITCHER ── */
+    .lang-switcher { display: flex; align-items: center; gap: 2px; margin-left: 6px; border: 1px solid rgba(0,0,0,0.12); border-radius: 20px; padding: 3px; }
+    .lang-btn { background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; color: #666; padding: 5px 10px; border-radius: 16px; transition: background 0.25s, color 0.25s; }
+    .lang-btn:hover { color: var(--red); }
+    .lang-btn.active { background: var(--red); color: #fff; }
+    @media(max-width:900px){ .lang-switcher{ margin-left:0; } }
+
     /* ── NAV DROPDOWN ── */
     .nav-dropdown { position: relative; }
     .nav-dropdown > a { display: flex; align-items: center; gap: 5px; cursor: pointer; }
@@ -839,22 +846,27 @@
 <header>
   <img src="logo.png" alt="We Sell Soluciones" class="header-logo secret-logo" onclick="handleSecretLogoClick()" title="We Sell Soluciones">
   <nav>
-    <a href="index.html">Inicio</a>
-    <a href="#servicios">Servicios</a>
+    <a href="index.html" data-i18n="nav.inicio">Inicio</a>
+    <a href="#servicios" data-i18n="nav.servicios">Servicios</a>
     <div class="nav-dropdown">
-      <a>Productos</a>
+      <a data-i18n="nav.productos">Productos</a>
       <div class="nav-dropdown-menu">
-        <a href="westock.html" class="active-product">Stock — WeStock</a>
+        <a href="westock.html" class="active-product" data-i18n="nav.westock">Stock — WeStock</a>
         <div class="menu-divider"></div>
-        <a href="wetask.html">Productividad — WeTask</a>
+        <a href="wetask.html" data-i18n="nav.wetask">Productividad — WeTask</a>
         <div class="menu-divider"></div>
-        <a href="reportes.html">Reportes — Dashify</a>
+        <a href="reportes.html" data-i18n="nav.reportes">Reportes — Dashify</a>
       </div>
     </div>
-    <a href="#nosotros">Nosotros</a>
-    <a href="#metodologia">Metodología</a>
-    <a href="#contenido">Contenido</a>
-    <a href="#contacto" class="nav-cta">Contacto</a>
+    <a href="#nosotros" data-i18n="nav.nosotros">Nosotros</a>
+    <a href="#metodologia" data-i18n="nav.metodologia">Metodología</a>
+    <a href="#contenido" data-i18n="nav.contenido">Contenido</a>
+    <a href="#contacto" class="nav-cta" data-i18n="nav.contacto">Contacto</a>
+    <div class="lang-switcher" id="lang-switcher">
+      <button type="button" data-lang="es" class="lang-btn active">ES</button>
+      <button type="button" data-lang="en" class="lang-btn">EN</button>
+      <button type="button" data-lang="pt" class="lang-btn">PT</button>
+    </div>
   </nav>
 </header>
 
@@ -863,12 +875,12 @@
   <div class="hero-vline"></div>
 
   <div class="hero-content">
-    <span class="hero-eyebrow">Consultoría en Negocios Digitales</span>
-    <h1><span class="red">VENDEMOS</span><br><span class="outline">SOLUCIONES</span><br>QUE ESCALAN</h1>
-    <p>Gestión de cuentas de Mercado Libre, automatización y marketing digital. Combinamos estrategia, tecnología y datos para llevar tu negocio al siguiente nivel.</p>
+    <span class="hero-eyebrow" data-i18n="hero.eyebrow">Consultoría en Negocios Digitales</span>
+    <h1><span class="red" data-i18n="hero.word1">VENDEMOS</span><br><span class="outline" data-i18n="hero.word2">SOLUCIONES</span><br><span data-i18n="hero.word3">QUE ESCALAN</span></h1>
+    <p data-i18n="hero.p">Gestión de cuentas de Mercado Libre, automatización y marketing digital. Combinamos estrategia, tecnología y datos para llevar tu negocio al siguiente nivel.</p>
     <div class="hero-actions">
-      <button class="btn-primary" onclick="Calendly.initPopupWidget({url:'https://calendly.com/wesellsoluciones/entrevista?primary_color=e03030&text_color=ffffff&background_color=131929'});return false;">Agendar reunión</button>
-      <button class="btn-ghost" onclick="scrollToSection('servicios')">Ver servicios →</button>
+      <button class="btn-primary" onclick="Calendly.initPopupWidget({url:'https://calendly.com/wesellsoluciones/entrevista?primary_color=e03030&text_color=ffffff&background_color=131929'});return false;" data-i18n="hero.btn1">Agendar reunión</button>
+      <button class="btn-ghost" onclick="scrollToSection('servicios')" data-i18n="hero.btn2">Ver servicios →</button>
     </div>
   </div>
   <div class="hero-visual">
@@ -917,27 +929,27 @@
 
 <div class="marquee-wrap">
   <div class="marquee-track">
-    <div class="marquee-item">ESTRATEGIA DIGITAL <span class="marquee-dot"></span> AUTOMATIZACIÓN <span class="marquee-dot"></span> MARKETING & ADS <span class="marquee-dot"></span> CRECIMIENTO <span class="marquee-dot"></span> ROI <span class="marquee-dot"></span> DATOS <span class="marquee-dot"></span> INTELIGENCIA ARTIFICIAL <span class="marquee-dot"></span></div>
-    <div class="marquee-item">ESTRATEGIA DIGITAL <span class="marquee-dot"></span> AUTOMATIZACIÓN <span class="marquee-dot"></span> MARKETING & ADS <span class="marquee-dot"></span> CRECIMIENTO <span class="marquee-dot"></span> ROI <span class="marquee-dot"></span> DATOS <span class="marquee-dot"></span> INTELIGENCIA ARTIFICIAL <span class="marquee-dot"></span></div>
+    <div class="marquee-item" data-i18n-html="marquee.items">ESTRATEGIA DIGITAL <span class="marquee-dot"></span> AUTOMATIZACIÓN <span class="marquee-dot"></span> MARKETING & ADS <span class="marquee-dot"></span> CRECIMIENTO <span class="marquee-dot"></span> ROI <span class="marquee-dot"></span> DATOS <span class="marquee-dot"></span> INTELIGENCIA ARTIFICIAL <span class="marquee-dot"></span></div>
+    <div class="marquee-item" data-i18n-html="marquee.items">ESTRATEGIA DIGITAL <span class="marquee-dot"></span> AUTOMATIZACIÓN <span class="marquee-dot"></span> MARKETING & ADS <span class="marquee-dot"></span> CRECIMIENTO <span class="marquee-dot"></span> ROI <span class="marquee-dot"></span> DATOS <span class="marquee-dot"></span> INTELIGENCIA ARTIFICIAL <span class="marquee-dot"></span></div>
   </div>
 </div>
 
 <div class="stats-bar">
-  <div class="stat reveal"><span class="stat-num">+10</span><span class="stat-label">Años de experiencia</span></div>
-  <div class="stat reveal" style="transition-delay:0.1s"><span class="stat-num">+50</span><span class="stat-label">Proyectos impulsados</span></div>
-  <div class="stat reveal" style="transition-delay:0.2s"><span class="stat-num" style="font-size:52px;">Máx. 5</span><span class="stat-label">Clientes activos</span></div>
+  <div class="stat reveal"><span class="stat-num">+10</span><span class="stat-label" data-i18n="stats.years">Años de experiencia</span></div>
+  <div class="stat reveal" style="transition-delay:0.1s"><span class="stat-num">+50</span><span class="stat-label" data-i18n="stats.projects">Proyectos impulsados</span></div>
+  <div class="stat reveal" style="transition-delay:0.2s"><span class="stat-num" style="font-size:52px;" data-i18n="stats.maxnum">Máx. 5</span><span class="stat-label" data-i18n="stats.clients">Clientes activos</span></div>
 </div>
 
 <section id="servicios" class="section">
-  <span class="section-label reveal">Lo que hacemos</span>
-  <h2 class="section-title reveal">Nuestros Servicios</h2>
+  <span class="section-label reveal" data-i18n="servicios.label">Lo que hacemos</span>
+  <h2 class="section-title reveal" data-i18n="servicios.title">Nuestros Servicios</h2>
   <div class="services-grid">
-    <div class="service-card reveal" onclick="window.location.href='estrategia-digital.html'" style="cursor:pointer"><span class="service-num">01</span><h3>Estrategia Digital</h3><p>Gestión de cuentas de Mercado Libre y planes de crecimiento online adaptados a tu modelo de negocio.</p><span class="service-arrow">↗</span></div>
-    <div class="service-card reveal" style="transition-delay:0.1s" onclick="window.location.href='automatizacion.html'" style="cursor:pointer"><span class="service-num">02</span><h3>Automatización</h3><p>Implementamos sistemas inteligentes para escalar ventas sin incrementar el esfuerzo manual.</p><span class="service-arrow">↗</span></div>
+    <div class="service-card reveal" onclick="window.location.href='estrategia-digital.html'" style="cursor:pointer"><span class="service-num">01</span><h3 data-i18n="servicios.s1.title">Estrategia Digital</h3><p data-i18n="servicios.s1.desc">Gestión de cuentas de Mercado Libre y planes de crecimiento online adaptados a tu modelo de negocio.</p><span class="service-arrow">↗</span></div>
+    <div class="service-card reveal" style="transition-delay:0.1s" onclick="window.location.href='automatizacion.html'" style="cursor:pointer"><span class="service-num">02</span><h3 data-i18n="servicios.s2.title">Automatización</h3><p data-i18n="servicios.s2.desc">Implementamos sistemas inteligentes para escalar ventas sin incrementar el esfuerzo manual.</p><span class="service-arrow">↗</span></div>
     <div class="service-card reveal" style="transition-delay:0.2s" onclick="window.location.href='marketing-ads.html'" style="cursor:pointer">
       <span class="service-num">03</span>
-      <h3>Marketing & Ads</h3>
-      <p>Estrategia, publicidad y análisis de datos para escalar tu negocio de forma efectiva y medible.</p>
+      <h3 data-i18n="servicios.s3.title">Marketing & Ads</h3>
+      <p data-i18n="servicios.s3.desc">Estrategia, publicidad y análisis de datos para escalar tu negocio de forma efectiva y medible.</p>
       <span class="service-arrow">↗</span>
     </div>
   </div>
@@ -946,18 +958,18 @@
 <section id="nosotros" class="section">
   <div class="about-img-wrap about-profile-media reveal-left">
     <img src="santiago-profile.png" alt="Santiago Silberstein, especialista en gestión de cuentas de Mercado Libre" class="about-img-main about-profile-photo">
-    <span class="about-tag">FOUNDER</span>
+    <span class="about-tag" data-i18n="nosotros.tag">FOUNDER</span>
   </div>
   <div class="about-text reveal-right">
-    <span class="section-label">Nosotros</span>
+    <span class="section-label" data-i18n="nosotros.label">Nosotros</span>
     <h2 class="section-title">Santiago Silberstein</h2>
     <div class="red-line"></div>
-    <p class="about-role">International Digital Business Consultant | Project Manager | Continuous Improvement Specialist | Strategy Planner</p>
-    <p>Profesional con enfoque internacional especializado en transformación digital, gestión de proyectos y optimización de procesos, con una sólida combinación de visión estratégica, orientación comercial y capacidad analítica.</p>
-    <p>No vendemos soluciones genéricas. Cada cliente recibe una estrategia construida desde cero, basada en sus datos, su mercado y sus metas.</p>
+    <p class="about-role" data-i18n="nosotros.role">International Digital Business Consultant | Project Manager | Continuous Improvement Specialist | Strategy Planner</p>
+    <p data-i18n="nosotros.p1">Profesional con enfoque internacional especializado en transformación digital, gestión de proyectos y optimización de procesos, con una sólida combinación de visión estratégica, orientación comercial y capacidad analítica.</p>
+    <p data-i18n="nosotros.p2">No vendemos soluciones genéricas. Cada cliente recibe una estrategia construida desde cero, basada en sus datos, su mercado y sus metas.</p>
     <div class="about-profile-actions">
-      <button class="btn-primary about-profile-btn" onclick="openProfile(0)">Ver biografía</button>
-      <a class="btn-ghost about-cv-btn" href="https://silbersteinsantiago.github.io/CV-Interactivo/" target="_blank" rel="noopener noreferrer">Trayectoria interactiva</a>
+      <button class="btn-primary about-profile-btn" onclick="openProfile(0)" data-i18n="nosotros.btn1">Ver biografía</button>
+      <a class="btn-ghost about-cv-btn" href="https://silbersteinsantiago.github.io/CV-Interactivo/" target="_blank" rel="noopener noreferrer" data-i18n="nosotros.btn2">Trayectoria interactiva</a>
     </div>
   </div>
 </section>
@@ -975,8 +987,8 @@
       </div>
     </div>
     <div class="profile-tabs">
-      <button class="profile-tab active" onclick="switchTab('descripcion')">Descripción</button>
-      <button class="profile-tab" onclick="switchTab('acerca')">Acerca de</button>
+      <button class="profile-tab active" onclick="switchTab('descripcion')" data-i18n="modal.tab1">Descripción</button>
+      <button class="profile-tab" onclick="switchTab('acerca')" data-i18n="modal.tab2">Acerca de</button>
     </div>
     <div class="profile-tab-content" id="tab-descripcion"></div>
     <div class="profile-tab-content" id="tab-acerca" style="display:none"></div>
@@ -1015,50 +1027,50 @@
 </style>
 
 <section id="metodologia" class="section" style="background:var(--surface);">
-  <span class="section-label reveal">Cómo trabajamos</span>
-  <h2 class="section-title reveal">Nuestra Metodología</h2>
-  <p class="reveal" style="font-size:15px;color:var(--muted);max-width:640px;margin-bottom:56px;line-height:1.85;">Primero entendemos. Luego diagnosticamos. Recién ahí ejecutamos con precisión.</p>
+  <span class="section-label reveal" data-i18n="metodologia.label">Cómo trabajamos</span>
+  <h2 class="section-title reveal" data-i18n="metodologia.title">Nuestra Metodología</h2>
+  <p class="reveal" style="font-size:15px;color:var(--muted);max-width:640px;margin-bottom:56px;line-height:1.85;"><span data-i18n="metodologia.subtitle">Primero entendemos. Luego diagnosticamos. Recién ahí ejecutamos con precisión.</span></p>
   <div class="metodologia-grid reveal">
     <div class="metodo-card">
-      <span class="metodo-step">PASO 1</span>
-      <h3 class="metodo-title">Entrevista con el Seller</h3>
-      <p class="metodo-desc">Sesión privada con el dueño o responsable del negocio para entender su situación actual, objetivos, desafíos y visión de crecimiento.</p>
+      <span class="metodo-step" data-i18n="metodologia.m1.step">PASO 1</span>
+      <h3 class="metodo-title" data-i18n="metodologia.m1.title">Entrevista con el Seller</h3>
+      <p class="metodo-desc" data-i18n="metodologia.m1.desc">Sesión privada con el dueño o responsable del negocio para entender su situación actual, objetivos, desafíos y visión de crecimiento.</p>
     </div>
     <div class="metodo-card" style="transition-delay:0.1s">
-      <span class="metodo-step">PASO 2</span>
-      <h3 class="metodo-title">Diagnóstico del Negocio</h3>
-      <p class="metodo-desc">Análisis integral de canales, márgenes, operaciones y procesos internos para identificar oportunidades reales de mejora y escala.</p>
+      <span class="metodo-step" data-i18n="metodologia.m2.step">PASO 2</span>
+      <h3 class="metodo-title" data-i18n="metodologia.m2.title">Diagnóstico del Negocio</h3>
+      <p class="metodo-desc" data-i18n="metodologia.m2.desc">Análisis integral de canales, márgenes, operaciones y procesos internos para identificar oportunidades reales de mejora y escala.</p>
     </div>
     <div class="metodo-card" style="transition-delay:0.2s">
-      <span class="metodo-step">PASO 3</span>
-      <h3 class="metodo-title">Análisis de Entorno</h3>
-      <p class="metodo-desc">Relevamiento profundo de la competencia y el mercado para posicionar la propuesta de valor con ventaja diferencial sostenible.</p>
+      <span class="metodo-step" data-i18n="metodologia.m3.step">PASO 3</span>
+      <h3 class="metodo-title" data-i18n="metodologia.m3.title">Análisis de Entorno</h3>
+      <p class="metodo-desc" data-i18n="metodologia.m3.desc">Relevamiento profundo de la competencia y el mercado para posicionar la propuesta de valor con ventaja diferencial sostenible.</p>
     </div>
     <div class="metodo-card" style="transition-delay:0.3s">
-      <span class="metodo-step">PASO 4</span>
-      <h3 class="metodo-title">Estrategia de Comunicación y Comercial</h3>
-      <p class="metodo-desc">Definimos el mensaje, los canales y el modelo comercial que conecta con el cliente ideal y maximiza la conversión.</p>
+      <span class="metodo-step" data-i18n="metodologia.m4.step">PASO 4</span>
+      <h3 class="metodo-title" data-i18n="metodologia.m4.title">Estrategia de Comunicación y Comercial</h3>
+      <p class="metodo-desc" data-i18n="metodologia.m4.desc">Definimos el mensaje, los canales y el modelo comercial que conecta con el cliente ideal y maximiza la conversión.</p>
     </div>
     <div class="metodo-card" style="transition-delay:0.4s">
-      <span class="metodo-step">PASO 5</span>
-      <h3 class="metodo-title">Plan de Acción y Ejecución</h3>
-      <p class="metodo-desc">Implementamos, medimos y ajustamos en tiempo real con métricas claras para sostener el crecimiento en el tiempo.</p>
+      <span class="metodo-step" data-i18n="metodologia.m5.step">PASO 5</span>
+      <h3 class="metodo-title" data-i18n="metodologia.m5.title">Plan de Acción y Ejecución</h3>
+      <p class="metodo-desc" data-i18n="metodologia.m5.desc">Implementamos, medimos y ajustamos en tiempo real con métricas claras para sostener el crecimiento en el tiempo.</p>
     </div>
   </div>
 </section>
 
 <section id="contenido" class="section">
-  <span class="section-label reveal">Portfolio digital</span>
-  <h2 class="section-title reveal">Contenido & Videos con IA</h2>
-  <p class="reveal" style="font-size:15px;color:var(--muted);max-width:640px;margin-bottom:56px;line-height:1.85;">Piezas de contenido para redes y videos generados con inteligencia artificial, parte de lo que producimos para nuestras marcas y clientes.</p>
+  <span class="section-label reveal" data-i18n="contenido.label">Portfolio digital</span>
+  <h2 class="section-title reveal" data-i18n="contenido.title">Contenido & Videos con IA</h2>
+  <p class="reveal" style="font-size:15px;color:var(--muted);max-width:640px;margin-bottom:56px;line-height:1.85;" data-i18n="contenido.subtitle">Piezas de contenido para redes y videos generados con inteligencia artificial, parte de lo que producimos para nuestras marcas y clientes.</p>
   <div class="content-grid reveal">
     <div class="video-card">
       <video controls preload="metadata" playsinline muted poster="reel-ia-mujer-poster.jpg">
         <source src="reel-ia-mujer.mp4?v=2" type="video/mp4">
       </video>
       <div class="video-card-info">
-        <span class="video-card-tag">Video IA</span>
-        <h3 class="video-card-title">Reel — Presentadora IA</h3>
+        <span class="video-card-tag" data-i18n="contenido.tag">Video IA</span>
+        <h3 class="video-card-title" data-i18n="contenido.v1">Reel — Presentadora IA</h3>
       </div>
     </div>
     <div class="video-card">
@@ -1066,8 +1078,8 @@
         <source src="publicidad-wesell-ml.mp4" type="video/mp4">
       </video>
       <div class="video-card-info">
-        <span class="video-card-tag">Video IA</span>
-        <h3 class="video-card-title">Publicidad We Sell — Mercado Libre</h3>
+        <span class="video-card-tag" data-i18n="contenido.tag">Video IA</span>
+        <h3 class="video-card-title" data-i18n="contenido.v2">Publicidad We Sell — Mercado Libre</h3>
       </div>
     </div>
     <div class="video-card">
@@ -1075,8 +1087,8 @@
         <source src="surfer-delmar.mp4" type="video/mp4">
       </video>
       <div class="video-card-info">
-        <span class="video-card-tag">Video IA</span>
-        <h3 class="video-card-title">Publicidad Delmar — Zapatillas Surfer</h3>
+        <span class="video-card-tag" data-i18n="contenido.tag">Video IA</span>
+        <h3 class="video-card-title" data-i18n="contenido.v3">Publicidad Delmar — Zapatillas Surfer</h3>
       </div>
     </div>
     <div class="video-card">
@@ -1084,22 +1096,22 @@
         <source src="we-stock.mp4" type="video/mp4">
       </video>
       <div class="video-card-info">
-        <span class="video-card-tag">Video IA</span>
-        <h3 class="video-card-title">WeStock — Presentación</h3>
+        <span class="video-card-tag" data-i18n="contenido.tag">Video IA</span>
+        <h3 class="video-card-title" data-i18n="contenido.v4">WeStock — Presentación</h3>
       </div>
     </div>
   </div>
 </section>
 
 <section id="contacto" class="section">
-  <span class="section-label reveal">Hablemos</span>
-  <h2 class="section-title reveal">Agendá tu Llamada</h2>
+  <span class="section-label reveal" data-i18n="contacto.label">Hablemos</span>
+  <h2 class="section-title reveal" data-i18n="contacto.title">Agendá tu Llamada</h2>
   <div class="reveal" style="max-width:600px;margin-bottom:48px;">
-    <p style="font-size:18px;font-weight:500;color:var(--text);margin-bottom:16px;">Primero nos conocemos.</p>
-    <p style="font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:14px;">Queremos entender tu negocio, tus objetivos y los desafíos que enfrentás hoy.</p>
-    <p style="font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:14px;">A partir de ahí, analizamos juntos las oportunidades reales de crecimiento y te entregamos un plan concreto para escalar tus ventas — con estrategia digital, automatización y marketing enfocado en resultados.</p>
-    <p style="font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:20px;">Marketplaces, canales digitales, pauta publicitaria, redes sociales. Todo a medida de tu negocio, sin soluciones genéricas.</p>
-    <p style="font-size:15px;font-weight:500;color:var(--text);letter-spacing:0.04em;">30 minutos. Sin vueltas. Sin compromiso.</p>
+    <p style="font-size:18px;font-weight:500;color:var(--text);margin-bottom:16px;" data-i18n="contacto.p1">Primero nos conocemos.</p>
+    <p style="font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:14px;" data-i18n="contacto.p2">Queremos entender tu negocio, tus objetivos y los desafíos que enfrentás hoy.</p>
+    <p style="font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:14px;" data-i18n="contacto.p3">A partir de ahí, analizamos juntos las oportunidades reales de crecimiento y te entregamos un plan concreto para escalar tus ventas — con estrategia digital, automatización y marketing enfocado en resultados.</p>
+    <p style="font-size:15px;color:var(--muted);line-height:1.85;margin-bottom:20px;" data-i18n="contacto.p4">Marketplaces, canales digitales, pauta publicitaria, redes sociales. Todo a medida de tu negocio, sin soluciones genéricas.</p>
+    <p style="font-size:15px;font-weight:500;color:var(--text);letter-spacing:0.04em;" data-i18n="contacto.p5">30 minutos. Sin vueltas. Sin compromiso.</p>
   </div>
 
   <!-- CALENDLY INLINE WIDGET -->
@@ -1118,8 +1130,8 @@
 
   <!-- Alternativa: botón que abre Calendly en popup -->
   <div class="reveal" style="margin-top:32px;text-align:center;">
-    <p style="font-size:13px;color:var(--muted);margin-bottom:16px;">¿Preferís abrirlo en una ventana aparte?</p>
-    <button class="btn-primary" onclick="Calendly.initPopupWidget({url:'https://calendly.com/wesellsoluciones/entrevista?primary_color=e03030&text_color=ffffff&background_color=131929'});return false;">
+    <p style="font-size:13px;color:var(--muted);margin-bottom:16px;" data-i18n="contacto.p6">¿Preferís abrirlo en una ventana aparte?</p>
+    <button class="btn-primary" onclick="Calendly.initPopupWidget({url:'https://calendly.com/wesellsoluciones/entrevista?primary_color=e03030&text_color=ffffff&background_color=131929'});return false;" data-i18n="contacto.btn">
       Agendar llamada
     </button>
   </div>
@@ -1127,7 +1139,7 @@
 
 <footer>
   <img src="logo.png" alt="We Sell Soluciones" class="footer-logo">
-  <p>© 2026 We Sell Soluciones — Todos los derechos reservados</p>
+  <p data-i18n="footer.rights">© 2026 We Sell Soluciones — Todos los derechos reservados</p>
 </footer>
 
 <!-- WHATSAPP FLOTANTE -->
@@ -1800,6 +1812,67 @@ footer {
       </ul>
       <h4>Perfil</h4>
       <p>Profesional versátil con mentalidad estratégica y ejecución práctica, capaz de conectar negocio, tecnología y datos para generar impacto real y sostenible en organizaciones que buscan escalar y optimizar su performance en mercados digitales.</p>`,
+      descripcion_en: `<p>International-focused professional specialized in digital transformation, project management, and process optimization, combining strategic vision, commercial orientation, and analytical capability.</p>
+      <p>Experience leading business initiatives in dynamic, multicultural environments, driving growth through digital solutions, continuous improvement, and data-driven decision making. Skilled at identifying opportunities, designing scalable strategies, and executing end-to-end projects, aligning business objectives with technological capabilities.</p>
+      <h4>Responsibilities and areas of impact</h4>
+      <ul>
+        <li>Advise organizations on digital business strategy and international expansion.</li>
+        <li>Lead implementation and transformation projects (from planning through execution).</li>
+        <li>Analyze commercial and operational data to identify growth and efficiency opportunities.</li>
+        <li>Design and implement continuous improvement processes (cost, productivity, and performance optimization).</li>
+        <li>Develop commercial strategies and action plans based on market insights.</li>
+        <li>Coordinate multidisciplinary teams and stakeholders across regions.</li>
+        <li>Define KPIs, dashboards, and key metrics for decision making.</li>
+        <li>Evaluate and integrate digital tools (CRM, ERP, automation, analytics).</li>
+      </ul>
+      <h4>Key skills</h4>
+      <ul>
+        <li>Project Management (Agile, Scrum, hybrid methodologies).</li>
+        <li>Strategic thinking and business planning.</li>
+        <li>Strong results orientation and commercial focus.</li>
+        <li>Data analysis and insight-driven decision making.</li>
+        <li>Effective communication and stakeholder management.</li>
+        <li>Adaptability in global, digital environments.</li>
+      </ul>
+      <h4>Profile</h4>
+      <p>Versatile professional with a strategic mindset and practical execution, able to connect business, technology, and data to generate real, sustainable impact for organizations looking to scale and optimize their performance in digital markets.</p>`,
+      acerca_en: `<p>I've worked in commercial roles for over 14 years. For more than 8 years I've specialized in digital projects, mostly focused on e-commerce, helping companies find optimal solutions to achieve excellent performance.</p>
+      <p>I led teams and areas responsible for meeting the goals of assigned projects. I applied a consistent standard to manage multiple projects and developed roadmaps to track previously designed action plans, ultimately delivering the expected results.</p>
+      <p>I coordinated all project stakeholders and studied how to improve functionality and operations, in order to measure KPIs and set appropriate, segmented strategies. I controlled the resources assigned to each project to meet objectives and ensure profitability.</p>
+      <p>I managed constraints (scope, schedule, cost, quality, etc.). For 5 years I've been an international digital business consultant, adopting and developing different business models to expand across various areas of e-commerce, working across sectors and markets (B2C, B2B, C2C).</p>
+      <p>I've also worked on web, inbound marketing and advertising projects, and custom developments focused on digital transformation. I gained experience with: various integrations, management systems (ERPs and CRMs), web development, e-commerce platforms, marketplaces, KPIs, scope, timelines, cost, quality, cross-team communication, customer experience, purchase journey, inventory, risk, and profitability.</p>
+      <p>Today I'm passionate about sharing my knowledge with companies and clients as a consultant and coach, focused on continuous improvement, profitability, and scalability. I adapt to each client's needs to provide personalized commercial consulting, factoring in market insight and understanding consumer motivation to uncover new opportunities.</p>`,
+      descripcion_pt: `<p>Profissional com foco internacional especializado em transformação digital, gestão de projetos e otimização de processos, com uma sólida combinação de visão estratégica, orientação comercial e capacidade analítica.</p>
+      <p>Experiência liderando iniciativas de negócio em ambientes dinâmicos e multiculturais, impulsionando o crescimento por meio de soluções digitais, melhoria contínua e tomada de decisão baseada em dados. Capacidade de identificar oportunidades, desenhar estratégias escaláveis e executar projetos de ponta a ponta, alinhando objetivos comerciais com capacidades tecnológicas.</p>
+      <h4>Responsabilidades e áreas de impacto</h4>
+      <ul>
+        <li>Assessorar organizações em estratégias de negócio digital e expansão internacional.</li>
+        <li>Liderar projetos de implementação e transformação (do planejamento à execução).</li>
+        <li>Analisar dados comerciais e operacionais para identificar oportunidades de crescimento e eficiência.</li>
+        <li>Desenhar e implementar processos de melhoria contínua (otimização de custos, produtividade e performance).</li>
+        <li>Desenvolver estratégias comerciais e planos de ação baseados em insights de mercado.</li>
+        <li>Coordenar equipes multidisciplinares e stakeholders em diferentes regiões.</li>
+        <li>Definir KPIs, dashboards e métricas-chave para a tomada de decisão.</li>
+        <li>Avaliar e integrar ferramentas digitais (CRM, ERP, automação, analytics).</li>
+      </ul>
+      <h4>Habilidades-chave</h4>
+      <ul>
+        <li>Gestão de Projetos (Agile, Scrum, metodologias híbridas).</li>
+        <li>Pensamento estratégico e planejamento de negócios.</li>
+        <li>Forte orientação a resultados e foco comercial.</li>
+        <li>Análise de dados e tomada de decisão baseada em insights.</li>
+        <li>Comunicação eficaz e gestão de stakeholders.</li>
+        <li>Adaptabilidade em ambientes globais e digitais.</li>
+      </ul>
+      <h4>Perfil</h4>
+      <p>Profissional versátil com mentalidade estratégica e execução prática, capaz de conectar negócio, tecnologia e dados para gerar impacto real e sustentável em organizações que buscam escalar e otimizar sua performance em mercados digitais.</p>`,
+      acerca_pt: `<p>Desenvolvi minha carreira em funções comerciais há mais de 14 anos. Há mais de 8 anos me especializo em projetos digitais, com foco principalmente em e-commerce, oferecendo às empresas soluções ideais para alcançar uma excelente performance.</p>
+      <p>Liderei equipes e áreas responsáveis por atingir os objetivos dos projetos designados. Apliquei um padrão para dirigir vários projetos e desenvolvi roadmaps para acompanhar os planos de ação previamente definidos, alcançando os resultados esperados.</p>
+      <p>Coordenei todas as partes interessadas dos projetos e estudei como melhorar sua funcionalidade e operação, para depois medir os KPIs e estabelecer estratégias adequadas e segmentadas. Controlei os recursos alocados ao projeto para cumprir os objetivos definidos e garantir sua rentabilidade.</p>
+      <p>Gerenciei as restrições (escopo, cronograma, custo, qualidade, etc.). Há 5 anos sou consultor internacional de negócios digitais e adotei e desenvolvi diferentes modelos de negócio para expandir em diferentes áreas do comércio eletrônico, atuando em diversos setores e mercados (B2C, B2B, C2C).</p>
+      <p>Também participei de projetos web, marketing e publicidade inbound e desenvolvimentos sob medida focados em transformação digital. Me capacitei em: integrações diversas, sistemas de gestão (ERPs e CRMs), desenvolvimento web, plataformas de e-commerce, marketplaces, indicadores, escopo, cronograma, custos, qualidade, comunicação entre áreas, experiência do cliente, jornada de compra, estoque, riscos e rentabilidade.</p>
+      <p>Hoje tenho paixão por transmitir meu conhecimento a diferentes empresas ou clientes como consultor e coach, com foco em melhoria contínua, rentabilidade e escalabilidade. Me adapto às necessidades de cada cliente para oferecer um serviço personalizado de consultoria comercial, considerando o insight de mercado e compreendendo a motivação dos consumidores para identificar novas oportunidades.</p>`,
+
       acerca: `<p>Me desarrollé profesionalmente en roles comerciales desde hace más de 14 años. Hace más de 8 años que trabajo especializándome en proyectos digitales enfocándome mayormente en comercio electrónico, brindando a las empresas soluciones óptimas para lograr una excelente performance.</p>
       <p>Lideré equipos de trabajo y áreas responsables en alcanzar los objetivos según los proyectos asignados. Apliqué un estándar para dirigir varios proyectos y desarrollé roadmaps para poder realizar seguimientos de los planes de acciones previamente diseñados, para finalmente lograr los resultados esperados.</p>
       <p>Coordiné todas las partes interesadas de proyectos y estudié sobre cómo mejorar su funcionabilidad y operatoria, para luego poder medir los KPIs y poder establecer estrategias acordes y segmentadas. Controlé los recursos asignados al proyecto con el fin de cumplir con los objetivos marcados y asegurar la rentabilidad del mismo.</p>
@@ -1837,7 +1910,60 @@ footer {
       <h4>Perfil ideal</h4>
       <p>Profesional orientado a resultados, con fuerte capacidad de organización, pensamiento crítico y habilidades interpersonales, capaz de gestionar múltiples proyectos y adaptarse a entornos dinámicos.</p>`,
       acerca: `<p>Quienes me conocen me definen como analítico, explorador y creativo. Mi especialidad es vincular el mundo de los negocios con las nuevas tecnologías, especialmente en relación al E-Commerce.</p>
-      <p>Me gusta trabajar en un ambiente desafiante y colaborativo. Actitud proactiva y propositiva, con la idea de que todo se puede mejorar. Pasión por el aprendizaje.</p>`
+      <p>Me gusta trabajar en un ambiente desafiante y colaborativo. Actitud proactiva y propositiva, con la idea de que todo se puede mejorar. Pasión por el aprendizaje.</p>`,
+      descripcion_en: `<p>The IT Implementation Analyst is responsible for planning, coordinating, and executing the implementation of technology solutions within an organization, ensuring proper integration with existing systems and alignment with business goals.</p>
+      <p>Acts as a bridge between technical teams and functional areas, translating business requirements into technical specifications, and ensuring projects are delivered on time, within scope, and within budget.</p>
+      <h4>Main responsibilities</h4>
+      <ul>
+        <li>Analyze business requirements and define suitable technology solutions.</li>
+        <li>Coordinate the implementation of systems, applications, or technology improvements.</li>
+        <li>Manage IT projects, including planning, tracking, and progress control.</li>
+        <li>Collaborate with development, QA, infrastructure teams, and stakeholders.</li>
+        <li>Configure, test, and validate solutions before production deployment.</li>
+        <li>Document processes, configurations, and implemented changes.</li>
+        <li>Provide post-implementation support and manage incidents.</li>
+        <li>Identify improvement opportunities in existing processes and systems.</li>
+      </ul>
+      <h4>Requirements and skills</h4>
+      <ul>
+        <li>Knowledge of project management (Agile, Scrum, or Waterfall).</li>
+        <li>Experience with enterprise systems (ERP, CRM, APIs, integrations).</li>
+        <li>Analytical skills and problem solving.</li>
+        <li>Effective communication with technical and non-technical profiles.</li>
+        <li>Basic knowledge of databases, testing, and systems architecture.</li>
+        <li>Intermediate/advanced English level (desirable).</li>
+      </ul>
+      <h4>Ideal profile</h4>
+      <p>Results-driven professional with strong organizational skills, critical thinking, and interpersonal abilities, able to manage multiple projects and adapt to dynamic environments.</p>`,
+      acerca_en: `<p>People who know me describe me as analytical, exploratory, and creative. My specialty is connecting the business world with new technologies, especially in relation to e-commerce.</p>
+      <p>I enjoy working in challenging, collaborative environments. Proactive, solution-oriented attitude, with the belief that everything can be improved. Passionate about learning.</p>`,
+      descripcion_pt: `<p>O IT Implementation Analyst é responsável por planejar, coordenar e executar a implementação de soluções tecnológicas dentro de uma organização, garantindo sua correta integração com os sistemas existentes e o cumprimento dos objetivos do negócio.</p>
+      <p>Atua como ponte entre as equipes técnicas e as áreas funcionais, traduzindo requisitos de negócio em especificações técnicas, e garantindo que os projetos sejam entregues no prazo, conforme escopo e dentro do orçamento estabelecido.</p>
+      <h4>Principais responsabilidades</h4>
+      <ul>
+        <li>Analisar requisitos do negócio e definir soluções tecnológicas adequadas.</li>
+        <li>Coordenar a implementação de sistemas, aplicações ou melhorias tecnológicas.</li>
+        <li>Gerenciar projetos de TI, incluindo planejamento, acompanhamento e controle de avanços.</li>
+        <li>Colaborar com equipes de desenvolvimento, QA, infraestrutura e stakeholders.</li>
+        <li>Configurar, testar e validar soluções antes de colocá-las em produção.</li>
+        <li>Documentar processos, configurações e mudanças implementadas.</li>
+        <li>Oferecer suporte pós-implementação e gerenciar incidentes.</li>
+        <li>Identificar oportunidades de melhoria em processos e sistemas existentes.</li>
+      </ul>
+      <h4>Requisitos e habilidades</h4>
+      <ul>
+        <li>Conhecimento em gestão de projetos (Agile, Scrum ou Waterfall).</li>
+        <li>Experiência com sistemas empresariais (ERP, CRM, APIs, integrações).</li>
+        <li>Habilidades analíticas e resolução de problemas.</li>
+        <li>Capacidade de comunicação eficaz com perfis técnicos e não técnicos.</li>
+        <li>Conhecimentos básicos de bancos de dados, testes e arquitetura de sistemas.</li>
+        <li>Nível intermediário/avançado de inglês (desejável).</li>
+      </ul>
+      <h4>Perfil ideal</h4>
+      <p>Profissional orientado a resultados, com forte capacidade de organização, pensamento crítico e habilidades interpessoais, capaz de gerenciar múltiplos projetos e se adaptar a ambientes dinâmicos.</p>`,
+      acerca_pt: `<p>Quem me conhece me define como analítico, explorador e criativo. Minha especialidade é conectar o mundo dos negócios com as novas tecnologias, especialmente em relação ao e-commerce.</p>
+      <p>Gosto de trabalhar em um ambiente desafiador e colaborativo. Atitude proativa e propositiva, com a ideia de que tudo pode ser melhorado. Paixão por aprender.</p>`
+
     }
   ];
 
@@ -1848,8 +1974,9 @@ footer {
     document.getElementById('profile-modal-name').textContent = p.nombre;
     document.getElementById('profile-modal-role').textContent = p.rol;
     document.getElementById('profile-tagline').textContent = p.tagline;
-    document.getElementById('tab-descripcion').innerHTML = p.descripcion;
-    document.getElementById('tab-acerca').innerHTML = p.acerca;
+    const lang = (window.currentLang && window.currentLang !== 'es') ? '_' + window.currentLang : '';
+    document.getElementById('tab-descripcion').innerHTML = p['descripcion' + lang] || p.descripcion;
+    document.getElementById('tab-acerca').innerHTML = p['acerca' + lang] || p.acerca;
     switchTab('descripcion');
     document.getElementById('profile-overlay').classList.add('open');
     document.body.style.overflow = 'hidden';
@@ -2068,6 +2195,127 @@ footer {
   document.querySelectorAll('.stat-num[data-target]').forEach(el => {
     counterObserver.observe(el);
   });
+</script>
+
+<script>
+  const DOT = '<span class="marquee-dot"></span>';
+  const I18N = {
+    en: {
+      "nav.inicio": "Home", "nav.servicios": "Services", "nav.productos": "Products",
+      "nav.westock": "Inventory — WeStock", "nav.wetask": "Productivity — WeTask", "nav.reportes": "Reports — Dashify",
+      "nav.nosotros": "About", "nav.metodologia": "Methodology", "nav.contenido": "Content", "nav.contacto": "Contact",
+      "hero.eyebrow": "Digital Business Consulting",
+      "hero.word1": "WE SELL", "hero.word2": "SOLUTIONS", "hero.word3": "THAT SCALE",
+      "hero.p": "Mercado Libre account management, automation, and digital marketing. We combine strategy, technology, and data to take your business to the next level.",
+      "hero.btn1": "Book a call", "hero.btn2": "See services →",
+      "marquee.items": "DIGITAL STRATEGY " + DOT + " AUTOMATION " + DOT + " MARKETING & ADS " + DOT + " GROWTH " + DOT + " ROI " + DOT + " DATA " + DOT + " ARTIFICIAL INTELLIGENCE " + DOT,
+      "stats.years": "Years of experience", "stats.projects": "Projects delivered", "stats.maxnum": "Max. 5", "stats.clients": "Active clients",
+      "servicios.label": "What we do", "servicios.title": "Our Services",
+      "servicios.s1.title": "Digital Strategy", "servicios.s1.desc": "Mercado Libre account management and online growth plans tailored to your business model.",
+      "servicios.s2.title": "Automation", "servicios.s2.desc": "We implement smart systems to scale sales without increasing manual effort.",
+      "servicios.s3.title": "Marketing & Ads", "servicios.s3.desc": "Strategy, advertising, and data analysis to scale your business effectively and measurably.",
+      "nosotros.tag": "FOUNDER", "nosotros.label": "About",
+      "nosotros.role": "International Digital Business Consultant | Project Manager | Continuous Improvement Specialist | Strategy Planner",
+      "nosotros.p1": "International-focused professional specialized in digital transformation, project management, and process optimization, combining strategic vision, commercial orientation, and analytical capability.",
+      "nosotros.p2": "We don't sell generic solutions. Every client gets a strategy built from scratch, based on their data, their market, and their goals.",
+      "nosotros.btn1": "View bio", "nosotros.btn2": "Interactive résumé",
+      "modal.tab1": "Description", "modal.tab2": "About",
+      "metodologia.label": "How we work", "metodologia.title": "Our Methodology",
+      "metodologia.subtitle": "First we understand. Then we diagnose. Only then do we execute with precision.",
+      "metodologia.m1.step": "STEP 1", "metodologia.m1.title": "Seller Interview", "metodologia.m1.desc": "A private session with the business owner or manager to understand their current situation, goals, challenges, and growth vision.",
+      "metodologia.m2.step": "STEP 2", "metodologia.m2.title": "Business Diagnosis", "metodologia.m2.desc": "A comprehensive analysis of channels, margins, operations, and internal processes to identify real opportunities for improvement and scale.",
+      "metodologia.m3.step": "STEP 3", "metodologia.m3.title": "Market Analysis", "metodologia.m3.desc": "In-depth review of competitors and the market to position the value proposition with a sustainable competitive edge.",
+      "metodologia.m4.step": "STEP 4", "metodologia.m4.title": "Communication & Commercial Strategy", "metodologia.m4.desc": "We define the message, channels, and commercial model that connects with the ideal customer and maximizes conversion.",
+      "metodologia.m5.step": "STEP 5", "metodologia.m5.title": "Action Plan & Execution", "metodologia.m5.desc": "We implement, measure, and adjust in real time with clear metrics to sustain growth over time.",
+      "contenido.label": "Digital portfolio", "contenido.title": "Content & AI Videos",
+      "contenido.subtitle": "Social media content and videos generated with artificial intelligence, part of what we produce for our brands and clients.",
+      "contenido.tag": "AI Video",
+      "contenido.v1": "Reel — AI Presenter", "contenido.v2": "We Sell Ad — Mercado Libre",
+      "contenido.v3": "Delmar Ad — Surfer Sneakers", "contenido.v4": "WeStock — Overview",
+      "contacto.label": "Let's talk", "contacto.title": "Book Your Call",
+      "contacto.p1": "First, we get to know each other.",
+      "contacto.p2": "We want to understand your business, your goals, and the challenges you're facing today.",
+      "contacto.p3": "From there, we look together at real growth opportunities and hand you a concrete plan to scale your sales — with digital strategy, automation, and results-focused marketing.",
+      "contacto.p4": "Marketplaces, digital channels, advertising, social media. All tailored to your business, no generic solutions.",
+      "contacto.p5": "30 minutes. No detours. No commitment.",
+      "contacto.p6": "Prefer to open it in a separate window?",
+      "contacto.btn": "Book a call",
+      "footer.rights": "© 2026 We Sell Soluciones — All rights reserved"
+    },
+    pt: {
+      "nav.inicio": "Início", "nav.servicios": "Serviços", "nav.productos": "Produtos",
+      "nav.westock": "Estoque — WeStock", "nav.wetask": "Produtividade — WeTask", "nav.reportes": "Relatórios — Dashify",
+      "nav.nosotros": "Sobre", "nav.metodologia": "Metodologia", "nav.contenido": "Conteúdo", "nav.contacto": "Contato",
+      "hero.eyebrow": "Consultoria em Negócios Digitais",
+      "hero.word1": "VENDEMOS", "hero.word2": "SOLUÇÕES", "hero.word3": "QUE ESCALAM",
+      "hero.p": "Gestão de contas do Mercado Livre, automação e marketing digital. Combinamos estratégia, tecnologia e dados para levar seu negócio ao próximo nível.",
+      "hero.btn1": "Agendar reunião", "hero.btn2": "Ver serviços →",
+      "marquee.items": "ESTRATÉGIA DIGITAL " + DOT + " AUTOMAÇÃO " + DOT + " MARKETING & ADS " + DOT + " CRESCIMENTO " + DOT + " ROI " + DOT + " DADOS " + DOT + " INTELIGÊNCIA ARTIFICIAL " + DOT,
+      "stats.years": "Anos de experiência", "stats.projects": "Projetos impulsionados", "stats.maxnum": "Máx. 5", "stats.clients": "Clientes ativos",
+      "servicios.label": "O que fazemos", "servicios.title": "Nossos Serviços",
+      "servicios.s1.title": "Estratégia Digital", "servicios.s1.desc": "Gestão de contas do Mercado Livre e planos de crescimento online adaptados ao seu modelo de negócio.",
+      "servicios.s2.title": "Automação", "servicios.s2.desc": "Implementamos sistemas inteligentes para escalar vendas sem aumentar o esforço manual.",
+      "servicios.s3.title": "Marketing & Ads", "servicios.s3.desc": "Estratégia, publicidade e análise de dados para escalar seu negócio de forma eficaz e mensurável.",
+      "nosotros.tag": "FUNDADOR", "nosotros.label": "Sobre",
+      "nosotros.role": "International Digital Business Consultant | Project Manager | Continuous Improvement Specialist | Strategy Planner",
+      "nosotros.p1": "Profissional com foco internacional especializado em transformação digital, gestão de projetos e otimização de processos, com uma sólida combinação de visão estratégica, orientação comercial e capacidade analítica.",
+      "nosotros.p2": "Não vendemos soluções genéricas. Cada cliente recebe uma estratégia construída do zero, baseada em seus dados, seu mercado e seus objetivos.",
+      "nosotros.btn1": "Ver biografia", "nosotros.btn2": "Trajetória interativa",
+      "modal.tab1": "Descrição", "modal.tab2": "Sobre",
+      "metodologia.label": "Como trabalhamos", "metodologia.title": "Nossa Metodologia",
+      "metodologia.subtitle": "Primeiro entendemos. Depois diagnosticamos. Só então executamos com precisão.",
+      "metodologia.m1.step": "PASSO 1", "metodologia.m1.title": "Entrevista com o Seller", "metodologia.m1.desc": "Sessão privada com o dono ou responsável pelo negócio para entender sua situação atual, objetivos, desafios e visão de crescimento.",
+      "metodologia.m2.step": "PASSO 2", "metodologia.m2.title": "Diagnóstico do Negócio", "metodologia.m2.desc": "Análise integral de canais, margens, operações e processos internos para identificar oportunidades reais de melhoria e escala.",
+      "metodologia.m3.step": "PASSO 3", "metodologia.m3.title": "Análise de Mercado", "metodologia.m3.desc": "Levantamento profundo da concorrência e do mercado para posicionar a proposta de valor com vantagem diferencial sustentável.",
+      "metodologia.m4.step": "PASSO 4", "metodologia.m4.title": "Estratégia de Comunicação e Comercial", "metodologia.m4.desc": "Definimos a mensagem, os canais e o modelo comercial que conecta com o cliente ideal e maximiza a conversão.",
+      "metodologia.m5.step": "PASSO 5", "metodologia.m5.title": "Plano de Ação e Execução", "metodologia.m5.desc": "Implementamos, medimos e ajustamos em tempo real com métricas claras para sustentar o crescimento ao longo do tempo.",
+      "contenido.label": "Portfólio digital", "contenido.title": "Conteúdo & Vídeos com IA",
+      "contenido.subtitle": "Peças de conteúdo para redes sociais e vídeos gerados com inteligência artificial, parte do que produzimos para nossas marcas e clientes.",
+      "contenido.tag": "Vídeo IA",
+      "contenido.v1": "Reel — Apresentadora IA", "contenido.v2": "Publicidade We Sell — Mercado Livre",
+      "contenido.v3": "Publicidade Delmar — Tênis Surfista", "contenido.v4": "WeStock — Apresentação",
+      "contacto.label": "Vamos conversar", "contacto.title": "Agende sua Chamada",
+      "contacto.p1": "Primeiro nos conhecemos.",
+      "contacto.p2": "Queremos entender seu negócio, seus objetivos e os desafios que você enfrenta hoje.",
+      "contacto.p3": "A partir daí, analisamos juntos as oportunidades reais de crescimento e entregamos um plano concreto para escalar suas vendas — com estratégia digital, automação e marketing focado em resultados.",
+      "contacto.p4": "Marketplaces, canais digitais, publicidade paga, redes sociais. Tudo sob medida para o seu negócio, sem soluções genéricas.",
+      "contacto.p5": "30 minutos. Direto ao ponto. Sem compromisso.",
+      "contacto.p6": "Prefere abrir em uma janela separada?",
+      "contacto.btn": "Agendar chamada",
+      "footer.rights": "© 2026 We Sell Soluciones — Todos os direitos reservados"
+    }
+  };
+
+  const ES_DEFAULTS = {};
+  document.querySelectorAll('[data-i18n]').forEach(el => { ES_DEFAULTS[el.getAttribute('data-i18n')] = el.textContent; });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { ES_DEFAULTS[el.getAttribute('data-i18n-html')] = el.innerHTML; });
+  I18N.es = ES_DEFAULTS;
+
+  window.currentLang = localStorage.getItem('wesell_lang') || 'es';
+
+  function applyLanguage(lang) {
+    window.currentLang = lang;
+    const dict = I18N[lang] || I18N.es;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key] !== undefined) el.textContent = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      if (dict[key] !== undefined) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+    });
+    document.documentElement.setAttribute('lang', lang === 'es' ? 'es-AR' : (lang === 'pt' ? 'pt-BR' : 'en'));
+    localStorage.setItem('wesell_lang', lang);
+  }
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => applyLanguage(btn.getAttribute('data-lang')));
+  });
+
+  if (window.currentLang !== 'es') applyLanguage(window.currentLang);
 </script>
 </body>
 </html>
