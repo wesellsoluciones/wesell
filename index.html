@@ -430,6 +430,15 @@
 
     /* ── STATS ── */
     .stats-bar { padding:50px 60px; display:flex; justify-content:space-between; background:var(--surface); border-bottom:1px solid var(--border-gray); border-top:1px solid var(--border-gray); }
+
+    /* ── VIDEO INSTITUCIONAL ── */
+    .institutional-video-section { background:var(--bg); padding:90px 60px; display:flex; flex-direction:column; align-items:center; text-align:center; }
+    .institutional-video-label { font-size:11px; letter-spacing:0.28em; text-transform:uppercase; color:var(--red); margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+    .institutional-video-label::before, .institutional-video-label::after { content:''; display:block; width:24px; height:1px; background:var(--red); }
+    .institutional-video-title { font-family:'Bebas Neue',sans-serif; font-size:clamp(32px,4vw,52px); font-weight:400; letter-spacing:0.02em; color:var(--text); margin-bottom:44px; }
+    .institutional-video-wrap { position:relative; width:100%; max-width:340px; border-radius:14px; overflow:hidden; border:1px solid var(--border-gray); box-shadow:0 30px 80px rgba(0,0,0,0.35); background:#000; }
+    .institutional-video-wrap video { width:100%; aspect-ratio:9/16; object-fit:cover; display:block; }
+    @media(max-width:560px){ .institutional-video-section{ padding:60px 24px; } }
     .stat { text-align:center; flex:1; border-right:1px solid var(--border-gray); }
     .stat:last-child { border-right:none; }
     .stat-num { font-family:'Bebas Neue',sans-serif; font-size:64px; color:var(--red); display:block; line-height:1; }
@@ -1005,7 +1014,17 @@
 <div class="stats-bar">
   <div class="stat reveal"><span class="stat-num">+10</span><span class="stat-label" data-i18n="stats.years">Años de experiencia</span></div>
   <div class="stat reveal" style="transition-delay:0.1s"><span class="stat-num">+50</span><span class="stat-label" data-i18n="stats.projects">Proyectos impulsados</span></div>
-  <div class="stat reveal" style="transition-delay:0.2s"><span class="stat-num" data-i18n="stats.maxnum">Máx. 5</span><span class="stat-label" data-i18n="stats.clients">Clientes activos</span></div>
+  <div class="stat reveal" style="transition-delay:0.2s"><span class="stat-num" data-i18n="stats.maxnum">+100</span><span class="stat-label" data-i18n="stats.clients">Clientes satisfechos</span></div>
+</div>
+
+<div class="institutional-video-section">
+  <span class="institutional-video-label" data-i18n="institucional.label">Conocé We Sell</span>
+  <h2 class="institutional-video-title" data-i18n="institucional.title">Nuestro video institucional</h2>
+  <div class="institutional-video-wrap reveal">
+    <video controls preload="metadata" playsinline muted poster="institucional-we-sell-poster.jpg">
+      <source src="institucional-we-sell.mp4" type="video/mp4">
+    </video>
+  </div>
 </div>
 
 <section id="servicios" class="section">
@@ -2277,7 +2296,7 @@ footer {
       "hero.p": "Mercado Libre account management, automation, and digital marketing. We combine strategy, technology, and data to take your business to the next level.",
       "hero.btn1": "Book a call", "hero.btn2": "See services →",
       "marquee.items": "DIGITAL STRATEGY " + DOT + " AUTOMATION " + DOT + " MARKETING & ADS " + DOT + " GROWTH " + DOT + " ROI " + DOT + " DATA " + DOT + " ARTIFICIAL INTELLIGENCE " + DOT,
-      "stats.years": "Years of experience", "stats.projects": "Projects delivered", "stats.maxnum": "Max. 5", "stats.clients": "Active clients",
+      "stats.years": "Years of experience", "stats.projects": "Projects delivered", "stats.maxnum": "+100", "stats.clients": "Satisfied clients", "institucional.label": "Get to know We Sell", "institucional.title": "Our institutional video",
       "servicios.label": "What we do", "servicios.title": "Our Services",
       "servicios.s1.title": "Digital Strategy", "servicios.s1.desc": "Mercado Libre account management and online growth plans tailored to your business model.",
       "servicios.s2.title": "Automation", "servicios.s2.desc": "We implement smart systems to scale sales without increasing manual effort.",
@@ -2319,7 +2338,7 @@ footer {
       "hero.p": "Gestão de contas do Mercado Livre, automação e marketing digital. Combinamos estratégia, tecnologia e dados para levar seu negócio ao próximo nível.",
       "hero.btn1": "Agendar reunião", "hero.btn2": "Ver serviços →",
       "marquee.items": "ESTRATÉGIA DIGITAL " + DOT + " AUTOMAÇÃO " + DOT + " MARKETING & ADS " + DOT + " CRESCIMENTO " + DOT + " ROI " + DOT + " DADOS " + DOT + " INTELIGÊNCIA ARTIFICIAL " + DOT,
-      "stats.years": "Anos de experiência", "stats.projects": "Projetos impulsionados", "stats.maxnum": "Máx. 5", "stats.clients": "Clientes ativos",
+      "stats.years": "Anos de experiência", "stats.projects": "Projetos impulsionados", "stats.maxnum": "+100", "stats.clients": "Clientes satisfeitos", "institucional.label": "Conheça a We Sell", "institucional.title": "Nosso vídeo institucional",
       "servicios.label": "O que fazemos", "servicios.title": "Nossos Serviços",
       "servicios.s1.title": "Estratégia Digital", "servicios.s1.desc": "Gestão de contas do Mercado Livre e planos de crescimento online adaptados ao seu modelo de negócio.",
       "servicios.s2.title": "Automação", "servicios.s2.desc": "Implementamos sistemas inteligentes para escalar vendas sem aumentar o esforço manual.",
