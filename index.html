@@ -1327,9 +1327,46 @@
   </div>
 </section>
 
-<footer>
-  <img src="logo.png" alt="We Sell Soluciones" class="footer-logo">
-  <p data-i18n="footer.rights">© 2026 We Sell Soluciones — Todos los derechos reservados</p>
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <a href="index.html" aria-label="We Sell Soluciones - Inicio">
+        <img src="logo.png" alt="We Sell Soluciones" class="footer-logo">
+      </a>
+      <p data-i18n="footer.tagline">Estrategia digital, automatización y marketing para escalar ventas online.</p>
+      <a class="footer-instagram" href="https://www.instagram.com/wesellsoluciones/" target="_blank" rel="noopener noreferrer" aria-label="Instagram We Sell Soluciones">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+          <circle cx="12" cy="12" r="4"></circle>
+          <circle cx="17.5" cy="6.5" r="1"></circle>
+        </svg>
+        <span>@wesellsoluciones</span>
+      </a>
+    </div>
+
+    <nav class="footer-nav" aria-label="Menú del footer">
+      <span data-i18n="footer.menu">Menú</span>
+      <a href="index.html" data-i18n="nav.inicio">Inicio</a>
+      <a href="#servicios" data-i18n="nav.servicios">Servicios</a>
+      <a href="westock.html" data-i18n="nav.westock">Stock — WeStock</a>
+      <a href="wetask.html" data-i18n="nav.wetask">Productividad — WeTask</a>
+      <a href="reportes.html" data-i18n="nav.reportes">Reportes — Dashify</a>
+      <a href="#nosotros" data-i18n="nav.nosotros">Nosotros</a>
+      <a href="#metodologia" data-i18n="nav.metodologia">Metodología</a>
+      <a href="#contacto" data-i18n="nav.contacto">Contacto</a>
+    </nav>
+
+    <div class="footer-contact">
+      <span data-i18n="footer.contact">Contacto</span>
+      <a href="mailto:wesellsoluciones@gmail.com">wesellsoluciones@gmail.com</a>
+      <a href="tel:+5491135019702">+54 9 11 3501-9702</a>
+      <p>CABA, Buenos Aires</p>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p data-i18n="footer.rights">© 2026 We Sell Soluciones — Todos los derechos reservados</p>
+    <a href="#top" data-i18n="footer.top">Volver arriba</a>
+  </div>
 </footer>
 
 <!-- WHATSAPP FLOTANTE -->
@@ -2073,6 +2110,134 @@ footer {
 .contact-inner {
   position: relative;
 }
+.site-footer {
+  position: relative;
+  z-index: 2;
+  padding: 0;
+  display: block;
+  background:
+    radial-gradient(circle at 88% 0%, rgba(217,45,45,0.13), transparent 30%),
+    linear-gradient(135deg, #111827 0%, #070b14 100%);
+  border-top: 1px solid rgba(217,45,45,0.32);
+  color: #ffffff;
+  box-shadow: none;
+}
+.footer-inner {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 56px 60px;
+  display: grid;
+  grid-template-columns: minmax(260px,1.2fr) minmax(220px,.9fr) minmax(240px,.8fr);
+  gap: 42px;
+}
+.footer-brand,
+.footer-contact,
+.footer-nav {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.footer-brand .footer-logo {
+  width: 64px;
+  height: 64px;
+  margin-bottom: 22px;
+  border: 1px solid rgba(255,255,255,0.16);
+  box-shadow: 0 18px 44px rgba(0,0,0,0.24);
+}
+.footer-brand p {
+  max-width: 360px;
+  color: rgba(255,255,255,0.68);
+  font-size: 14px;
+  line-height: 1.75;
+  letter-spacing: 0;
+  margin-bottom: 22px;
+}
+.footer-instagram {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 42px;
+  padding: 10px 14px;
+  color: #ffffff;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.14);
+  border-radius: 999px;
+  background: rgba(255,255,255,0.06);
+  transition: transform .25s ease, border-color .25s ease, background .25s ease;
+}
+.footer-instagram:hover {
+  transform: translateY(-2px);
+  border-color: rgba(217,45,45,0.6);
+  background: rgba(217,45,45,0.16);
+}
+.footer-instagram svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+}
+.footer-instagram span,
+.footer-nav span,
+.footer-contact span {
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+.footer-nav {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  column-gap: 22px;
+  row-gap: 12px;
+}
+.footer-nav span {
+  grid-column: 1 / -1;
+  margin-bottom: 8px;
+  color: var(--red);
+}
+.footer-nav a,
+.footer-contact a,
+.footer-contact p,
+.footer-bottom a,
+.footer-bottom p {
+  color: rgba(255,255,255,0.68);
+  font-size: 13px;
+  line-height: 1.5;
+  text-decoration: none;
+  letter-spacing: 0;
+}
+.footer-nav a,
+.footer-contact a,
+.footer-bottom a {
+  transition: color .22s ease, transform .22s ease;
+}
+.footer-nav a:hover,
+.footer-contact a:hover,
+.footer-bottom a:hover {
+  color: #ffffff;
+  transform: translateX(2px);
+}
+.footer-contact {
+  gap: 12px;
+}
+.footer-contact span {
+  margin-bottom: 8px;
+  color: var(--red);
+}
+.footer-contact p {
+  margin: 0;
+}
+.footer-bottom {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding: 20px 60px 28px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  border-top: 1px solid rgba(255,255,255,0.10);
+}
 @media(max-width:900px) {
   .hero {
     min-height: 0;
@@ -2091,6 +2256,13 @@ footer {
   .metodologia-grid::before {
     display: none;
   }
+  .footer-inner {
+    grid-template-columns: 1fr;
+    padding: 44px 24px;
+  }
+  .footer-bottom {
+    padding: 20px 24px 26px;
+  }
 }
 @media(max-width:560px) {
   .command-line {
@@ -2106,6 +2278,12 @@ footer {
   }
   .service-card {
     min-height: 238px;
+  }
+  .footer-nav {
+    grid-template-columns: 1fr;
+  }
+  .footer-bottom {
+    flex-direction: column;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -2736,6 +2914,10 @@ footer {
       "contacto.p5": "30 minutes. No detours. No commitment.",
       "contacto.p6": "Prefer to open it in a separate window?",
       "contacto.btn": "Book a call",
+      "footer.tagline": "Digital strategy, automation, and marketing to scale online sales.",
+      "footer.menu": "Menu",
+      "footer.contact": "Contact",
+      "footer.top": "Back to top",
       "footer.rights": "© 2026 We Sell Soluciones — All rights reserved"
     },
     pt: {
@@ -2788,6 +2970,10 @@ footer {
       "contacto.p5": "30 minutos. Direto ao ponto. Sem compromisso.",
       "contacto.p6": "Prefere abrir em uma janela separada?",
       "contacto.btn": "Agendar chamada",
+      "footer.tagline": "Estratégia digital, automação e marketing para escalar vendas online.",
+      "footer.menu": "Menu",
+      "footer.contact": "Contato",
+      "footer.top": "Voltar ao topo",
       "footer.rights": "© 2026 We Sell Soluciones — Todos os direitos reservados"
     }
   };
