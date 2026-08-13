@@ -1003,10 +1003,28 @@
       <button class="btn-primary magnetic" onclick="Calendly.initPopupWidget({url:'https://calendly.com/wesellsoluciones/entrevista?primary_color=e03030&text_color=ffffff&background_color=131929'});return false;" data-i18n="hero.btn1">Agendar reunión</button>
       <button class="btn-ghost magnetic" onclick="scrollToSection('servicios')" data-i18n="hero.btn2">Ver servicios →</button>
     </div>
-    <div class="hero-signal-strip reveal" aria-label="Señales de trabajo We Sell">
-      <span data-i18n="experience.signal1">Mercado Libre con foco comercial</span>
-      <span data-i18n="experience.signal2">Automatizaciones que alivian la operación</span>
-      <span data-i18n="experience.signal3">Decisiones guiadas por datos reales</span>
+    <div class="hero-system-card reveal" aria-label="Sistema comercial We Sell">
+      <div class="system-card-top">
+        <span data-i18n="experience.systemLabel">Sistema comercial activo</span>
+        <i data-i18n="experience.systemStatus">En optimización</i>
+      </div>
+      <div class="system-card-flow">
+        <div>
+          <strong>01</strong>
+          <span data-i18n="experience.system1">Canales</span>
+        </div>
+        <div>
+          <strong>02</strong>
+          <span data-i18n="experience.system2">Operación</span>
+        </div>
+        <div>
+          <strong>03</strong>
+          <span data-i18n="experience.system3">Conversión</span>
+        </div>
+      </div>
+      <div class="system-card-bottom">
+        <span data-i18n="experience.systemMetric">Lectura de datos + ejecución semanal</span>
+      </div>
     </div>
   </div>
   <div class="hero-visual">
@@ -1893,50 +1911,112 @@ footer {
 .hero-content p {
   font-size: 14px;
 }
-.hero-signal-strip {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-  max-width: 620px;
+.hero-system-card {
+  width: min(560px, 100%);
   margin-top: 30px;
-}
-.hero-signal-strip span {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  min-height: 42px;
-  padding: 10px 14px 10px 34px;
-  color: #293241;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: .06em;
-  text-transform: uppercase;
-  background: rgba(255,255,255,0.66);
+  padding: 16px;
+  background: rgba(255,255,255,0.78);
   border: 1px solid rgba(17,24,39,0.08);
-  border-radius: 999px;
-  box-shadow: 0 14px 34px rgba(16,24,40,0.08);
-  backdrop-filter: blur(14px);
-  animation: signalFloat 6s ease-in-out infinite;
+  border-radius: 8px;
+  box-shadow: 0 24px 70px rgba(16,24,40,0.10);
+  backdrop-filter: blur(16px);
 }
-.hero-signal-strip span:nth-child(2) {
-  animation-delay: .8s;
+.system-card-top,
+.system-card-bottom {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  align-items: center;
 }
-.hero-signal-strip span:nth-child(3) {
-  animation-delay: 1.6s;
+.system-card-top span,
+.system-card-bottom span {
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: .14em;
+  text-transform: uppercase;
 }
-.hero-signal-strip span::before {
+.system-card-top i {
+  position: relative;
+  padding-left: 14px;
+  color: var(--red);
+  font-size: 11px;
+  font-style: normal;
+  font-weight: 700;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.system-card-top i::before {
   content: '';
   position: absolute;
-  left: 14px;
-  width: 8px;
-  height: 8px;
+  left: 0;
+  top: 50%;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: var(--red);
-  box-shadow: 0 0 18px rgba(217,45,45,0.55);
+  box-shadow: 0 0 18px rgba(217,45,45,0.65);
+  transform: translateY(-50%);
 }
-@keyframes signalFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-5px); }
+.system-card-flow {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0,1fr));
+  gap: 10px;
+  margin: 18px 0;
+}
+.system-card-flow::before {
+  content: '';
+  position: absolute;
+  left: 15%;
+  right: 15%;
+  top: 26px;
+  height: 1px;
+  background: linear-gradient(90deg, rgba(217,45,45,0.28), rgba(17,24,39,0.16), rgba(217,45,45,0.28));
+}
+.system-card-flow div {
+  position: relative;
+  min-height: 86px;
+  padding: 14px;
+  background: #ffffff;
+  border: 1px solid var(--border-gray);
+  border-radius: 8px;
+}
+.system-card-flow strong {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  margin-bottom: 18px;
+  color: #ffffff;
+  background: var(--red);
+  border-radius: 50%;
+  font-size: 10px;
+  letter-spacing: 0;
+}
+.system-card-flow span {
+  display: block;
+  color: var(--text);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.system-card-bottom {
+  padding-top: 13px;
+  border-top: 1px solid var(--border-gray);
+}
+.system-card-bottom::after {
+  content: '';
+  width: 118px;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--red), #111827);
+  animation: systemPulse 3.4s ease-in-out infinite;
+}
+@keyframes systemPulse {
+  0%, 100% { transform: scaleX(.62); opacity: .68; }
+  50% { transform: scaleX(1); opacity: 1; }
 }
 .stats-bar {
   display: grid;
@@ -2255,7 +2335,7 @@ footer {
   .hero {
     min-height: 0;
   }
-  .hero-signal-strip {
+  .hero-system-card {
     margin-top: 22px;
   }
   .stats-bar,
@@ -2278,13 +2358,25 @@ footer {
   }
 }
 @media(max-width:560px) {
-  .hero-signal-strip {
-    flex-direction: column;
-    align-items: flex-start;
+  .hero-system-card {
+    padding: 14px;
   }
-  .hero-signal-strip span {
-    width: 100%;
-    min-height: 40px;
+  .system-card-top,
+  .system-card-bottom {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+  .system-card-flow {
+    grid-template-columns: 1fr;
+  }
+  .system-card-flow::before {
+    left: 27px;
+    right: auto;
+    top: 28px;
+    bottom: 28px;
+    width: 1px;
+    height: auto;
+    background: linear-gradient(to bottom, rgba(217,45,45,0.28), rgba(17,24,39,0.16), rgba(217,45,45,0.28));
   }
   .experience-map {
     padding-inline: 18px;
@@ -2304,7 +2396,7 @@ footer {
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-signal-strip span {
+  .system-card-bottom::after {
     animation: none;
   }
 }
@@ -2888,7 +2980,9 @@ footer {
       "hero.word1": "WE SELL", "hero.word2": "SOLUTIONS", "hero.word3": "THAT SCALE",
       "hero.p": "Mercado Libre account management, automation, and digital marketing. We combine strategy, technology, and data to take your business to the next level.",
       "hero.btn1": "Book a call", "hero.btn2": "See services →",
-      "experience.signal1": "Mercado Libre with commercial focus", "experience.signal2": "Automations that lighten operations", "experience.signal3": "Decisions guided by real data",
+      "experience.systemLabel": "Active commercial system", "experience.systemStatus": "Optimizing",
+      "experience.system1": "Channels", "experience.system2": "Operations", "experience.system3": "Conversion",
+      "experience.systemMetric": "Data reading + weekly execution",
       "experience.label": "We Sell System", "experience.title": "Less noise. More signals to sell better.",
       "experience.node1.title": "Detect", "experience.node1.text": "We review channels, margins, and friction before moving a single piece.",
       "experience.node2.title": "Organize", "experience.node2.text": "We turn operations into a system that is understandable, measurable, and actionable.",
@@ -2944,7 +3038,9 @@ footer {
       "hero.word1": "VENDEMOS", "hero.word2": "SOLUÇÕES", "hero.word3": "QUE ESCALAM",
       "hero.p": "Gestão de contas do Mercado Livre, automação e marketing digital. Combinamos estratégia, tecnologia e dados para levar seu negócio ao próximo nível.",
       "hero.btn1": "Agendar reunião", "hero.btn2": "Ver serviços →",
-      "experience.signal1": "Mercado Livre com foco comercial", "experience.signal2": "Automações que aliviam a operação", "experience.signal3": "Decisões guiadas por dados reais",
+      "experience.systemLabel": "Sistema comercial ativo", "experience.systemStatus": "Em otimização",
+      "experience.system1": "Canais", "experience.system2": "Operação", "experience.system3": "Conversão",
+      "experience.systemMetric": "Leitura de dados + execução semanal",
       "experience.label": "Sistema We Sell", "experience.title": "Menos ruído. Mais sinais para vender melhor.",
       "experience.node1.title": "Detectar", "experience.node1.text": "Analisamos canais, margens e fricções antes de mover qualquer peça.",
       "experience.node2.title": "Organizar", "experience.node2.text": "Transformamos a operação em um sistema compreensível, mensurável e acionável.",
