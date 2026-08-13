@@ -213,6 +213,10 @@
     nav a:hover { color: var(--red); }
     .nav-back { background: var(--red) !important; color: #ffffff !important; padding: 9px 20px !important; border-radius: 2px; font-weight: 500 !important; letter-spacing: 0.13em !important; font-size: 11px !important; transition: background 0.2s, box-shadow 0.2s, transform 0.15s !important; box-shadow: 0 2px 18px rgba(220,38,38,0.32); white-space: nowrap; }
     .nav-back:hover { background: var(--red-bright) !important; box-shadow: 0 4px 28px rgba(220,38,38,0.55) !important; transform: translateY(-1px); color: #ffffff !important; }
+    .lang-switcher { display: flex; align-items: center; gap: 2px; margin-left: 6px; border: 1px solid rgba(255,255,255,0.15); border-radius: 20px; padding: 3px; }
+    .lang-btn { background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 11px; font-weight: 500; letter-spacing: 0.06em; color: rgba(0,0,0,0.55); padding: 5px 10px; border-radius: 16px; transition: background 0.25s, color 0.25s; }
+    .lang-btn:hover { color: var(--red); }
+    .lang-btn.active { background: var(--red); color: #fff; }
     .nav-dropdown { position: relative; }
     .nav-dropdown > a { display: flex; align-items: center; gap: 5px; cursor: pointer; color: #222222; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; text-decoration: none; transition: color 0.3s; }
     .nav-dropdown > a:hover { color: var(--red); }
@@ -659,63 +663,68 @@
     <img src="logo.png" alt="We Sell Soluciones" class="header-logo">
   </a>
   <nav>
-    <a href="index.html">Inicio</a>
-    <a href="index.html#servicios">Servicios</a>
+    <a href="index.html" data-i18n="nav.inicio">Inicio</a>
+    <a href="index.html#servicios" data-i18n="nav.servicios">Servicios</a>
     <div class="nav-dropdown">
-      <a>Productos</a>
+      <a data-i18n="nav.productos">Productos</a>
       <div class="nav-dropdown-menu">
-        <a href="westock.html">Stock — WeStock</a>
+        <a href="westock.html" data-i18n="nav.westock">Stock — WeStock</a>
         <div class="menu-divider"></div>
-        <a href="wetask.html" class="active-product">Productividad — WeTask</a>
+        <a href="wetask.html" class="active-product" data-i18n="nav.wetask">Productividad — WeTask</a>
         <div class="menu-divider"></div>
-        <a href="reportes.html">Reportes — Dashify</a>
+        <a href="reportes.html" data-i18n="nav.reportes">Reportes — Dashify</a>
       </div>
     </div>
-    <a href="index.html#nosotros">Nosotros</a>
-    <a href="index.html#contacto">Contacto</a>
-    <a href="#comprar" class="nav-back">↗ Obtener WE TASK</a>
+    <a href="index.html#nosotros" data-i18n="nav.nosotros">Nosotros</a>
+    <a href="index.html#contacto" data-i18n="nav.contacto">Contacto</a>
+    <a href="#comprar" class="nav-back" data-i18n="nav.cta">↗ Obtener WE TASK</a>
+    <div class="lang-switcher" id="lang-switcher">
+      <button type="button" data-lang="es" class="lang-btn active">ES</button>
+      <button type="button" data-lang="en" class="lang-btn">EN</button>
+      <button type="button" data-lang="pt" class="lang-btn">PT</button>
+    </div>
   </nav>
 </header>
 
 <!-- HERO -->
 <section class="hero">
   <div class="hero-inner">
-    <div class="hero-badge">Productividad</div>
+    <div class="hero-badge" data-i18n="hero.badge">Productividad</div>
     <h1>
       WE<span class="red">TASK</span><br>
-      <span class="outline">GESTIÓN DE</span><br>
-      <span class="outline">TAREAS</span>
+      <span class="outline" data-i18n="hero.word1">GESTIÓN DE</span><br>
+      <span class="outline" data-i18n="hero.word2">TAREAS</span>
     </h1>
-    <p class="hero-sub">Organizá tu trabajo, enfocate en lo que importa</p>
-    <p class="hero-desc">
+    <p class="hero-sub" data-i18n="hero.sub">Organizá tu trabajo, enfocate en lo que importa</p>
+    <p class="hero-desc" data-i18n="hero.desc">
       WE TASK es la herramienta de productividad diseñada para que nunca más pierdas una tarea importante.
       Gestioná proyectos, plazos y recordatorios desde un solo lugar, de forma simple y eficiente.
     </p>
     <div class="hero-actions">
-      <a href="#comprar" class="btn-primary">Obtener ahora</a>
-      <a href="#que-es" class="btn-ghost">Ver más</a>
+      <a href="#comprar" class="btn-primary" data-i18n="hero.btn1">Obtener ahora</a>
+      <a href="#que-es" class="btn-ghost" data-i18n="hero.btn2">Ver más</a>
     </div>
     <div class="product-hero-visual task-visual" aria-label="Vista previa de WeTask">
       <div class="product-window">
         <div class="product-window-top">
           <span></span><span></span><span></span>
-          <strong>WeTask · Productividad</strong>
+          <strong data-i18n="hero.windowTitle">WeTask · Productividad</strong>
         </div>
         <div class="product-window-body">
           <div class="task-board">
             <div class="task-column">
-              <small>Hoy</small>
-              <p><b></b> Revisar ventas</p>
-              <p><b></b> Llamar cliente</p>
+              <small data-i18n="hero.board1">Hoy</small>
+              <p><b></b> <span data-i18n="hero.task1">Revisar ventas</span></p>
+              <p><b></b> <span data-i18n="hero.task2">Llamar cliente</span></p>
             </div>
             <div class="task-column">
-              <small>En foco</small>
+              <small data-i18n="hero.board2">En foco</small>
               <div class="focus-ring">25:00</div>
             </div>
             <div class="task-column">
-              <small>Listo</small>
-              <p class="done"><b></b> Propuesta enviada</p>
-              <p class="done"><b></b> Agenda semanal</p>
+              <small data-i18n="hero.board3">Listo</small>
+              <p class="done"><b></b> <span data-i18n="hero.task3">Propuesta enviada</span></p>
+              <p class="done"><b></b> <span data-i18n="hero.task4">Agenda semanal</span></p>
             </div>
           </div>
         </div>
@@ -724,15 +733,15 @@
   </div>
   <div class="scroll-hint">
     <div class="scroll-line"></div>
-    Scroll
+    <span data-i18n="hero.scroll">Scroll</span>
   </div>
 </section>
 
 <!-- MARQUEE -->
 <div class="marquee-wrap">
   <div class="marquee-track">
-    <div class="marquee-item">GESTIÓN DE TAREAS <div class="marquee-dot"></div> FOCUS TIMER <div class="marquee-dot"></div> RECORDATORIOS <div class="marquee-dot"></div> CALENDARIO INTEGRADO <div class="marquee-dot"></div> WE SELL SOLUCIONES <div class="marquee-dot"></div> WE TASK <div class="marquee-dot"></div></div>
-    <div class="marquee-item">GESTIÓN DE TAREAS <div class="marquee-dot"></div> FOCUS TIMER <div class="marquee-dot"></div> RECORDATORIOS <div class="marquee-dot"></div> CALENDARIO INTEGRADO <div class="marquee-dot"></div> WE SELL SOLUCIONES <div class="marquee-dot"></div> WE TASK <div class="marquee-dot"></div></div>
+    <div class="marquee-item" data-i18n-html="marquee.items">GESTIÓN DE TAREAS <div class="marquee-dot"></div> FOCUS TIMER <div class="marquee-dot"></div> RECORDATORIOS <div class="marquee-dot"></div> CALENDARIO INTEGRADO <div class="marquee-dot"></div> WE SELL SOLUCIONES <div class="marquee-dot"></div> WE TASK <div class="marquee-dot"></div></div>
+    <div class="marquee-item" data-i18n-html="marquee.items">GESTIÓN DE TAREAS <div class="marquee-dot"></div> FOCUS TIMER <div class="marquee-dot"></div> RECORDATORIOS <div class="marquee-dot"></div> CALENDARIO INTEGRADO <div class="marquee-dot"></div> WE SELL SOLUCIONES <div class="marquee-dot"></div> WE TASK <div class="marquee-dot"></div></div>
   </div>
 </div>
 
@@ -741,15 +750,15 @@
   <div class="section-wrap">
     <div class="que-es-grid">
       <div class="que-es-text reveal-left">
-        <p class="section-label">Qué es WE TASK</p>
-        <h2 class="section-title">Tu productividad,<br>siempre <span style="color:var(--red)">bajo control</span></h2>
-        <p>
+        <p class="section-label" data-i18n="queEs.label">Qué es WE TASK</p>
+        <h2 class="section-title"><span data-i18n="queEs.title1">Tu productividad,</span><br><span data-i18n="queEs.title2">siempre</span> <span style="color:var(--red)" data-i18n="queEs.title3">bajo control</span></h2>
+        <p data-i18n-html="queEs.p1">
           WE TASK es un <strong>sistema de gestión de tareas y productividad</strong> desarrollado por We Sell Soluciones para profesionales y equipos que necesitan organizar su trabajo de forma efectiva.
         </p>
-        <p>
+        <p data-i18n="queEs.p2">
           Olvidate de las listas en papel y las tareas que se pierden. Con WE TASK podés crear y priorizar tareas, asignar fechas límite, activar recordatorios y concentrarte con el timer de foco integrado.
         </p>
-        <p>
+        <p data-i18n-html="queEs.p3">
           Diseñado para ser <strong>rápido, intuitivo y visualmente atractivo</strong>, con cambio de tema según el horario del día, integración con Google Calendar y soporte para tareas recurrentes.
         </p>
       </div>
@@ -759,35 +768,35 @@
             <div class="mockup-dot" style="background:#e03030;"></div>
             <div class="mockup-dot" style="background:#fbbf24;"></div>
             <div class="mockup-dot" style="background:#4ade80;"></div>
-            <span class="mockup-title-bar">WE TASK — Panel principal</span>
+            <span class="mockup-title-bar" data-i18n="mockup.title">WE TASK — Panel principal</span>
           </div>
           <div class="mockup-body">
             <div class="mockup-header-row">
-              <span class="mockup-heading">Mis Tareas</span>
-              <span class="mockup-badge-red">● Activo</span>
+              <span class="mockup-heading" data-i18n="mockup.heading">Mis Tareas</span>
+              <span class="mockup-badge-red" data-i18n="mockup.active">● Activo</span>
             </div>
             <div class="mockup-task" style="border-left-color:#4ade80;">
               <div class="mockup-task-check done">✓</div>
-              <span class="mockup-task-text done">Revisar informe de ventas Q1</span>
-              <span class="mockup-task-tag tag-work">Trabajo</span>
+              <span class="mockup-task-text done" data-i18n="mockup.task1">Revisar informe de ventas Q1</span>
+              <span class="mockup-task-tag tag-work" data-i18n="mockup.tagWork">Trabajo</span>
             </div>
             <div class="mockup-task" style="border-left-color:#FF5757;">
               <div class="mockup-task-check"></div>
-              <span class="mockup-task-text">Reunión con cliente — 15hs</span>
-              <span class="mockup-task-tag tag-urgent">Urgente</span>
+              <span class="mockup-task-text" data-i18n="mockup.task2">Reunión con cliente — 15hs</span>
+              <span class="mockup-task-tag tag-urgent" data-i18n="mockup.tagUrgent">Urgente</span>
             </div>
             <div class="mockup-task" style="border-left-color:#5B8DEF;">
               <div class="mockup-task-check"></div>
-              <span class="mockup-task-text">Actualizar propuesta comercial</span>
-              <span class="mockup-task-tag tag-work">Trabajo</span>
+              <span class="mockup-task-text" data-i18n="mockup.task3">Actualizar propuesta comercial</span>
+              <span class="mockup-task-tag tag-work" data-i18n="mockup.tagWork2">Trabajo</span>
             </div>
             <div class="mockup-task" style="border-left-color:#45D4A8;">
               <div class="mockup-task-check"></div>
-              <span class="mockup-task-text">Llamar al proveedor</span>
-              <span class="mockup-task-tag tag-personal">Personal</span>
+              <span class="mockup-task-text" data-i18n="mockup.task4">Llamar al proveedor</span>
+              <span class="mockup-task-tag tag-personal" data-i18n="mockup.tagPersonal">Personal</span>
             </div>
             <div style="margin-top:14px;padding:12px 14px;background:var(--surface);border-radius:6px;display:flex;justify-content:space-between;align-items:center;">
-              <span style="font-size:11px;color:var(--muted);">🎯 Focus Timer</span>
+              <span style="font-size:11px;color:var(--muted);" data-i18n="mockup.focusTimer">🎯 Focus Timer</span>
               <span style="font-family:'Courier New',monospace;font-size:20px;font-weight:700;color:var(--red);">25:00</span>
             </div>
           </div>
@@ -800,38 +809,38 @@
 <!-- FEATURES -->
 <div id="features" style="background:var(--bg);">
   <div class="section-wrap">
-    <p class="section-label reveal">Funcionalidades</p>
-    <h2 class="section-title reveal">Todo lo que<br>necesitás</h2>
+    <p class="section-label reveal" data-i18n="feat.label">Funcionalidades</p>
+    <h2 class="section-title reveal"><span data-i18n="feat.title1">Todo lo que</span><br><span data-i18n="feat.title2">necesitás</span></h2>
     <div class="features-grid">
       <div class="feature-card reveal">
         <span class="feature-icon">✅</span>
-        <h3>Gestión de tareas</h3>
-        <p>Creá tareas con nombre, descripción, fecha límite, prioridad y etiquetas. Marcá como completadas con un clic y seguí tu progreso en tiempo real.</p>
+        <h3 data-i18n="feat.f1.title">Gestión de tareas</h3>
+        <p data-i18n="feat.f1.desc">Creá tareas con nombre, descripción, fecha límite, prioridad y etiquetas. Marcá como completadas con un clic y seguí tu progreso en tiempo real.</p>
       </div>
       <div class="feature-card reveal">
         <span class="feature-icon">⏱️</span>
-        <h3>Focus Timer (Pomodoro)</h3>
-        <p>Técnica Pomodoro integrada para trabajar en bloques de concentración. Asignale un timer a cada tarea y maximizá tu productividad sin distracciones.</p>
+        <h3 data-i18n="feat.f2.title">Focus Timer (Pomodoro)</h3>
+        <p data-i18n="feat.f2.desc">Técnica Pomodoro integrada para trabajar en bloques de concentración. Asignale un timer a cada tarea y maximizá tu productividad sin distracciones.</p>
       </div>
       <div class="feature-card reveal">
         <span class="feature-icon">🔔</span>
-        <h3>Recordatorios</h3>
-        <p>Configurá alertas para tus tareas más importantes. Nunca más te olvidés de un vencimiento o compromiso clave.</p>
+        <h3 data-i18n="feat.f3.title">Recordatorios</h3>
+        <p data-i18n="feat.f3.desc">Configurá alertas para tus tareas más importantes. Nunca más te olvidés de un vencimiento o compromiso clave.</p>
       </div>
       <div class="feature-card reveal">
         <span class="feature-icon">📅</span>
-        <h3>Calendario integrado</h3>
-        <p>Visualizá tus tareas en formato calendario. Conectá con Google Calendar para tener todos tus eventos y tareas en un solo lugar.</p>
+        <h3 data-i18n="feat.f4.title">Calendario integrado</h3>
+        <p data-i18n="feat.f4.desc">Visualizá tus tareas en formato calendario. Conectá con Google Calendar para tener todos tus eventos y tareas en un solo lugar.</p>
       </div>
       <div class="feature-card reveal">
         <span class="feature-icon">📝</span>
-        <h3>Notas rápidas</h3>
-        <p>Anotá ideas, reuniones y pendientes en el bloc de notas integrado. Tus notas siempre disponibles junto a tus tareas.</p>
+        <h3 data-i18n="feat.f5.title">Notas rápidas</h3>
+        <p data-i18n="feat.f5.desc">Anotá ideas, reuniones y pendientes en el bloc de notas integrado. Tus notas siempre disponibles junto a tus tareas.</p>
       </div>
       <div class="feature-card reveal">
         <span class="feature-icon">🌤️</span>
-        <h3>Interfaz dinámica</h3>
-        <p>Tema visual que cambia según la hora del día: amanecer, día, tarde y noche. Una experiencia de uso más natural e inmersiva.</p>
+        <h3 data-i18n="feat.f6.title">Interfaz dinámica</h3>
+        <p data-i18n="feat.f6.desc">Tema visual que cambia según la hora del día: amanecer, día, tarde y noche. Una experiencia de uso más natural e inmersiva.</p>
       </div>
     </div>
   </div>
@@ -840,35 +849,35 @@
 <!-- CÓMO FUNCIONA -->
 <div id="como-funciona" style="background:var(--surface);">
   <div class="section-wrap">
-    <p class="section-label reveal">Proceso</p>
-    <h2 class="section-title reveal">Cómo funciona<br><span style="color:var(--red)">WE TASK</span></h2>
+    <p class="section-label reveal" data-i18n="proc.label">Proceso</p>
+    <h2 class="section-title reveal"><span data-i18n="proc.title">Cómo funciona</span><br><span style="color:var(--red)">WE TASK</span></h2>
     <div class="steps-list">
       <div class="step reveal">
         <span class="step-num">01</span>
         <div class="step-content">
-          <h3>Adquirís la herramienta</h3>
-          <p>Realizás el pago a través de Mercado Pago de forma segura. En minutos recibís el acceso y podés descargarlo directamente desde la página.</p>
+          <h3 data-i18n="proc.s1.title">Adquirís la herramienta</h3>
+          <p data-i18n="proc.s1.desc">Realizás el pago a través de Mercado Pago de forma segura. En minutos recibís el acceso y podés descargarlo directamente desde la página.</p>
         </div>
       </div>
       <div class="step reveal">
         <span class="step-num">02</span>
         <div class="step-content">
-          <h3>Descargás e instalás</h3>
-          <p>WE TASK es un archivo HTML que funciona directamente en tu navegador, sin instalaciones complicadas ni dependencias externas. Abrí y listo.</p>
+          <h3 data-i18n="proc.s2.title">Descargás e instalás</h3>
+          <p data-i18n="proc.s2.desc">WE TASK es un archivo HTML que funciona directamente en tu navegador, sin instalaciones complicadas ni dependencias externas. Abrí y listo.</p>
         </div>
       </div>
       <div class="step reveal">
         <span class="step-num">03</span>
         <div class="step-content">
-          <h3>Organizás tus tareas</h3>
-          <p>Desde el primer momento podés crear tareas, asignar fechas, activar el timer de foco y ver tu productividad mejorar. Simple y efectivo.</p>
+          <h3 data-i18n="proc.s3.title">Organizás tus tareas</h3>
+          <p data-i18n="proc.s3.desc">Desde el primer momento podés crear tareas, asignar fechas, activar el timer de foco y ver tu productividad mejorar. Simple y efectivo.</p>
         </div>
       </div>
       <div class="step reveal">
         <span class="step-num">04</span>
         <div class="step-content">
-          <h3>Soporte continuo</h3>
-          <p>Contás con soporte de We Sell Soluciones para resolver dudas, ajustes y mejoras. No estás solo después de la compra.</p>
+          <h3 data-i18n="proc.s4.title">Soporte continuo</h3>
+          <p data-i18n="proc.s4.desc">Contás con soporte de We Sell Soluciones para resolver dudas, ajustes y mejoras. No estás solo después de la compra.</p>
         </div>
       </div>
     </div>
@@ -880,25 +889,25 @@
   <div class="section-wrap">
     <div class="cta-inner reveal">
       <div>
-        <p class="cta-label">Obtener WE TASK</p>
-        <h2 class="cta-title">Empezá a organizarte<br>con <span style="color:var(--red)">WE TASK</span></h2>
-        <p class="cta-desc">
+        <p class="cta-label" data-i18n="obtener.label">Obtener WE TASK</p>
+        <h2 class="cta-title"><span data-i18n="obtener.title1">Empezá a organizarte</span><br><span data-i18n="obtener.title2">con</span> <span style="color:var(--red)">WE TASK</span></h2>
+        <p class="cta-desc" data-i18n="obtener.desc">
           Adquirí WE TASK con un solo pago y tomá el control de tu productividad. Sin suscripciones ocultas, sin sorpresas.
         </p>
       </div>
       <div class="price-box">
         <div class="price-tag"><span>$</span>5.999</div>
-        <p class="price-period">ARS · Pago único · Acceso total</p>
+        <p class="price-period" data-i18n="obtener.priceDesc">ARS · Pago único · Acceso total</p>
         <ul class="price-features">
-          <li>Sistema completo de gestión de tareas</li>
-          <li>Focus Timer (Pomodoro) integrado</li>
-          <li>Recordatorios y alertas</li>
-          <li>Calendario + Google Calendar</li>
-          <li>Notas integradas</li>
-          <li>Soporte de We Sell Soluciones</li>
+          <li data-i18n="obtener.li1">Sistema completo de gestión de tareas</li>
+          <li data-i18n="obtener.li2">Focus Timer (Pomodoro) integrado</li>
+          <li data-i18n="obtener.li3">Recordatorios y alertas</li>
+          <li data-i18n="obtener.li4">Calendario + Google Calendar</li>
+          <li data-i18n="obtener.li5">Notas integradas</li>
+          <li data-i18n="obtener.li6">Soporte de We Sell Soluciones</li>
         </ul>
         <button onclick="abrirModal()" class="btn-buy">
-          Comprar con Mercado Pago →
+          <span data-i18n="obtener.buy">Comprar con Mercado Pago →</span>
         </button>
       </div>
     </div>
@@ -964,8 +973,8 @@
 
 <!-- FOOTER -->
 <footer>
-  <p>© 2025 We Sell Soluciones — WE TASK</p>
-  <a href="index.html">← Volver al sitio principal</a>
+  <p data-i18n="footer.rights">© 2025 We Sell Soluciones — WE TASK</p>
+  <a href="index.html" data-i18n="footer.back">← Volver al sitio principal</a>
 </footer>
 
 <!-- WHATSAPP -->
@@ -1286,13 +1295,8 @@
     }
   }
 
-  document.getElementById('admin-pwd').addEventListener('keydown', function(e) { if (e.key === 'Enter') adminIngresar(); });
-  document.getElementById('admin-usr').addEventListener('keydown', function(e) { if (e.key === 'Enter') adminIngresar(); });
-  ['admin-usr','admin-pwd'].forEach(function(id) {
-    document.getElementById(id).addEventListener('input', function() {
-      document.getElementById('admin-err').style.display = 'none';
-    });
-  });
+  document.getElementById('admin-pwd') && document.getElementById('admin-pwd').addEventListener('keydown', function(e) { if (e.key === 'Enter') adminIngresar(); });
+  document.getElementById('admin-usr') && document.getElementById('admin-usr').addEventListener('keydown', function(e) { if (e.key === 'Enter') adminIngresar(); });
 </script>
 
 <!-- ADMIN PANEL -->
@@ -1304,12 +1308,158 @@
       <p>Panel de gestión · Acceso privado</p>
     </div>
     <div class="admin-card">
-      <h2>Iniciar sesión</h2>
-      <p class="admin-sub">Área restringida. Solo personal autorizado.</p>
+      <h2>Iniciar sesión</h2>      <p class="admin-sub">Área restringida. Solo personal autorizado.</p>
       <div class="admin-field">
         <label>Usuario</label>
         <input type="text" id="admin-usr" placeholder="usuario" autocomplete="off">
       </div>
       <div class="admin-field">
         <label>Contraseña</label>
-        <input type="password" id="admin-pwd" placeholder="•••�
+        <input type="password" id="admin-pwd" placeholder="••••••••" autocomplete="off">
+      </div>
+      <div class="admin-err" id="admin-err">Usuario o contraseña incorrectos</div>
+      <button class="admin-btn" onclick="adminIngresar()">Ingresar</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.getElementById('admin-pwd').addEventListener('keydown', function(e) { if (e.key === 'Enter') adminIngresar(); });
+  document.getElementById('admin-usr').addEventListener('keydown', function(e) { if (e.key === 'Enter') adminIngresar(); });
+  ['admin-usr','admin-pwd'].forEach(function(id) {
+    document.getElementById(id).addEventListener('input', function() {
+      document.getElementById('admin-err').style.display = 'none';
+    });
+  });
+</script>
+
+<script>
+  const DOT = '<div class="marquee-dot"></div>';
+  const I18N = {
+    en: {
+      "nav.inicio": "Home", "nav.servicios": "Services", "nav.productos": "Products",
+      "nav.westock": "Inventory — WeStock", "nav.wetask": "Productivity — WeTask", "nav.reportes": "Reports — Dashify",
+      "nav.nosotros": "About", "nav.contacto": "Contact", "nav.cta": "↗ Get WE TASK",
+      "hero.badge": "Productivity",
+      "hero.word1": "TASK", "hero.word2": "MANAGEMENT",
+      "hero.sub": "Organize your work, focus on what matters",
+      "hero.desc": "WE TASK is the productivity tool designed so you never lose track of an important task again. Manage projects, deadlines, and reminders from one place, simply and efficiently.",
+      "hero.btn1": "Get it now", "hero.btn2": "See more",
+      "hero.windowTitle": "WeTask · Productivity",
+      "hero.board1": "Today", "hero.board2": "In focus", "hero.board3": "Done",
+      "hero.task1": "Review sales", "hero.task2": "Call client", "hero.task3": "Proposal sent", "hero.task4": "Weekly agenda",
+      "hero.scroll": "Scroll",
+      "marquee.items": "TASK MANAGEMENT " + DOT + " FOCUS TIMER " + DOT + " REMINDERS " + DOT + " INTEGRATED CALENDAR " + DOT + " WE SELL SOLUCIONES " + DOT + " WE TASK " + DOT,
+      "queEs.label": "What is WE TASK",
+      "queEs.title1": "Your productivity,", "queEs.title2": "always", "queEs.title3": "under control",
+      "queEs.p1": "WE TASK is a <strong>task management and productivity system</strong> built by We Sell Soluciones for professionals and teams who need to organize their work effectively.",
+      "queEs.p2": "Forget paper lists and tasks that fall through the cracks. With WE TASK you can create and prioritize tasks, set deadlines, activate reminders, and focus with the built-in focus timer.",
+      "queEs.p3": "Designed to be <strong>fast, intuitive, and visually appealing</strong>, with a theme that changes throughout the day, Google Calendar integration, and support for recurring tasks.",
+      "mockup.title": "WE TASK — Main dashboard", "mockup.heading": "My Tasks", "mockup.active": "● Active",
+      "mockup.task1": "Review Q1 sales report", "mockup.tagWork": "Work", "mockup.task2": "Client meeting — 3pm",
+      "mockup.tagUrgent": "Urgent", "mockup.task3": "Update business proposal", "mockup.tagWork2": "Work",
+      "mockup.task4": "Call the supplier", "mockup.tagPersonal": "Personal", "mockup.focusTimer": "🎯 Focus Timer",
+      "feat.label": "Features", "feat.title1": "Everything you", "feat.title2": "need",
+      "feat.f1.title": "Task management", "feat.f1.desc": "Create tasks with name, description, deadline, priority, and tags. Mark them complete with one click and track your progress in real time.",
+      "feat.f2.title": "Focus Timer (Pomodoro)", "feat.f2.desc": "Built-in Pomodoro technique to work in focused blocks. Assign a timer to each task and maximize your productivity without distractions.",
+      "feat.f3.title": "Reminders", "feat.f3.desc": "Set alerts for your most important tasks. Never forget a deadline or key commitment again.",
+      "feat.f4.title": "Integrated calendar", "feat.f4.desc": "View your tasks in calendar format. Connect with Google Calendar to keep all your events and tasks in one place.",
+      "feat.f5.title": "Quick notes", "feat.f5.desc": "Jot down ideas, meetings, and to-dos in the built-in notepad. Your notes always available alongside your tasks.",
+      "feat.f6.title": "Dynamic interface", "feat.f6.desc": "Visual theme that changes with the time of day: dawn, day, evening, and night. A more natural, immersive experience.",
+      "proc.label": "Process", "proc.title": "How WE TASK",
+      "proc.s1.title": "Get the tool", "proc.s1.desc": "Make a secure payment through Mercado Pago. Within minutes you get access and can download it directly from the page.",
+      "proc.s2.title": "Download and install", "proc.s2.desc": "WE TASK is an HTML file that runs directly in your browser, no complicated installs or external dependencies. Just open it.",
+      "proc.s3.title": "Organize your tasks", "proc.s3.desc": "From the very first moment you can create tasks, set dates, start the focus timer, and watch your productivity improve. Simple and effective.",
+      "proc.s4.title": "Ongoing support", "proc.s4.desc": "You have We Sell Soluciones' support to resolve questions, adjustments, and improvements. You're not alone after the purchase.",
+      "obtener.label": "Get WE TASK",
+      "obtener.title1": "Start organizing", "obtener.title2": "with",
+      "obtener.desc": "Get WE TASK with a single payment and take control of your productivity. No hidden subscriptions, no surprises.",
+      "obtener.priceDesc": "ARS · One-time payment · Full access",
+      "obtener.li1": "Complete task management system", "obtener.li2": "Built-in Focus Timer (Pomodoro)",
+      "obtener.li3": "Reminders and alerts", "obtener.li4": "Calendar + Google Calendar",
+      "obtener.li5": "Integrated notes", "obtener.li6": "We Sell Soluciones support",
+      "obtener.buy": "Buy with Mercado Pago →",
+      "footer.rights": "© 2025 We Sell Soluciones — WE TASK",
+      "footer.back": "← Back to main site"
+    },
+    pt: {
+      "nav.inicio": "Início", "nav.servicios": "Serviços", "nav.productos": "Produtos",
+      "nav.westock": "Estoque — WeStock", "nav.wetask": "Produtividade — WeTask", "nav.reportes": "Relatórios — Dashify",
+      "nav.nosotros": "Sobre", "nav.contacto": "Contato", "nav.cta": "↗ Obter WE TASK",
+      "hero.badge": "Produtividade",
+      "hero.word1": "GESTÃO DE", "hero.word2": "TAREFAS",
+      "hero.sub": "Organize seu trabalho, foque no que importa",
+      "hero.desc": "WE TASK é a ferramenta de produtividade feita para você nunca mais perder uma tarefa importante. Gerencie projetos, prazos e lembretes em um só lugar, de forma simples e eficiente.",
+      "hero.btn1": "Obter agora", "hero.btn2": "Ver mais",
+      "hero.windowTitle": "WeTask · Produtividade",
+      "hero.board1": "Hoje", "hero.board2": "Em foco", "hero.board3": "Concluído",
+      "hero.task1": "Revisar vendas", "hero.task2": "Ligar para cliente", "hero.task3": "Proposta enviada", "hero.task4": "Agenda semanal",
+      "hero.scroll": "Scroll",
+      "marquee.items": "GESTÃO DE TAREFAS " + DOT + " FOCUS TIMER " + DOT + " LEMBRETES " + DOT + " CALENDÁRIO INTEGRADO " + DOT + " WE SELL SOLUCIONES " + DOT + " WE TASK " + DOT,
+      "queEs.label": "O que é WE TASK",
+      "queEs.title1": "Sua produtividade,", "queEs.title2": "sempre", "queEs.title3": "sob controle",
+      "queEs.p1": "WE TASK é um <strong>sistema de gestão de tarefas e produtividade</strong> desenvolvido pela We Sell Soluciones para profissionais e equipes que precisam organizar seu trabalho de forma eficaz.",
+      "queEs.p2": "Esqueça as listas de papel e as tarefas que se perdem. Com o WE TASK você pode criar e priorizar tarefas, definir prazos, ativar lembretes e se concentrar com o timer de foco integrado.",
+      "queEs.p3": "Desenhado para ser <strong>rápido, intuitivo e visualmente atraente</strong>, com tema que muda conforme o horário do dia, integração com Google Calendar e suporte para tarefas recorrentes.",
+      "mockup.title": "WE TASK — Painel principal", "mockup.heading": "Minhas Tarefas", "mockup.active": "● Ativo",
+      "mockup.task1": "Revisar relatório de vendas Q1", "mockup.tagWork": "Trabalho", "mockup.task2": "Reunião com cliente — 15h",
+      "mockup.tagUrgent": "Urgente", "mockup.task3": "Atualizar proposta comercial", "mockup.tagWork2": "Trabalho",
+      "mockup.task4": "Ligar para o fornecedor", "mockup.tagPersonal": "Pessoal", "mockup.focusTimer": "🎯 Focus Timer",
+      "feat.label": "Funcionalidades", "feat.title1": "Tudo o que", "feat.title2": "você precisa",
+      "feat.f1.title": "Gestão de tarefas", "feat.f1.desc": "Crie tarefas com nome, descrição, prazo, prioridade e etiquetas. Marque como concluídas com um clique e acompanhe seu progresso em tempo real.",
+      "feat.f2.title": "Focus Timer (Pomodoro)", "feat.f2.desc": "Técnica Pomodoro integrada para trabalhar em blocos de concentração. Atribua um timer a cada tarefa e maximize sua produtividade sem distrações.",
+      "feat.f3.title": "Lembretes", "feat.f3.desc": "Configure alertas para suas tarefas mais importantes. Nunca mais esqueça um vencimento ou compromisso importante.",
+      "feat.f4.title": "Calendário integrado", "feat.f4.desc": "Visualize suas tarefas em formato de calendário. Conecte com o Google Calendar para ter todos os seus eventos e tarefas em um só lugar.",
+      "feat.f5.title": "Notas rápidas", "feat.f5.desc": "Anote ideias, reuniões e pendências no bloco de notas integrado. Suas notas sempre disponíveis junto às suas tarefas.",
+      "feat.f6.title": "Interface dinâmica", "feat.f6.desc": "Tema visual que muda conforme a hora do dia: amanhecer, dia, tarde e noite. Uma experiência mais natural e imersiva.",
+      "proc.label": "Processo", "proc.title": "Como funciona o",
+      "proc.s1.title": "Adquira a ferramenta", "proc.s1.desc": "Faça o pagamento com segurança pelo Mercado Pago. Em minutos você recebe o acesso e pode baixar diretamente da página.",
+      "proc.s2.title": "Baixe e instale", "proc.s2.desc": "WE TASK é um arquivo HTML que roda direto no seu navegador, sem instalações complicadas nem dependências externas. Abra e pronto.",
+      "proc.s3.title": "Organize suas tarefas", "proc.s3.desc": "Desde o primeiro momento você pode criar tarefas, definir datas, ativar o timer de foco e ver sua produtividade melhorar. Simples e eficaz.",
+      "proc.s4.title": "Suporte contínuo", "proc.s4.desc": "Você conta com o suporte da We Sell Soluciones para resolver dúvidas, ajustes e melhorias. Você não está sozinho após a compra.",
+      "obtener.label": "Obter WE TASK",
+      "obtener.title1": "Comece a se organizar", "obtener.title2": "com",
+      "obtener.desc": "Adquira o WE TASK com um único pagamento e tenha o controle da sua produtividade. Sem assinaturas ocultas, sem surpresas.",
+      "obtener.priceDesc": "ARS · Pagamento único · Acesso total",
+      "obtener.li1": "Sistema completo de gestão de tarefas", "obtener.li2": "Focus Timer (Pomodoro) integrado",
+      "obtener.li3": "Lembretes e alertas", "obtener.li4": "Calendário + Google Calendar",
+      "obtener.li5": "Notas integradas", "obtener.li6": "Suporte da We Sell Soluciones",
+      "obtener.buy": "Comprar com Mercado Pago →",
+      "footer.rights": "© 2025 We Sell Soluciones — WE TASK",
+      "footer.back": "← Voltar ao site principal"
+    }
+  };
+
+  const ES_DEFAULTS = {};
+  document.querySelectorAll('[data-i18n]').forEach(el => { ES_DEFAULTS[el.getAttribute('data-i18n')] = el.textContent; });
+  document.querySelectorAll('[data-i18n-html]').forEach(el => { ES_DEFAULTS[el.getAttribute('data-i18n-html')] = el.innerHTML; });
+  I18N.es = ES_DEFAULTS;
+
+  window.currentLang = localStorage.getItem('wesell_lang') || 'es';
+
+  function applyLanguage(lang) {
+    window.currentLang = lang;
+    const dict = I18N[lang] || I18N.es;
+    document.querySelectorAll('[data-i18n]').forEach(el => {
+      const key = el.getAttribute('data-i18n');
+      if (dict[key] !== undefined) el.textContent = dict[key];
+    });
+    document.querySelectorAll('[data-i18n-html]').forEach(el => {
+      const key = el.getAttribute('data-i18n-html');
+      if (dict[key] !== undefined) el.innerHTML = dict[key];
+    });
+    document.querySelectorAll('.lang-btn').forEach(btn => {
+      btn.classList.toggle('active', btn.getAttribute('data-lang') === lang);
+    });
+    document.documentElement.setAttribute('lang', lang === 'es' ? 'es-AR' : (lang === 'pt' ? 'pt-BR' : 'en'));
+    localStorage.setItem('wesell_lang', lang);
+  }
+
+  document.querySelectorAll('.lang-btn').forEach(btn => {
+    btn.addEventListener('click', () => applyLanguage(btn.getAttribute('data-lang')));
+  });
+
+  if (window.currentLang !== 'es') applyLanguage(window.currentLang);
+</script>
+</body>
+</html>
