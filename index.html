@@ -1343,13 +1343,24 @@
         <img src="logo.png" alt="We Sell Soluciones" class="footer-logo">
       </a>
       <p data-i18n="footer.tagline">Estrategia digital, automatización y marketing para escalar ventas online.</p>
-      <a class="footer-instagram" href="https://www.instagram.com/wesellsoluciones/" target="_blank" rel="noopener noreferrer" aria-label="Instagram We Sell Soluciones">
-        <svg viewBox="0 0 24 24" aria-hidden="true">
-          <rect x="3" y="3" width="18" height="18" rx="5"></rect>
-          <circle cx="12" cy="12" r="4"></circle>
-          <circle cx="17.5" cy="6.5" r="1"></circle>
-        </svg>
-      </a>
+      <div class="footer-socials" aria-label="Redes sociales">
+        <a class="footer-social" href="https://www.instagram.com/wesellsoluciones/" target="_blank" rel="noopener noreferrer" aria-label="Instagram We Sell Soluciones">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5"></rect>
+            <circle cx="12" cy="12" r="4"></circle>
+            <circle cx="17.5" cy="6.5" r="1"></circle>
+          </svg>
+        </a>
+        <a class="footer-social" href="https://www.linkedin.com/feed/" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn We Sell Soluciones">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4.98 8.5v10.2"></path>
+            <path d="M4.98 5.3h.02"></path>
+            <path d="M9.5 18.7V8.5"></path>
+            <path d="M9.5 12.9c0-2.2 1.28-4.1 3.75-4.1 2.28 0 3.27 1.48 3.27 4.1v5.8"></path>
+            <path d="M16.52 12.9v5.8"></path>
+          </svg>
+        </a>
+      </div>
     </div>
 
     <nav class="footer-nav" aria-label="Menú del footer">
@@ -1366,9 +1377,11 @@
 
     <div class="footer-contact">
       <span data-i18n="footer.contact">Contacto</span>
-      <a href="mailto:wesellsoluciones@gmail.com">wesellsoluciones@gmail.com</a>
-      <a href="tel:+5491135019702">+54 9 11 3501-9702</a>
-      <p>CABA, Buenos Aires</p>
+      <div class="footer-contact-list">
+        <a href="mailto:wesellsoluciones@gmail.com"><small>Email</small>wesellsoluciones@gmail.com</a>
+        <a href="tel:+5491135019702"><small>Teléfono</small>+54 9 11 3501-9702</a>
+        <p><small>Ubicación</small>CABA, Buenos Aires</p>
+      </div>
     </div>
   </div>
   <div class="footer-bottom">
@@ -2237,8 +2250,8 @@ footer {
   margin: 0 auto;
   padding: 48px 60px;
   display: grid;
-  grid-template-columns: minmax(260px, .9fr) minmax(360px, 1.1fr) minmax(250px, .8fr);
-  gap: 56px;
+  grid-template-columns: minmax(280px, .9fr) minmax(360px, 1fr) minmax(300px, .9fr);
+  gap: 44px;
   align-items: center;
 }
 .footer-brand,
@@ -2267,7 +2280,12 @@ footer {
   letter-spacing: 0;
   margin-bottom: 20px;
 }
-.footer-instagram {
+.footer-socials {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+.footer-social {
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -2281,18 +2299,20 @@ footer {
   background: rgba(255,255,255,0.08);
   transition: transform .25s ease, border-color .25s ease, background .25s ease;
 }
-.footer-instagram:hover {
+.footer-social:hover {
   transform: translateY(-2px);
   color: #ffffff;
   border-color: rgba(217,45,45,0.72);
   background: rgba(217,45,45,0.24);
 }
-.footer-instagram svg {
+.footer-social svg {
   width: 20px;
   height: 20px;
   fill: none;
   stroke: currentColor;
   stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 .footer-nav span,
 .footer-contact span {
@@ -2345,7 +2365,7 @@ footer {
   transform: translateX(2px);
 }
 .footer-contact {
-  gap: 12px;
+  gap: 14px;
   padding: 0;
   background: transparent;
   border: 0;
@@ -2357,6 +2377,22 @@ footer {
 }
 .footer-contact p {
   margin: 0;
+}
+.footer-contact-list {
+  display: grid;
+  gap: 13px;
+}
+.footer-contact-list a,
+.footer-contact-list p {
+  display: grid;
+  gap: 4px;
+}
+.footer-contact-list small {
+  color: rgba(255,255,255,0.38);
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: .14em;
+  text-transform: uppercase;
 }
 .footer-bottom {
   max-width: 1240px;
