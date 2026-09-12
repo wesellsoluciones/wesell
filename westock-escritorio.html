@@ -250,6 +250,9 @@ body.demo-mode .main{padding-top:36px;}
       <button class="btn btn-ghost" onclick="exportCSV()">⬇ Exportar</button>
       <button class="btn btn-ghost" onclick="document.getElementById('file-import').click()">📤 Importar</button>
       <input type="file" id="file-import" accept=".xlsx,.xls,.csv" style="display:none" onchange="importarArchivo(event)">
+      <button class="btn btn-ghost" id="btn-pricing-costos" style="display:none" onclick="exportarCostosPricing()">💲 Costos→Pricing</button>
+      <button class="btn btn-ghost" id="btn-pricing-sugerencias" style="display:none" onclick="abrirModalSugerencias()">🏷 Sugerencias<span id="sugerencias-badge" style="display:none;margin-left:5px;background:var(--danger);color:#fff;border-radius:10px;padding:1px 6px;font-size:10px"></span></button>
+      <input type="file" id="file-import-pricing" accept=".json" style="display:none" onchange="handleImportSugerencias(event)">
       <button class="btn btn-primary" onclick="openModal()">+ Nuevo SKU</button>
     </div>
   </div>
@@ -1470,6 +1473,14 @@ body.demo-mode .main{padding-top:36px;}
   <div class="modal-footer"><div style="flex:1;font-size:12px;color:var(--muted)" id="import-footer-note"></div><button class="btn btn-ghost" onclick="closeImport()">Cancelar</button><button class="btn btn-primary" onclick="confirmarImport()">✅ Confirmar</button></div></div>
 </div>
 
+<div class="modal-overlay" id="modal-sugerencias" onclick="if(event.target.id==='modal-sugerencias')cerrarModalSugerencias()">
+  <div class="modal" style="max-width:620px"><div class="modal-header"><span class="modal-title">🏷 Sugerencias de Pricing</span><button class="modal-close" onclick="cerrarModalSugerencias()">✕</button></div>
+  <div class="modal-body" id="modal-sugerencias-body">
+    <p style="color:var(--muted);font-size:13px">No hay sugerencias cargadas todavía. Importá el archivo <code>sugerencias_westock.json</code> que genera el script de Pricing.</p>
+  </div>
+  <div class="modal-footer"><button class="btn btn-ghost" onclick="document.getElementById('file-import-pricing').click()">📤 Importar archivo</button><button class="btn btn-ghost" onclick="limpiarSugerenciasPricing()">🗑 Limpiar</button><button class="btn btn-primary" onclick="cerrarModalSugerencias()">Cerrar</button></div></div>
+</div>
+
 <div class="modal-overlay" id="modal-combo" onclick="if(event.target.id==='modal-combo')cerrarModalCombo()">
   <div class="modal" style="max-width:560px"><div class="modal-header"><span class="modal-title" id="combo-modal-title">🎁 Nuevo Combo</span><button class="modal-close" onclick="cerrarModalCombo()">✕</button></div>
   <div class="modal-body">
@@ -1523,11 +1534,25 @@ async function validarLicenciaHMAC(clave) {
 // datos guardados (inventario, integraciones, operadores, etc.) por
 // cliente para que al ingresar con una clave diferente arranque de cero.
 let WS_NS = '';
+// Los botones de integración con el script de Pricing (💲/🏷) son de uso
+// interno de We Sell, no tienen sentido para los clientes que compran
+// WeStock — se muestran solo si la licencia activa es la del propio Santi,
+// o en el acceso admin. Así el mismo archivo sirve para vender y para uso propio.
+const WS_EMAILS_PROPIETARIO = ['chilautss@gmail.com','wesellsoluciones@gmail.com'];
+let WS_ES_PROPIETARIO = false;
 function wsSetNS(clave){
   try{
     const email = (clave||'').split('|')[0].trim().toLowerCase();
     WS_NS = email ? email.replace(/[^a-z0-9]+/g,'_') : '';
-  }catch(e){ WS_NS=''; }
+    WS_ES_PROPIETARIO = WS_EMAILS_PROPIETARIO.includes(email);
+  }catch(e){ WS_NS=''; WS_ES_PROPIETARIO=false; }
+  actualizarVisibilidadPricing();
+}
+function actualizarVisibilidadPricing(){
+  ['btn-pricing-costos','btn-pricing-sugerencias'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el) el.style.display = WS_ES_PROPIETARIO ? '' : 'none';
+  });
 }
 function nsKey(k){
   return (WS_NS && k!=='ws_license') ? (k+'__'+WS_NS) : k;
@@ -1541,6 +1566,7 @@ function reconectarIntegracionesCliente(){
   try{ if(typeof tnAutoConectar==='function')  tnAutoConectar();  }catch(e){ console.warn('TN auto-conectar:',e); }
   try{ if(typeof amzAutoConectar==='function') amzAutoConectar(); }catch(e){ console.warn('AMZ auto-conectar:',e); }
   try{ if(typeof shAutoConectar==='function')  shAutoConectar();  }catch(e){ console.warn('SH auto-conectar:',e); }
+  try{ if(typeof actualizarBadgeSugerenciasPricing==='function') actualizarBadgeSugerenciasPricing(); }catch(e){}
 }
 
 // Vuelve a leer la configuración de integraciones (ML/TN/Amazon/Shopify)
@@ -1614,6 +1640,8 @@ function initAcceso(){
     sessionStorage.removeItem('ws_admin_session');
     isDemo = false;
     wsSetNS('');
+    WS_ES_PROPIETARIO = true;
+    actualizarVisibilidadPricing();
     loadData();
     recargarConfigIntegraciones();
     reconectarIntegracionesCliente();
@@ -2275,6 +2303,115 @@ function exportCSV(){
     XLSX.writeFile(wb, `inventario-westock-${fecha}.xlsx`);
     showToast('📥 Exportado a Excel correctamente');
   });
+}
+
+// =========================
+// Integración con el script de Pricing (pricing_dinamico_wesell.py)
+// =========================
+// Exporta {id_de_ML: precio_costo} de todos los productos de WeStock que
+// están vinculados a una publicación de Mercado Libre y tienen precio costo
+// cargado. El script de Python lee este archivo (costos_westock.json) en
+// vez de depender de COSTOS_MANUALES cargado a mano.
+async function exportarCostosPricing(){
+  if(typeof mlToken==='undefined' || !mlToken){
+    showToast('❌ Primero conectá Mercado Libre en el panel de Sincronización');
+    return;
+  }
+  showToast('⏳ Cargando publicaciones de ML para cruzar costos...');
+  try{
+    if(!mlPublicaciones || !mlPublicaciones.length){
+      const ids = await mlFetchTodosIds();
+      mlPublicaciones = await mlFetchDetalles(ids);
+    }
+    mlCruzarSKUs();
+  }catch(e){
+    showToast('❌ Error al cargar publicaciones de ML: '+e.message);
+    return;
+  }
+
+  const costos={};
+  let n=0;
+  (mlMatches||[]).forEach(m=>{
+    if(m.ml_item && m.ml_item.id && m.ws_prod && m.ws_prod.precio>0){
+      costos[m.ml_item.id]=m.ws_prod.precio;
+      n++;
+    }
+  });
+
+  if(!n){
+    showToast('⚠️ No hay productos vinculados a ML con precio costo cargado en WeStock');
+    return;
+  }
+
+  const blob=new Blob([JSON.stringify(costos,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download='costos_westock.json';
+  document.body.appendChild(a); a.click(); a.remove();
+  URL.revokeObjectURL(url);
+  showToast('✅ Exportados '+n+' costo'+(n>1?'s':'')+' — movelo a la carpeta del script de Pricing');
+}
+
+// Importa el archivo sugerencias_westock.json que genera el script de
+// Pricing (con las publicaciones que conviene ajustar) y las muestra en
+// un panel dentro de WeStock, además de guardarlas para la próxima visita.
+function handleImportSugerencias(evt){
+  const file=evt.target.files[0];
+  if(!file) return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    try{
+      const data=JSON.parse(e.target.result);
+      const lista=Object.entries(data).map(([id,info])=>({id,...info}));
+      localStorage.setItem(nsKey('ws_pricing_sugerencias'), JSON.stringify(lista));
+      showToast('✅ '+lista.length+' sugerencia'+(lista.length>1?'s':'')+' de precio importadas');
+      abrirModalSugerencias();
+    }catch(err){
+      showToast('❌ Archivo inválido: '+err.message);
+    }
+  };
+  reader.readAsText(file);
+  evt.target.value='';
+}
+
+function leerSugerenciasPricing(){
+  try{
+    return JSON.parse(localStorage.getItem(nsKey('ws_pricing_sugerencias'))||'[]');
+  }catch(e){ return []; }
+}
+
+function actualizarBadgeSugerenciasPricing(){
+  const badge=document.getElementById('sugerencias-badge');
+  if(!badge) return;
+  const n=leerSugerenciasPricing().length;
+  if(n>0){ badge.style.display='inline-block'; badge.textContent=n; }
+  else{ badge.style.display='none'; }
+}
+
+function abrirModalSugerencias(){
+  const lista=leerSugerenciasPricing();
+  const body=document.getElementById('modal-sugerencias-body');
+  if(!lista.length){
+    body.innerHTML='<p style="color:var(--muted);font-size:13px">No hay sugerencias cargadas todavía. Importá el archivo <code>sugerencias_westock.json</code> que genera el script de Pricing.</p>';
+  } else {
+    body.innerHTML = lista.map(s=>{
+      const actual = Number(s.precio_actual||0);
+      const sugerido = Number(s.precio_sugerido||0);
+      return `<div style="border:1px solid var(--border);border-radius:8px;padding:12px 14px;margin-bottom:10px">
+        <div style="font-weight:600;font-size:13px">${s.titulo||s.id}</div>
+        <div style="font-size:11px;color:var(--muted);margin-bottom:6px">${s.id}</div>
+        <div style="font-size:13px">Precio actual: <b>$${actual.toLocaleString('es-AR')}</b> → Sugerido: <b style="color:var(--warn)">$${sugerido.toLocaleString('es-AR')}</b></div>
+      </div>`;
+    }).join('');
+  }
+  document.getElementById('modal-sugerencias').classList.add('open');
+  actualizarBadgeSugerenciasPricing();
+}
+function cerrarModalSugerencias(){ document.getElementById('modal-sugerencias').classList.remove('open'); }
+function limpiarSugerenciasPricing(){
+  localStorage.removeItem(nsKey('ws_pricing_sugerencias'));
+  abrirModalSugerencias();
+  showToast('🗑 Sugerencias eliminadas');
 }
 
 function calcularStockCombo(cs){return cs.length?Math.min(...cs.map(c=>{const p=productos.find(x=>x.id===c.skuId);return p?Math.floor(p.stock/c.qty):0;})):0;}
