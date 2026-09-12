@@ -160,6 +160,16 @@
     .nav-dropdown-menu a:hover { background: rgba(220,38,38,0.06); color: var(--red) !important; }
     .nav-dropdown-menu a.active-product { color: var(--red) !important; font-weight: 500; }
     .nav-dropdown-menu .menu-divider { height: 1px; background: rgba(0,0,0,0.07); margin: 4px 0; }
+    /* Ver <script> al final del body: entre 561px y 900px el menú pasa a
+       position:fixed calculado por JS para no quedar cortado por el
+       overflow:hidden de header/nav en ese rango. */
+    .nav-dropdown-menu.dropdown-fixed {
+      position: fixed !important;
+      transform: none !important;
+    }
+    .nav-dropdown:hover .nav-dropdown-menu.dropdown-fixed {
+      transform: none !important;
+    }
 
     /* ── HERO ── */
     .hero {
@@ -3383,6 +3393,47 @@ footer {
       setTimeout(() => scramble(span, original, 500), 500 + i * 180);
     });
   }
+})();
+</script>
+
+<script>
+// ── Fix: el menú "Productos" queda cortado (invisible) entre 561px y 900px
+// de ancho, porque en ese rango .nav dropdown-menu se despliega adentro de
+// <nav>/<header>, que tienen overflow:hidden (necesario para el scroll
+// horizontal del menú en pantallas angostas). Ese overflow le corta la
+// visibilidad al desplegable aunque su contenido siga estando ahí.
+// Solución: en ese rango de ancho, lo pasamos a position:fixed calculando
+// su posición con JS, así ya no queda "adentro" del contenedor que recorta.
+(function () {
+  function fijarPosicionDropdown(dd, menu) {
+    if (window.innerWidth > 900 || window.innerWidth <= 560) {
+      // Fuera del rango problemático: comportamiento normal (CSS original)
+      menu.classList.remove('dropdown-fixed');
+      menu.style.top = '';
+      menu.style.left = '';
+      return;
+    }
+    const r = dd.getBoundingClientRect();
+    menu.classList.add('dropdown-fixed');
+    menu.style.top = (r.bottom + 6) + 'px';
+    const anchoMenu = menu.offsetWidth || 180;
+    let left = r.left + (r.width / 2) - (anchoMenu / 2);
+    left = Math.max(8, Math.min(left, window.innerWidth - anchoMenu - 8));
+    menu.style.left = left + 'px';
+  }
+
+  document.querySelectorAll('.nav-dropdown').forEach(function (dd) {
+    const menu = dd.querySelector('.nav-dropdown-menu');
+    if (!menu) return;
+    dd.addEventListener('mouseenter', function () { fijarPosicionDropdown(dd, menu); });
+    dd.addEventListener('touchstart', function () { fijarPosicionDropdown(dd, menu); }, { passive: true });
+  });
+  window.addEventListener('resize', function () {
+    document.querySelectorAll('.nav-dropdown').forEach(function (dd) {
+      const menu = dd.querySelector('.nav-dropdown-menu');
+      if (menu) fijarPosicionDropdown(dd, menu);
+    });
+  });
 })();
 </script>
 </body>
