@@ -1651,7 +1651,26 @@ function initAcceso(){
     showToast('✅ Acceso admin concedido. Bienvenido a WeStock.');
     return;
   }
-  // Siempre pide la clave al abrir la app
+  // Si ya hay una clave guardada y sigue siendo válida, entrar directo sin
+  // volver a pedirla en cada refresh (antes se re-pedía siempre, aunque la
+  // clave guardada fuera válida — fricción innecesaria).
+  const licGuardada = localStorage.getItem('ws_license') || '';
+  if(licGuardada){
+    validarLicenciaHMAC(licGuardada).then(esValida=>{
+      if(esValida){
+        wsSetNS(licGuardada);
+        isDemo=false;
+        loadData();
+        recargarConfigIntegraciones();
+        reconectarIntegracionesCliente();
+        actualizarSidebarLicenciado(licGuardada);
+        renderDashboard();
+      } else {
+        mostrarLockUI(false);
+      }
+    });
+    return;
+  }
   mostrarLock();
 }
 
