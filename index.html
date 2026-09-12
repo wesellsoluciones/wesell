@@ -1912,13 +1912,21 @@ body::before {
   -webkit-mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 86%, transparent);
   mask-image: linear-gradient(to bottom, transparent, #000 12%, #000 86%, transparent);
 }
-header,
 .marquee-wrap,
 .stats-bar,
 section,
 footer {
   position: relative;
   z-index: 2;
+}
+header {
+  /* Restaura el z-index original del header (ya definido como 100 al
+     principio del archivo, en position:fixed). Esta regla más abajo lo
+     había bajado a 2 sin querer, dejándolo al mismo nivel que .hero
+     (que viene después en el HTML), y como el Hero pintaba encima,
+     el menú desplegable de "Productos" quedaba tapado. No tocamos
+     "position" acá para no pisar el position:fixed original. */
+  z-index: 100;
 }
 .hero {
   min-height: 82vh;
